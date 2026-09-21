@@ -16,3 +16,6 @@ dist/
 output/
 .DS_Store
 Thumbs.db
+.voice-preview/
+__pycache__/
+*.pyc

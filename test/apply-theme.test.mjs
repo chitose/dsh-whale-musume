@@ -187,7 +187,7 @@ test("patchMascotClient adds the mascot settings section and is idempotent", () 
   const fixture = 'const store = 1;\nconst injected = (a) => a;\nctx.slots.inject("settings.theme.item", () => ctx.slots.register({}, ThemePackRow));';
   const out = patchMascotClient(fixture);
   assert.equal(out.changed, true);
-  assert.ok(out.source.includes("/* DSH-WHALE-MOE:MASCOT-SETTINGS v27 */"));
+  assert.ok(out.source.includes("/* DSH-WHALE-MOE:MASCOT-SETTINGS v28 */"));
   assert.ok(out.source.includes('id: "mascot"'));
   assert.ok(out.source.includes('label: "Mascot"'));
   assert.ok(out.source.includes('label: "Whale-chan"'));
@@ -221,14 +221,41 @@ test("patchMascotClient adds the mascot settings section and is idempotent", () 
   assert.equal(second.changed, false);
 });
 
-test("patchMascotClient upgrades legacy v1-v26 blocks to v27", () => {
+test("patchMascotClient upgrades legacy v1-v27 blocks to v28", () => {
   const fixture = 'const store = 1;\nconst injected = (a) => a;\nctx.slots.inject("settings.theme.item", () => ctx.slots.register({}, ThemePackRow));';
-  const legacy = patchMascotClient(fixture).source.replace("DSH-WHALE-MOE:MASCOT-SETTINGS v27", "DSH-WHALE-MOE:MASCOT-SETTINGS v4");
+  const legacy = patchMascotClient(fixture).source.replace("DSH-WHALE-MOE:MASCOT-SETTINGS v28", "DSH-WHALE-MOE:MASCOT-SETTINGS v4");
   const upgraded = patchMascotClient(legacy);
   assert.equal(upgraded.changed, true);
-  assert.ok(upgraded.source.includes("DSH-WHALE-MOE:MASCOT-SETTINGS v27"));
+  assert.ok(upgraded.source.includes("DSH-WHALE-MOE:MASCOT-SETTINGS v28"));
   assert.ok(!upgraded.source.includes("DSH-WHALE-MOE:MASCOT-SETTINGS v4"));
   assert.equal((upgraded.source.match(/id: "mascot"/g) || []).length, 1);
+});
+
+test("patchMascotClient upgrades the v27 block that predates the voice toggle", () => {
+  const fixture = 'const store = 1;\nconst injected = (a) => a;\nctx.slots.inject("settings.theme.item", () => ctx.slots.register({}, ThemePackRow));';
+  const v27 = patchMascotClient(fixture).source.replace("DSH-WHALE-MOE:MASCOT-SETTINGS v28", "DSH-WHALE-MOE:MASCOT-SETTINGS v27");
+  const upgraded = patchMascotClient(v27);
+  assert.equal(upgraded.changed, true);
+  assert.ok(upgraded.source.includes("DSH-WHALE-MOE:MASCOT-SETTINGS v28"));
+  assert.ok(upgraded.source.includes('prefKey: "voiceJa"'), "the voice toggle must reach existing installs");
+  assert.equal((upgraded.source.match(/id: "mascot"/g) || []).length, 1);
+});
+
+test("patchMascotClient explains itself on a DSH build without the theme-pack slot", () => {
+  /* dsh-client-ui-theme on newer builds registers settings.general.item only, so
+     the anchor this mode patches is gone: it must fail with actionable advice
+     rather than a bare "anchor not found". */
+  const modern =
+    'ctx.slots.inject("settings.general.item", () => ctx.slots.register({ name: "settings.general.item", id: "font-size" }, FontSizeRow));';
+  assert.throws(
+    () => patchMascotClient(modern),
+    (error) => {
+      assert.match(error.message, /no theme-pack settings slot/);
+      assert.match(error.message, /gear menu/);
+      assert.match(error.message, /settings\.section \(id=mascot\)/);
+      return true;
+    }
+  );
 });
 
 test("mascotSettings round-trip writes only client.js and restores it", () => {

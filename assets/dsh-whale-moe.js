@@ -11,6 +11,10 @@
   var doc = root.document;
   var VIEW_ATTR = "data-dsh-whale-view";
   var ASSET_ROOT = "/assets/generated/";
+  /* Bundled Japanese voice clips (assets/voice/ja). client.js rewrites this to
+     the plugin asset route; the theme install copies the same tree to /assets/. */
+  var VOICE_ROOT = "/assets/voice/ja/";
+  var VOICE_MANIFEST_VERSION = "?v=1";
   var POSE_VERSION = "?v=5";
   var DEBOUNCE_MS = 120;
   var PARTICLE_MAX = 30;
@@ -19,6 +23,7 @@
   var PREFS = [
     { key: "pet", label: "Mascot" },
     { key: "chat", label: "Dialogue bubbles" },
+    { key: "voiceJa", label: "Voice (JP clips)" },
     { key: "particles", label: "Particles" }
   ];
 
@@ -681,10 +686,115 @@
     }
   }
 
+  /* ---------- bundled Japanese voice ----------
+     Every line in the core banks has a pre-rendered clip; the manifest maps the
+     exact English line string to its file. A line with no clip (generated
+     announcements, or banks added later) simply stays silent here. */
+  var voiceManifest = null;
+  var voiceRequested = false;
+  var voiceAudio = null;
+  var voiceBlocked = false;
+  /* Diagnosable state: `__dshWhaleVoice.misses` answers "why was that bubble
+     silent" without a debugger. Bounded so a long session cannot grow it. */
+  var voiceMisses = [];
+  var VOICE_MISS_MAX = 20;
+
+  function noteVoiceMiss(line, reason) {
+    if (voiceMisses.length >= VOICE_MISS_MAX) voiceMisses.shift();
+    voiceMisses.push({ line: String(line).slice(0, 80), reason: reason });
+    root.__dshWhaleVoice = {
+      loaded: !!voiceManifest,
+      clips: voiceManifest ? Object.keys(voiceManifest.files).length : 0,
+      blocked: voiceBlocked,
+      misses: voiceMisses
+    };
+  }
+
+  function loadVoiceManifest() {
+    if (voiceRequested || typeof root.fetch !== "function") return;
+    voiceRequested = true;
+    try {
+      root.fetch(VOICE_ROOT + "manifest.json" + VOICE_MANIFEST_VERSION)
+        .then(function (response) { return response && response.ok ? response.json() : null; })
+        .then(function (json) { if (json && json.files) voiceManifest = json; })
+        .catch(function () { /* no voice pack installed: stay silent */ });
+    } catch (e) { /* fetch unavailable */ }
+  }
+
+  /* Pure: caller supplies the manifest and root, which keeps it testable. */
+  function voiceSourceFor(line, manifest, voiceRoot) {
+    var files = manifest && manifest.files;
+    if (!files || typeof line !== "string") return "";
+    var file = files[line];
+    if (!file || typeof file !== "string") return "";
+    if (file.indexOf("..") !== -1 || file.charAt(0) === "/") return "";
+    return voiceRoot + file;
+  }
+
+  function voiceEnabled() {
+    /* Motion preferences are unrelated to audio, so they do not gate this.
+       Bubbles are the source of truth: she speaks what is displayed. */
+    return readPref("voiceJa") && readPref("chat");
+  }
+
+  function lineHasVoice(line) {
+    return voiceEnabled() && !!voiceSourceFor(line, voiceManifest, VOICE_ROOT);
+  }
+
+  function voiceBlockedReason(error) {
+    var name = (error && error.name) || "";
+    var message = String((error && error.message) || "");
+    /* Changing .src while a play() promise is still pending rejects it with
+       AbortError ("interrupted by a new load request"). That is a newer line
+       taking over, not a refusal, and it must never disarm playback. */
+    if (name === "AbortError" || /interrupted by a new load request|play\(\) request was interrupted/i.test(message)) {
+      return "";
+    }
+    if (name === "NotAllowedError" || /not allowed|user gesture|requires a user|didn't interact|did not interact/i.test(message)) {
+      return "policy";
+    }
+    return ""; /* an unknown media error is not proof of a policy refusal */
+  }
+
+  function playVoiceFor(line) {
+    if (typeof line !== "string" || !line) return false;
+    if (!readPref("voiceJa")) { noteVoiceMiss(line, "voice-off"); return false; }
+    if (!readPref("chat")) { noteVoiceMiss(line, "bubbles-off"); return false; }
+    if (!voiceManifest) { noteVoiceMiss(line, "manifest-not-loaded"); loadVoiceManifest(); return false; }
+    var source = voiceSourceFor(line, voiceManifest, VOICE_ROOT);
+    if (!source) { noteVoiceMiss(line, "not-in-pack"); return false; }
+    if (voiceBlocked) { noteVoiceMiss(line, "autoplay-blocked"); return false; }
+    try {
+      if (!voiceAudio) voiceAudio = new root.Audio();
+      if (voiceAudio.src !== source) voiceAudio.src = source;
+      voiceAudio.currentTime = 0;
+      var started = voiceAudio.play();
+      if (started && typeof started.catch === "function") {
+        started.catch(function (error) {
+          /* Browsers refuse audio before the first user gesture; retry later
+             rather than logging a rejection on every single line. */
+          if (voiceBlockedReason(error) === "policy") {
+            voiceBlocked = true;
+            noteVoiceMiss(line, "autoplay-refused");
+          }
+        });
+      }
+      return true;
+    } catch (e) {
+      if (voiceBlockedReason(e) === "policy") {
+        voiceBlocked = true;
+        noteVoiceMiss(line, "playback-error");
+      }
+      return false;
+    }
+  }
+
   function showInteractionLine(line) {
     if (!line) return;
     showLine(line);
-    emitInteractionLine(localizeLine(line));
+    /* The bundled clip already speaks this line; only hand lines the pack does
+       not cover to the optional MiMo TTS bridge, so they never double-speak. */
+    if (!lineHasVoice(line)) emitInteractionLine(localizeLine(line));
   }
 
   function bellyReact(now) {
@@ -762,7 +872,13 @@
     var wasHidden = bubble.hidden;
     bubble.classList.remove("dsh-whale-out");
     if (memory.bubbleOutTimer) { root.clearTimeout(memory.bubbleOutTimer); memory.bubbleOutTimer = null; }
-    typeBubble(text, localizeLine(line));
+    var localized = localizeLine(line);
+    /* Every bubble path speaks: the clips carry the built-in names, so a custom
+       "call me" or self-name makes the audio say マスター/くじらちゃん while the
+       bubble shows the custom name. Speaking is the point of the feature, and
+       muting every line that mentions a name would silence 74% of the library. */
+    playVoiceFor(line);
+    typeBubble(text, localized);
     bubble.hidden = false;
     memory.bubbleHideAt = Date.now() + 4500;
     if (wasHidden) bubble.classList.add("dsh-whale-pop");
@@ -1840,6 +1956,7 @@
       if (!memory.celebrationVisible) {
         memory.celebrationVisible = true;
         memory.lastLine = celebLine;
+        playVoiceFor("Ehehe~ I like Master best!");
         typeBubble(bubbleText, celebLine);
         bubble.hidden = false;
         memory.bubbleHideAt = Date.now() + 4500;
@@ -1854,7 +1971,10 @@
     /* speech: only meaningful workbench events speak */
     var eventStates = { failure: 1, success: 1, tool: 1, thinking: 1, curious: 1 };
     if (computed.speak && readPref("chat") && view === "workbench" && eventStates[computed.state] && !typingTimer) {
-      typeBubble(bubbleText, computed.line);
+      /* This path writes the bubble directly rather than via showLine(), so it
+         needs its own voice call — these state lines are the most-seen bubbles. */
+      playVoiceFor(computed.line);
+      typeBubble(bubbleText, localizeLine(computed.line));
       bubble.hidden = false;
       memory.bubbleHideAt = Date.now() + 4500;
       if (!motionReduced() && computed.line !== memory.lastLine) {
@@ -3088,12 +3208,15 @@
 
   function onUserActivity() {
     memory.lastInteractionAt = Date.now();
+    /* A gesture clears the browser's autoplay block, so clips can play again. */
+    if (voiceBlocked) voiceBlocked = false;
     schedule();
   }
 
   function start() {
     if (root.__dshWhaleMoeStarted) return;
     root.__dshWhaleMoeStarted = true;
+    if (voiceEnabled()) loadVoiceManifest();
     root.addEventListener("pointerdown", onUserActivity, true);
     root.addEventListener("keydown", onUserActivity, true);
     root.addEventListener("resize", schedule);

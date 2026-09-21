@@ -132,6 +132,24 @@ export function patchIndexHtml(source) {
   return { source: replaceExactlyOnce(source, "</head>", fallback, "frontend index head close"), changed: true };
 }
 
+/* The Japanese voice pack is a directory tree rather than a fixed file list, and
+   it is optional: a clone that never ran scripts/voice-pack.py simply has no
+   voice directory and installs exactly as before. */
+function collectVoiceAssets() {
+  const dir = path.join(EXT, "assets", "voice");
+  const out = [];
+  if (!fs.existsSync(dir)) return out;
+  const walk = (rel) => {
+    for (const entry of fs.readdirSync(path.join(dir, rel), { withFileTypes: true })) {
+      const next = rel ? `${rel}/${entry.name}` : entry.name;
+      if (entry.isDirectory()) walk(next);
+      else out.push(`voice/${next}`);
+    }
+  };
+  walk("");
+  return out.sort();
+}
+
 export function planWrites(target, assetsOnly = false) {
   const base = path.resolve(target);
   const writes = [];
@@ -142,7 +160,7 @@ export function planWrites(target, assetsOnly = false) {
        patchHost/patchClient/untheme helpers stay exported for legacy installs. */
   }
   const assetsRoot = path.join(base, "node_modules/@deepseek-ai/dsh-web-frontend/dist/assets");
-  for (const name of ASSETS) {
+  for (const name of [...ASSETS, ...collectVoiceAssets()]) {
     const src = path.join(EXT, "assets", name);
     if (!fs.existsSync(src)) throw new Error(`theme asset missing: ${src}`);
     push(normalizeRel(path.join(path.relative(base, assetsRoot), name)), fs.readFileSync(src));
@@ -249,8 +267,8 @@ export function untheme(target = DEFAULT_TARGET, options = {}) {
 
 /* ---- mascot settings section: Whale-chan (mascot) ---- */
 
-const MASCOT_SETTINGS_MARKER = "DSH-WHALE-MOE:MASCOT-SETTINGS v27";
-const MASCOT_SETTINGS_LEGACY = ["DSH-WHALE-MOE:MASCOT-SETTINGS v1", "DSH-WHALE-MOE:MASCOT-SETTINGS v2", "DSH-WHALE-MOE:MASCOT-SETTINGS v3", "DSH-WHALE-MOE:MASCOT-SETTINGS v4", "DSH-WHALE-MOE:MASCOT-SETTINGS v5", "DSH-WHALE-MOE:MASCOT-SETTINGS v6", "DSH-WHALE-MOE:MASCOT-SETTINGS v7", "DSH-WHALE-MOE:MASCOT-SETTINGS v8", "DSH-WHALE-MOE:MASCOT-SETTINGS v9", "DSH-WHALE-MOE:MASCOT-SETTINGS v10", "DSH-WHALE-MOE:MASCOT-SETTINGS v11", "DSH-WHALE-MOE:MASCOT-SETTINGS v12", "DSH-WHALE-MOE:MASCOT-SETTINGS v13", "DSH-WHALE-MOE:MASCOT-SETTINGS v14", "DSH-WHALE-MOE:MASCOT-SETTINGS v15", "DSH-WHALE-MOE:MASCOT-SETTINGS v16", "DSH-WHALE-MOE:MASCOT-SETTINGS v17", "DSH-WHALE-MOE:MASCOT-SETTINGS v18", "DSH-WHALE-MOE:MASCOT-SETTINGS v19", "DSH-WHALE-MOE:MASCOT-SETTINGS v20", "DSH-WHALE-MOE:MASCOT-SETTINGS v21", "DSH-WHALE-MOE:MASCOT-SETTINGS v22", "DSH-WHALE-MOE:MASCOT-SETTINGS v23", "DSH-WHALE-MOE:MASCOT-SETTINGS v24", "DSH-WHALE-MOE:MASCOT-SETTINGS v25", "DSH-WHALE-MOE:MASCOT-SETTINGS v26"];
+const MASCOT_SETTINGS_MARKER = "DSH-WHALE-MOE:MASCOT-SETTINGS v28";
+const MASCOT_SETTINGS_LEGACY = ["DSH-WHALE-MOE:MASCOT-SETTINGS v1", "DSH-WHALE-MOE:MASCOT-SETTINGS v2", "DSH-WHALE-MOE:MASCOT-SETTINGS v3", "DSH-WHALE-MOE:MASCOT-SETTINGS v4", "DSH-WHALE-MOE:MASCOT-SETTINGS v5", "DSH-WHALE-MOE:MASCOT-SETTINGS v6", "DSH-WHALE-MOE:MASCOT-SETTINGS v7", "DSH-WHALE-MOE:MASCOT-SETTINGS v8", "DSH-WHALE-MOE:MASCOT-SETTINGS v9", "DSH-WHALE-MOE:MASCOT-SETTINGS v10", "DSH-WHALE-MOE:MASCOT-SETTINGS v11", "DSH-WHALE-MOE:MASCOT-SETTINGS v12", "DSH-WHALE-MOE:MASCOT-SETTINGS v13", "DSH-WHALE-MOE:MASCOT-SETTINGS v14", "DSH-WHALE-MOE:MASCOT-SETTINGS v15", "DSH-WHALE-MOE:MASCOT-SETTINGS v16", "DSH-WHALE-MOE:MASCOT-SETTINGS v17", "DSH-WHALE-MOE:MASCOT-SETTINGS v18", "DSH-WHALE-MOE:MASCOT-SETTINGS v19", "DSH-WHALE-MOE:MASCOT-SETTINGS v20", "DSH-WHALE-MOE:MASCOT-SETTINGS v21", "DSH-WHALE-MOE:MASCOT-SETTINGS v22", "DSH-WHALE-MOE:MASCOT-SETTINGS v23", "DSH-WHALE-MOE:MASCOT-SETTINGS v24", "DSH-WHALE-MOE:MASCOT-SETTINGS v25", "DSH-WHALE-MOE:MASCOT-SETTINGS v26", "DSH-WHALE-MOE:MASCOT-SETTINGS v27"];
 const MASCOT_SETTINGS_ANCHOR = "}, ThemePackRow));";
 
 function mascotBlock(marker) {
@@ -399,6 +417,7 @@ function mascotBlock(marker) {
 			const rows = [
 				{ label: "Whale-chan", prefKey: "pet" },
 				{ label: "Dialogue bubbles", prefKey: "chat" },
+				{ label: "Japanese voice", prefKey: "voiceJa" },
 				{ label: "Particles", prefKey: "particles" },
 				{ label: "Mini games", prefKey: "game" },
 				{ label: "Keyword awareness", prefKey: "keywords" },
@@ -535,8 +554,25 @@ function mascotBlock(marker) {
 
 export function patchMascotClient(source) {
   if (source.includes(MASCOT_SETTINGS_MARKER)) return { source, changed: false };
+  const anchorMissing = () => {
+    /* Newer DSH builds dropped the theme-pack settings slot this mode patches
+       (dsh-client-ui-theme registers settings.general.item only). Rebuilding the
+       panel against a different, build-specific anchor would risk a syntax error
+       inside someone's settings bundle, so refuse loudly and point at the paths
+       that do work on any build. */
+    if (source.includes(MASCOT_SETTINGS_ANCHOR)) return;
+    throw new Error(
+      "--mascot-settings cannot patch this DSH build: it has no theme-pack settings slot " +
+        `(anchor ${JSON.stringify(MASCOT_SETTINGS_ANCHOR)} not found in ${REL.themeClient}).\n` +
+        "  Whale-chan herself, including the Japanese voice, works from --target alone;\n" +
+        "  every toggle (mascot / bubbles / Japanese voice / particles) is in her gear menu.\n" +
+        "  For a section on the DSH settings page, install the plugin as a bundle instead:\n" +
+        "  its lib/client.js registers settings.section (id=mascot) natively, on any build."
+    );
+  };
   const legacyMarker = MASCOT_SETTINGS_LEGACY.find((marker) => source.includes(`/* ${marker} */`));
   if (legacyMarker) {
+    anchorMissing();
     const start = source.indexOf(`/* ${legacyMarker} */`);
     const tail = "}, MascotPrefRows));";
     const end = source.indexOf(tail, start);
@@ -544,6 +580,7 @@ export function patchMascotClient(source) {
     const withoutLegacy = source.slice(0, start) + source.slice(end + tail.length);
     return { source: replaceExactlyOnce(withoutLegacy, MASCOT_SETTINGS_ANCHOR, mascotBlock(MASCOT_SETTINGS_MARKER), "mascot settings slot upgrade"), changed: true };
   }
+  anchorMissing();
   return { source: replaceExactlyOnce(source, MASCOT_SETTINGS_ANCHOR, mascotBlock(MASCOT_SETTINGS_MARKER), "mascot settings slot"), changed: true };
 }
 
