@@ -4,6 +4,7 @@
 
 - The runtime plugin makes zero network requests and never reads, writes, or transmits any API key or credential; neither the plugin code nor the test code contains any key.
 - The pose art generation pipeline (`scripts/gen-assets.py`) calls a third-party image generation API; the required key is read only from the `DSH_JMRAI_API_KEY` environment variable and is never committed to the repository. Normal installation and use do not require that script, nor any key.
+- The bundled Japanese voice pack (`assets/voice/ja/`, 654 Ogg Vorbis clips) is generated offline by `scripts/kokoro-render.py`; the Kokoro model files are downloaded once at development time only. At runtime the mascot reads those clips from the local DSH install, so playback adds no network access.
 
 ## Data
 

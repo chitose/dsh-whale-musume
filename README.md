@@ -147,9 +147,11 @@
 
 - Mascot settings are integrated into the DSH settings page;
 - Collapsible groups: Companion / Weather / Balance / Daily & Growth / Achievement Wall / Growth Diary / Data & Reset, with the overview card and group cards aligned to equal width;
-- Pill toggles: mascot / speech bubble / line narration (shown when MiMo TTS is detected) / particle effects / mini-game / keyword awareness / slack-off reminder / late-night mode / weather effects / tool-type poses / drag inertia / proactive care / accessibility / balance care / show balance number;
+- Pill toggles: mascot / speech bubble / Japanese voice / particle effects / mini-game / keyword awareness / slack-off reminder / late-night mode / weather effects / tool-type poses / drag inertia / proactive care / accessibility / balance care / show balance number;
 - Off by default: line narration, keyword awareness (involves reading chat content), accessibility, balance care, show balance number (involves your account balance);
-- Plugin integration: with `dsh-xiaomi-tts` installed and enabled, you can narrate the lines triggered by head, belly, and tail clicks or a triple click; not installed, unconfigured, or failed playback never affects existing interactions;
+- **Japanese voice** is on by default: every line that appears in a bubble is also spoken from a bundled pack of 654 pre-rendered clips (`assets/voice/ja/`, Kokoro-82M `jf_tebukuro`, 15.7 MB of Ogg Vorbis) — all 653 dialogue lines plus her celebration line. It covers every bubble path, including the work-state lines, and follows the bubble toggle. The clips carry the built-in names, so with a custom "How to address me" or self-name you will hear マスター/くじらちゃん while the bubble shows your name;
+- Any bubble that stays silent can be explained from the console: `__dshWhaleVoice.misses` lists the last 20 lines with a reason (`not-in-pack`, `autoplay-blocked`, `voice-off`, …). The only lines without clips are dynamically composed announcements such as "Achievement unlocked: …"; install MiMo TTS if you want those read too;
+- Plugin integration: with `dsh-xiaomi-tts` installed and enabled, you can narrate the lines triggered by head, belly, and tail clicks or a triple click; not installed, unconfigured, or failed playback never affects existing interactions, and lines that already have a bundled clip are not handed to it, so the two never speak at once;
 - Daily & Growth uses tabs: Today's Quests / Weekly Check-in / Titles, managed alongside the achievement wall;
 - The overview card lets you edit "How to address me" and **"her self-name"** — leave the latter empty and she defaults to "Whale-chan"; every self-reference is then replaced consistently across all 385 occurrences in her dialogue library;
 - Growth data is displayed as compact horizontal cards with sensible information density.
@@ -381,12 +383,16 @@ Or simply turn off the "Mascot" toggle in the settings panel (assets stay in pla
 dsh-whale-musume/
 ├─ assets/
 │  ├─ dsh-whale-moe.css          # Mascot styles and animations
-│  ├─ dsh-whale-moe.js           # DOM presentation layer, state scheduling, interactions
+│  ├─ dsh-whale-moe.js           # DOM presentation layer, state scheduling, interactions, voice playback
 │  ├─ whale-moe-core.js          # Pure-function state machine (unit-testable)
 │  ├─ peek-calibration.json      # Peek-pose calibration data
-│  └─ generated/                 # 90+ sprites (states / interactions / growth / games / weather / festivals / expressions)
+│  ├─ generated/                 # 90+ sprites (states / interactions / growth / games / weather / festivals / expressions)
+│  └─ voice/ja/                  # Generated voice pack: 654 Ogg Vorbis clips + manifest.json (15.7 MB)
 ├─ scripts/
 │  ├─ apply-theme.mjs            # Install / rollback / settings injection
+│  ├─ voice-pilot.mjs            # Voice: line selection, translation store, job builder
+│  ├─ kokoro-render.py           # Voice: Kokoro synthesis with format / silence / vocabulary assertions
+│  ├─ voice-pack.py              # Voice: compression with a per-file SNR gate
 │  ├─ gen-assets.py              # Sprite generation pipeline (calls a third-party image API; keys via environment variables)
 │  ├─ build-assets.py            # Sprite asset build
 │  ├─ build-review.py            # Generates the sprite review page
@@ -399,15 +405,19 @@ dsh-whale-musume/
 │  ├─ whale-moe-quest.test.mjs
 │  ├─ whale-moe-zones.test.mjs
 │  ├─ apply-theme.test.mjs
+│  ├─ voice-pack.test.mjs        # Voice pack coverage, URL contract, playback behaviour
+│  ├─ voice-browser-check.mjs    # Voice end-to-end check in headless Chrome (npm run qa:voice)
 │  ├─ cdp-whale-moe.mjs
 │  ├─ motion-qa.mjs
 │  ├─ soak-work.mjs
 │  ├─ showcase-poses.mjs
 │  └─ showcase-actions.mjs
 ├─ docs/
+│  ├─ voice-pipeline.md          # How to change a translation and regenerate the voice
 │  └─ images/                    # Logo, running screenshots and sprite overview boards
 ├─ LICENSE
 ├─ README.md
+├─ README.en.md
 ├─ CHANGELOG.md
 ├─ SECURITY.md
 └─ CONTRIBUTING.md
@@ -418,10 +428,14 @@ dsh-whale-musume/
 ## Development & Testing
 
 ```powershell
-# Unit tests (102)
+# Unit tests (122)
 npm test
 # or equivalently:
 node --test test/whale-moe-core.test.mjs test/whale-moe-growth.test.mjs test/apply-theme.test.mjs test/whale-moe-game.test.mjs test/whale-moe-fx.test.mjs test/whale-moe-quest.test.mjs test/whale-moe-zones.test.mjs
+
+# Voice end-to-end (needs Chrome/Edge; Node 22+ for the global WebSocket)
+npm run qa:voice          # headless, asserts that playback really advances
+npm run qa:voice:watch    # the same in a visible, audible window
 
 # Motion quality check (needs a test DSH copy running on port 3181)
 node test/motion-qa.mjs
@@ -431,6 +445,8 @@ node test/cdp-whale-moe.mjs
 ```
 
 It is recommended to develop against a separate DSH copy to avoid polluting your main installation.
+
+Regenerating the Japanese voice (translations, new lines, a different voice) is documented in [`docs/voice-pipeline.md`](docs/voice-pipeline.md).
 
 ---
 
@@ -443,6 +459,7 @@ It is recommended to develop against a separate DSH copy to avoid polluting your
 | Images don't update | Hard-refresh (`Ctrl+F5`); asset URLs carry version numbers — if the browser cache is stale, clear the site cache |
 | No "Mascot" section in settings | Script method: run `--mascot-settings` and refresh; bundle method: confirm DSH is 0.1.1-rc.2+; check DSH version compatibility |
 | Accidental drags | A single click never starts a drag; movement must exceed 4px to enter drag mode |
+| Some bubbles have no voice | Paste `__dshWhaleVoice` into the browser console: it lists the last 20 unvoiced lines with a reason. `not-in-pack` means the line has no clip (only dynamically composed announcements do); `autoplay-blocked` clears on your next click; `voice-off` / `bubbles-off` are the toggles. See [docs/voice-pipeline.md](docs/voice-pipeline.md) |
 | Want to restore the default position | Right-click → Back to home position |
 | Mixed the two install methods | Fully uninstall/rollback with the corresponding method first, then reinstall with just one of them |
 
