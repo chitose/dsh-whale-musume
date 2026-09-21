@@ -41,9 +41,9 @@ test("signin streak increments across consecutive days", () => {
 });
 
 test("keyword matcher only works when enabled", () => {
-  assert.equal(core.matchKeyword("谢谢你！", true), "thanks");
-  assert.equal(core.matchKeyword("谢谢你！", false), null);
-  assert.equal(core.matchKeyword("无关内容", true), null);
+  assert.equal(core.matchKeyword("Thank you!", true), "thanks");
+  assert.equal(core.matchKeyword("Thank you!", false), null);
+  assert.equal(core.matchKeyword("unrelated content", true), null);
 });
 
 test("dialogue bank meets the 480-line quota", () => {

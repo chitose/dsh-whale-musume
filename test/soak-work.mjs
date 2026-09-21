@@ -58,7 +58,7 @@ async function main() {
   await waitFor(call, `Boolean(document.querySelector('button'))`, 30000, 500);
   await delay(1000);
   for (let r = 0; r < 4; r++) {
-    const d = await ev(call, `(() => { const ds=[...document.querySelectorAll('[role="dialog"]')].filter(n=>n.offsetParent!==null); const labels=['稍后配置','继续','我知道了','关闭']; for(const l of labels){const t=ds.find(n=>[...n.querySelectorAll('button')].some(b=>(b.textContent||'').trim()===l)); if(!t) continue; [...t.querySelectorAll('button')].find(b=>(b.textContent||'').trim()===l).click(); return true;} return false; })()`);
+    const d = await ev(call, `(() => { const ds=[...document.querySelectorAll('[role="dialog"]')].filter(n=>n.offsetParent!==null); const labels=['\u7a0d\u540e\u914d\u7f6e','\u7ee7\u7eed','\u6211\u77e5\u9053\u4e86','\u5173\u95ed','later','continue','got it','close']; for(const l of labels){const t=ds.find(n=>[...n.querySelectorAll('button')].some(b=>(b.textContent||'').trim().toLowerCase()===l)); if(!t) continue; [...t.querySelectorAll('button')].find(b=>(b.textContent||'').trim().toLowerCase()===l).click(); return true;} return false; })()`);
     if (!d) break; await delay(400);
   }
   await ev(call, `localStorage.setItem('whale-moe:pet','1'); localStorage.setItem('whale-moe:mode','float'); localStorage.setItem('whale-moe:keywords','0'); window.dispatchEvent(new CustomEvent('whale-moe-prefs-change',{detail:{key:'mode',value:'float'}})); true`);

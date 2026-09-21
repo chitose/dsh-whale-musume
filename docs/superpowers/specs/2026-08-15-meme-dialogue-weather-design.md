@@ -1,119 +1,119 @@
-# DS娘 梗聊天 + 可爱对话 + 天气陪伴 设计
+# Whale-chan Meme Chat + Cute Dialogue + Weather Companionship Design
 
-日期：2026-08-15
-状态：已获用户确认，待写实现计划
+Date: 2026-08-15
+Status: Approved by the user; implementation plan pending
 
-## 1. 目标
+## 1. Goals
 
-在不破坏现有状态机、工作态稳定性（v1.0.2）的前提下，把 DS娘 的台词从约 190 条扩到约 500 条，并让她具备：
+Without breaking the existing state machine or work-state stability (v1.0.2), expand Whale-chan's dialogue lines from about 190 to about 500, and give her:
 
-1. 大量安全梗 + 可爱风格对话（元气青梅人设保留：可撒娇、可吐槽、不冒犯）
-2. 低频主动闲聊（每 5–8 分钟一次），且尽量贴当前任务阶段/内容，不尴尬
-3. 分时段问候（早安/上午好/中午好/下午好/傍晚好/晚上好），带关心话
-4. 接入 Open-Meteo 天气，设置面板可填城市、选填 API Key，并有“测试连接”按钮
+1. A large set of safe memes plus cute-style dialogue (keeping the energetic childhood-friend persona: she can act clingy, can snark, and never offends)
+2. Low-frequency proactive small talk (once every 5-8 minutes) that stays as close as possible to the current task stage/content and never feels awkward
+3. Time-of-day greetings (good morning / late morning / noon / good afternoon / good evening / good night), each with a word of care
+4. Open-Meteo weather integration, with a city field and an optional API Key in the settings panel, plus a "Test connection" button
 
-## 2. 用户已确认的决策
+## 2. Decisions Already Confirmed by the User
 
-- 方案 A：就地扩容 `whale-moe-core.js` 词库 + presenter 新组件，不新增脚本文件
-- 台词总量约 500 条；可爱为主 + 安全梗（不碰政治、歧视、争议梗）
-- 天气位置：设置里手填城市；默认空 = 完全不联网
-- 天气呈现：30–60 分钟查一次，待机闲聊时自然插入 + 偶发气泡；工作时不插嘴
-- 主动闲聊：每 5–8 分钟一次；本地读任务文本做话题分类（只匹配关键词，绝不上传）
-- 问候：>3 小时一次；配合天气变体；23:00–05:00 不主动打扰
-- 设置面板必须有：城市输入框、API Key 输入框（选填）、测试连接按钮
+- Option A: expand the `whale-moe-core.js` line bank in place plus new presenter components; no new script files
+- Total dialogue is about 500 lines; mostly cute plus safe memes (no politics, discrimination, or controversial memes)
+- Weather location: city typed manually in settings; empty by default = no network access at all
+- Weather presentation: polled once every 30-60 minutes, woven naturally into idle small talk plus occasional bubbles; no interruptions while working
+- Proactive small talk: once every 5-8 minutes; task text is read locally for topic classification (keyword matching only, never uploaded)
+- Greetings: once every >3 hours; with weather variants; no proactive interruptions between 23:00 and 05:00
+- The settings panel must have: a city input, an API Key input (optional), and a test connection button
 
-## 3. 天气 API
+## 3. Weather API
 
-主选 Open-Meteo（免费、无需 key、CORS 可用）：
+Primary choice: Open-Meteo (free, no key required, CORS available):
 
-- 地理编码：`https://geocoding-api.open-meteo.com/v1/search?name={城市}&count=1&language=zh&format=json`
-- 天气：`https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto`
-- 填了 API Key：在以上请求附加 `&apikey={key}`；无 key 正常走免费档
-- 免费非商业额度对 30–60 分钟一次轮询绰绰有余
+- Geocoding: `https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1&language=zh&format=json`
+- Weather: `https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto`
+- With an API Key set: append `&apikey={key}` to the requests above; without a key, use the free tier normally
+- The free non-commercial quota is more than enough for polling once every 30-60 minutes
 
-隐私：仅向 Open-Meteo 发送城市名/经纬度；任务文本、聊天记录永不外传。
-任务话题分类只在本机浏览器内存中匹配关键词，用完即弃。
+Privacy: only the city name/latitude-longitude are sent to Open-Meteo; task text and chat history are never shared externally.
+Task topic classification matches keywords only in local browser memory and is discarded immediately after use.
 
-## 4. 架构与模块边界
+## 4. Architecture and Module Boundaries
 
-### 4.1 whale-moe-core.js（纯逻辑，无 DOM/网络）
+### 4.1 whale-moe-core.js (pure logic, no DOM/network)
 
-- 词库扩至约 500 条：
-  - `LINES`：状态台词，每状态 4–6 条（约 70）
-  - `DIALOGUE.daily`（约 110）、`work`（约 90）、`interact`（约 80）
-  - `DIALOGUE.keyword`（约 60，含新梗关键词组）
-  - `DIALOGUE.meme`（约 70，12 组：打工人/摸鱼/DDL/画饼/摆烂/发疯文学/立 flag/bug 玄学等）
-  - `DIALOGUE.context`（约 30：code/write/research/bug/data/deploy/general）
-  - `DIALOGUE.weather`（约 30：晴/雨/雪/雷/大风/降温/升温/高温/阴/雾）
-  - `DIALOGUE.greet`（约 30：6 个时间桶 × 5+，每条带关心）
-- 新增导出：
-  - `pickDialogueAvoidRecent(bank, event, counter, rng, recent)`：防重复选取器，优先避开 `recent` 中最近 N 条；不破坏现有 `pickDialogue`
-  - `greetBucket(hour)`：6 个时间桶 = 早上 6:00–8:59 / 上午 9:00–11:59 / 中午 12:00–13:59 / 下午 14:00–17:59 / 傍晚 18:00–22:59 / 深夜 23:00–5:59（深夜不主动问候，只被动回应）
-  - `weatherText(code)`：Open-Meteo WMO weather_code → `{ emoji, label, kind }` 映射（kind: sunny/rain/snow/thunder/wind/hot/cold/cloudy/fog）
-  - `classifyTask(text)`：本地关键词分类 → `code/write/research/bug/data/deploy/general`
-  - 保留 `TEASE_CHANCE` 导出占位兼容，但状态机已不随机 teasing
+- Expand the line bank to about 500 lines:
+  - `LINES`: state dialogue lines, 4-6 per state (about 70)
+  - `DIALOGUE.daily` (about 110), `work` (about 90), `interact` (about 80)
+  - `DIALOGUE.keyword` (about 60, including new meme keyword groups)
+  - `DIALOGUE.meme` (about 70, 12 groups: office worker / slacking off / deadlines / empty promises / letting it rot / madness literature / flag setting / bug mysticism, etc.)
+  - `DIALOGUE.context` (about 30: code/write/research/bug/data/deploy/general)
+  - `DIALOGUE.weather` (about 30: sunny/rain/snow/thunder/strong wind/cooling/warming/high heat/overcast/fog)
+  - `DIALOGUE.greet` (about 30: 6 time buckets x 5+, each with a word of care)
+- New exports:
+  - `pickDialogueAvoidRecent(bank, event, counter, rng, recent)`: an anti-repetition picker that prefers to avoid the most recent N entries in `recent`; does not break the existing `pickDialogue`
+  - `greetBucket(hour)`: 6 time buckets = early morning 6:00-8:59 / morning 9:00-11:59 / noon 12:00-13:59 / afternoon 14:00-17:59 / evening 18:00-22:59 / late night 23:00-5:59 (no proactive greeting late at night, only passive responses)
+  - `weatherText(code)`: Open-Meteo WMO weather_code -> `{ emoji, label, kind }` mapping (kind: sunny/rain/snow/thunder/wind/hot/cold/cloudy/fog)
+  - `classifyTask(text)`: local keyword classification -> `code/write/research/bug/data/deploy/general`
+  - Keep the `TEASE_CHANCE` export as a compatibility placeholder, but the state machine no longer teases randomly
 
-### 4.2 dsh-whale-moe.js（presenter，DOM/网络/调度）
+### 4.2 dsh-whale-moe.js (presenter: DOM/network/scheduling)
 
-- `WeatherService`：
-  - `city` / `apiKey` 存在 `whale-moe:weatherCity` / `whale-moe:weatherKey`
-  - 缓存城市坐标与天气，天气数据 2 小时过期
-  - 30–60 分钟刷新一次；失败退避 60 分钟；测试按钮独立实时请求
-  - 不主动弹任何窗口，只在设置面板与气泡里呈现
-- `IdleChatScheduler`：
-  - 每 5–8 分钟（随机）评估一次，仅 `state === idle`、气泡空闲、宠物开启、非设置页时说话
-  - 选句优先级：问候/天气变化 > 任务阶段与内容贴题 > 通用可爱/梗
-  - 工作态不插嘴；错过顺延
-- `TaskTopicProbe`：
-  - 复用现有关键词扫描的时机（聊天文本变化时，本地）
-  - 只匹配分类词表，产出 `context` 分类；不存文本
-- 问候：
-  - 打开应用/签到后若距上次问候 >3 小时，且不在 23:00–05:00 主动区间，问候一次
-  - 23:00–05:00 只在用户互动/发言后回一句“早点睡”式关心
-- 设置面板（`apply-theme.mjs` 注入 React 部分）：
-  - “天气”区块：城市文本框、API Key 密码框、测试连接按钮
-  - 测试结果状态（✅/❌ + 文案）常驻显示，不自动消失
-  - 无城市 = 不请求任何天气接口
+- `WeatherService`:
+  - `city` / `apiKey` stored in `whale-moe:weatherCity` / `whale-moe:weatherKey`
+  - Caches city coordinates and weather; weather data expires after 2 hours
+  - Refreshes once every 30-60 minutes; on failure backs off for 60 minutes; the test button issues its own live request
+  - Never opens any window proactively; presents only in the settings panel and in bubbles
+- `IdleChatScheduler`:
+  - Evaluates once every 5-8 minutes (randomized), and speaks only when `state === idle`, the bubble is free, the pet is enabled, and the settings page is not open
+  - Line selection priority: greetings/weather changes > on-topic task stage and content > generic cute/meme lines
+  - No interrupting in the work state; missed slots are deferred
+- `TaskTopicProbe`:
+  - Reuses the timing of the existing keyword scan (locally, when chat text changes)
+  - Matches only the classification word list, produces a `context` category; stores no text
+- Greetings:
+  - When the app opens / after check-in, if more than 3 hours have passed since the last greeting and the time is outside the 23:00-05:00 proactive window, greet once
+  - Between 23:00 and 05:00, only reply with a "get some sleep early"-style word of care after the user interacts/speaks
+- Settings panel (the React part injected by `apply-theme.mjs`):
+  - A "Weather" section: city text field, API Key password field, test connection button
+  - The test result status (✅/❌ + message) stays permanently visible and does not auto-dismiss
+  - No city = no weather API requests at all
 
-## 5. 数据流
+## 5. Data Flow
 
-1. 用户设置城市 → `WeatherService.save()` → 地理编码 → 缓存坐标
-2. 定时器/问候触发 → `WeatherService.getWeather()` → core 的 `weatherText(code)` 选模板
-3. `IdleChatScheduler` 组合优先级：问候 > 天气变化 > 任务分类/阶段 > 通用
-4. `showLine()` 沿用现有气泡展示；气泡占用时丢弃或顺延，不打断现有动效
+1. User sets a city -> `WeatherService.save()` -> geocoding -> cache coordinates
+2. Timer/greeting trigger -> `WeatherService.getWeather()` -> core's `weatherText(code)` selects a template
+3. `IdleChatScheduler` combines priority: greetings > weather changes > task classification/stage > generic
+4. `showLine()` reuses the existing bubble presentation; when the bubble is occupied the line is dropped or deferred, without interrupting existing animations
 
-## 6. 失败与降级
+## 6. Failures and Degradation
 
-- 网络失败：静默重试 1 次 → 退避 60 分钟
-- 城市无效/无结果：面板显示“未找到城市”，不反复请求
-- API Key 无效：自动退回无 key 请求；再失败静默
-- 天气过期：不硬聊天气，退到通用句
-- 所有天气功能失败都不得影响看板娘本体与工作态
+- Network failure: one silent retry -> back off for 60 minutes
+- Invalid city/no results: the panel shows "City not found" and does not retry repeatedly
+- Invalid API Key: automatically falls back to a keyless request; if that also fails, stay silent
+- Stale weather: do not force weather talk; fall back to generic lines
+- No weather-feature failure may affect the mascot itself or the work state
 
-## 7. 测试与验收
+## 7. Testing and Acceptance
 
-1. 单元测试：
-   - 防重复选取器不连续重复
-   - `greetBucket` 各边界（5:59/6:00/8:59/9:00/11:59/12:00/13:59/14:00/17:59/18:00/22:59/23:00）
-   - WMO weather_code 映射覆盖常见码（0,1,2,3,45,48,51,61,63,65,71,73,75,80,81,82,95,96,99）
-   - `classifyTask` 对 code/write/research/bug/data/deploy/general 样例
-   - 词库总量 ≥ 480，各分组不低于设计下限
-2. CDP：
-   - 设置面板出现城市/API Key/测试按钮
-   - 天气关闭时 `fetch` 计数为 0
-   - 测试按钮：真实请求 Open-Meteo 成功或明确失败展示；用测试钩子可注入 mock
-   - 主动闲聊计时器存在、间隔落在 5–8 分钟区间；测试钩子可快进
-   - 问候不打扰区间（23:00–05:00）不主动说话
-3. 回归：
-   - 现有 CDP 58 项、motion QA、soak-work、37 项单元测试全部保持绿色
-   - 工作态稳定规则不变：忙时不闲聊、不切姿势、信号保持逻辑不被改动
-4. 人工验收：
-   - 真机填“上海”，测试连接显示 ✅；问候/闲聊里出现带天气的关心句
+1. Unit tests:
+   - The anti-repetition picker does not repeat consecutively
+   - `greetBucket` at every boundary (5:59/6:00/8:59/9:00/11:59/12:00/13:59/14:00/17:59/18:00/22:59/23:00)
+   - The WMO weather_code mapping covers common codes (0,1,2,3,45,48,51,61,63,65,71,73,75,80,81,82,95,96,99)
+   - `classifyTask` for code/write/research/bug/data/deploy/general samples
+   - Total line bank >= 480, with no group below its design minimum
+2. CDP:
+   - The settings panel shows the city/API Key/test button
+   - With weather off, the `fetch` count is 0
+   - Test button: makes a real Open-Meteo request and shows success or an explicit failure; test hooks can inject a mock
+   - The proactive small-talk timer exists and its interval falls in the 5-8 minute range; test hooks can fast-forward
+   - No proactive speech during the do-not-disturb greeting window (23:00-05:00)
+3. Regression:
+   - All existing 58 CDP checks, motion QA, soak-work, and 37 unit tests stay green
+   - Work-state stability rules unchanged: no small talk while busy, no pose switching, and the signal-hold logic is not modified
+4. Manual acceptance:
+   - On a real machine, enter "Shanghai" and the test connection shows ✅; greetings/small talk include weather-aware words of care
 
-## 8. 明确不做
+## 8. Explicitly Out of Scope
 
-- 不做主题换肤、衣柜
-- 不做多城市/天气卡片独立 UI
-- 不新增脚本文件、不引入 npm 依赖
-- 不让天气/闲聊在工作态抢话或切换姿势
-- 不碰政治、歧视、争议梗
+- No theme skins or wardrobe
+- No multi-city/weather-card standalone UI
+- No new script files and no npm dependencies
+- Weather/small talk must not grab the conversation or switch poses during the work state
+- No politics, discrimination, or controversial memes

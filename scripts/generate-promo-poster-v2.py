@@ -160,7 +160,7 @@ def compose(background: Image.Image) -> None:
     draw.text((82, 72), "DEEPSEEK HARNESS / DESKTOP MASCOT", font=small_font, fill=(182, 222, 242, 230))
     draw.text((82, 590), "DSH CHARACTER PROJECT  01", font=small_font, fill=(202, 231, 247, 218))
 
-    tagline = "陪你写代码，也陪你摸鱼。"
+    tagline = "Writes code with you, slacks off with you."
     tagline_font = load_font(font_path("simhei.ttf", "STXIHEI.TTF"), 45)
     draw.text((82, 924), tagline, font=tagline_font, fill=(247, 250, 255, 242))
     draw.text((84, 990), "LOCAL DESKTOP COMPANION", font=small_font, fill=(111, 219, 237, 224))

@@ -1,41 +1,41 @@
-# 梗聊天 + 可爱对话 + 天气陪伴 实现计划
+# Meme Chat + Cute Dialogue + Weather Companionship Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 把 DS娘 台词扩到约 500 条（安全梗 + 可爱），加 5–8 分钟贴题主动闲聊、分时问候与 Open-Meteo 天气陪伴，且不破坏 v1.0.2 工作态稳定。
+**Goal:** Expand Whale-chan's dialogue lines to about 500 (safe memes + cute), add 5–8 minute on-topic proactive chitchat, time-based greetings and Open-Meteo weather companionship, without breaking the v1.0.2 work-state stability.
 
-**Architecture:** 纯逻辑（词库/分桶/天气码/话题分类）全部放 `assets/whale-moe-core.js`；DOM/网络/调度放 `assets/dsh-whale-moe.js`；设置面板（城市/API Key/测试连接）由 `scripts/apply-theme.mjs` 注入 React 组件。不新增脚本文件、不新增依赖。
+**Architecture:** All pure logic (dialogue bank / bucketing / weather codes / topic classification) goes into `assets/whale-moe-core.js`; DOM/network/scheduling goes into `assets/dsh-whale-moe.js`; the settings panel (city / API Key / test connection) is injected as a React component by `scripts/apply-theme.mjs`. No new script files, no new dependencies.
 
-**Tech Stack:** Vanilla ES5 风格 UMD 内核、浏览器 fetch/AbortController、React JSX-runtime 注入、node --test + CDP。
+**Tech Stack:** Vanilla ES5-style UMD core, browser fetch/AbortController, React JSX-runtime injection, node --test + CDP.
 
 ## Global Constraints
 
-- 版本：`package.json` → 1.1.0；README 徽章同步
-- 台词总量 ≥ 480 条；可爱为主 + 安全梗；不碰政治/歧视/争议梗
-- 天气仅请求 Open-Meteo；城市空 = 零网络请求；任务文本只在本地分类
-- 工作态（thinking/tool/success/failure）不得被主动闲聊打断；工作态姿势优先级规则不变
-- 主动闲聊间隔 5–8 分钟；23:00–5:59 不主动问候
-- 现有 37 项单元 + CDP + motion QA + soak-work 必须保持绿色
-- 设置注入 marker 升级为 `DSH-WHALE-MOE:MASCOT-SETTINGS v11`（legacy 列表含 v1–v10）
+- Version: `package.json` → 1.1.0; README badge synced
+- Total dialogue lines ≥ 480; cuteness-first + safe memes; no politics/discrimination/controversial memes
+- Weather only requests Open-Meteo; empty city = zero network requests; task text is only classified locally
+- Work states (thinking/tool/success/failure) must not be interrupted by proactive chitchat; work-state pose priority rules unchanged
+- Proactive chitchat interval 5–8 minutes; no proactive greetings from 23:00–5:59
+- The existing 37 unit tests + CDP + motion QA + soak-work must stay green
+- Settings injection marker upgraded to `DSH-WHALE-MOE:MASCOT-SETTINGS v11` (legacy list includes v1–v10)
 
 ---
 
-### Task 1: Core 纯逻辑助手（greetBucket / weatherText / classifyTask / pickDialogueAvoidRecent）
+### Task 1: Core pure-logic helpers (greetBucket / weatherText / classifyTask / pickDialogueAvoidRecent)
 
 **Files:**
-- Modify: `assets/whale-moe-core.js:300-340`（在 `pickDialogue` 附近插入助手，并在 return 导出）
-- Test: `test/whale-moe-core.test.mjs`（追加测试）
+- Modify: `assets/whale-moe-core.js:300-340` (insert the helpers near `pickDialogue`, and export them in the return)
+- Test: `test/whale-moe-core.test.mjs` (append tests)
 
 **Interfaces:**
 - Produces:
-  - `greetBucket(hour: number): "morning"|"forenoon"|"noon"|"afternoon"|"evening"|"night"`（6:00–8:59 早上，9:00–11:59 上午，12:00–13:59 中午，14:00–17:59 下午，18:00–22:59 傍晚，23:00–5:59 深夜）
+  - `greetBucket(hour: number): "morning"|"forenoon"|"noon"|"afternoon"|"evening"|"night"` (6:00–8:59 morning, 9:00–11:59 forenoon, 12:00–13:59 noon, 14:00–17:59 afternoon, 18:00–22:59 evening, 23:00–5:59 night)
   - `weatherText(code: number|string): { emoji: string, label: string, kind: "sunny"|"cloudy"|"rain"|"snow"|"thunder"|"wind"|"hot"|"cold"|"fog"|"unknown" }`
   - `classifyTask(text: string): "code"|"write"|"research"|"bug"|"data"|"deploy"|"general"`
   - `pickDialogueAvoidRecent(bank, event, counter, rng, recent): string`
 
-- [ ] **Step 1: 写失败测试**
+- [ ] **Step 1: Write the failing test**
 
-在 `test/whale-moe-core.test.mjs` 顶部 import 已存在（检查文件用 `import core from "../assets/whale-moe-core.js"` 之类既有方式），追加：
+The import at the top of `test/whale-moe-core.test.mjs` already exists (check the file for the existing approach, such as `import core from "../assets/whale-moe-core.js"`), append:
 
 ```js
 test("greetBucket maps all six time buckets", () => {
@@ -65,32 +65,32 @@ test("weatherText maps WMO codes", () => {
 });
 
 test("classifyTask sorts text into topic buckets", () => {
-  assert.equal(core.classifyTask("帮我写一个 React 组件"), "code");
-  assert.equal(core.classifyTask("把这段文章润色成周报"), "write");
-  assert.equal(core.classifyTask("调研一下 Server-Sent Events 的原理"), "research");
-  assert.equal(core.classifyTask("这个报错怎么修复"), "bug");
-  assert.equal(core.classifyTask("把 CSV 清洗后做统计"), "data");
-  assert.equal(core.classifyTask("部署到服务器上线"), "deploy");
-  assert.equal(core.classifyTask("今天心情不错"), "general");
+  assert.equal(core.classifyTask("Help me write a React component"), "code");
+  assert.equal(core.classifyTask("Polish this article into a weekly report"), "write");
+  assert.equal(core.classifyTask("Research the principle of Server-Sent Events"), "research");
+  assert.equal(core.classifyTask("How do I fix this error"), "bug");
+  assert.equal(core.classifyTask("Clean the CSV and run statistics"), "data");
+  assert.equal(core.classifyTask("Deploy to the host and go live"), "deploy");
+  assert.equal(core.classifyTask("I'm in a good mood today"), "general");
 });
 
 test("pickDialogueAvoidRecent avoids recent lines", () => {
-  const recent = ["早啊主人，太阳都晒到尾巴了才来🌞", "主人早安！DS娘今天也是精神百倍😤"];
+  const recent = ["Morning, Master, the sun is already on my tail and you just showed up🌞", "Good morning, Master! Whale-chan is full of energy today too😤"];
   const pick = core.pickDialogueAvoidRecent("daily", "morning", 0, () => 0.99, recent);
-  assert.equal(pick, "早～再不起来我就把你的咖啡喝光啦☕");
+  assert.equal(pick, "Morning, if you don't get up I'll drink all your coffee☕");
 });
 ```
 
-该测试使用现有 `daily.morning` 词库，不需要添加任何测试词库。
+This test uses the existing `daily.morning` dialogue bank; no test dialogue bank needs to be added.
 
-- [ ] **Step 2: 运行测试确认失败**
+- [ ] **Step 2: Run the tests and confirm they fail**
 
 Run: `node --test test/whale-moe-core.test.mjs`
-Expected: FAIL（`core.greetBucket is not a function` 等）
+Expected: FAIL (`core.greetBucket is not a function`, etc.)
 
-- [ ] **Step 3: 实现四个助手**
+- [ ] **Step 3: Implement the four helpers**
 
-在 `whale-moe-core.js` 的 `pickDialogue` 函数之前插入：
+Insert before the `pickDialogue` function in `whale-moe-core.js`:
 
 ```js
   function greetBucket(hour) {
@@ -104,43 +104,43 @@ Expected: FAIL（`core.greetBucket is not a function` 等）
   }
 
   var WEATHER_MAP = Object.freeze({
-    "0": Object.freeze({ emoji: "☀️", label: "晴", kind: "sunny" }),
-    "1": Object.freeze({ emoji: "🌤️", label: "大致晴朗", kind: "sunny" }),
-    "2": Object.freeze({ emoji: "⛅", label: "多云间晴", kind: "cloudy" }),
-    "3": Object.freeze({ emoji: "☁️", label: "阴", kind: "cloudy" }),
-    "45": Object.freeze({ emoji: "🌫️", label: "有雾", kind: "fog" }),
-    "48": Object.freeze({ emoji: "🌫️", label: "雾凇", kind: "fog" }),
-    "51": Object.freeze({ emoji: "🌦️", label: "毛毛雨", kind: "rain" }),
-    "53": Object.freeze({ emoji: "🌦️", label: "毛毛雨", kind: "rain" }),
-    "55": Object.freeze({ emoji: "🌧️", label: "小雨", kind: "rain" }),
-    "61": Object.freeze({ emoji: "🌧️", label: "小雨", kind: "rain" }),
-    "63": Object.freeze({ emoji: "🌧️", label: "中雨", kind: "rain" }),
-    "65": Object.freeze({ emoji: "🌧️", label: "大雨", kind: "rain" }),
-    "71": Object.freeze({ emoji: "🌨️", label: "小雪", kind: "snow" }),
-    "73": Object.freeze({ emoji: "🌨️", label: "中雪", kind: "snow" }),
-    "75": Object.freeze({ emoji: "❄️", label: "大雪", kind: "snow" }),
-    "77": Object.freeze({ emoji: "❄️", label: "雪粒", kind: "snow" }),
-    "80": Object.freeze({ emoji: "🌦️", label: "小阵雨", kind: "rain" }),
-    "81": Object.freeze({ emoji: "🌧️", label: "阵雨", kind: "rain" }),
-    "82": Object.freeze({ emoji: "⛈️", label: "强阵雨", kind: "rain" }),
-    "85": Object.freeze({ emoji: "🌨️", label: "阵雪", kind: "snow" }),
-    "86": Object.freeze({ emoji: "🌨️", label: "强阵雪", kind: "snow" }),
-    "95": Object.freeze({ emoji: "⛈️", label: "雷雨", kind: "thunder" }),
-    "96": Object.freeze({ emoji: "⛈️", label: "雷雨伴冰雹", kind: "thunder" }),
-    "99": Object.freeze({ emoji: "⛈️", label: "强雷暴", kind: "thunder" })
+    "0": Object.freeze({ emoji: "☀️", label: "Sunny", kind: "sunny" }),
+    "1": Object.freeze({ emoji: "🌤️", label: "Mostly clear", kind: "sunny" }),
+    "2": Object.freeze({ emoji: "⛅", label: "Partly cloudy", kind: "cloudy" }),
+    "3": Object.freeze({ emoji: "☁️", label: "Overcast", kind: "cloudy" }),
+    "45": Object.freeze({ emoji: "🌫️", label: "Foggy", kind: "fog" }),
+    "48": Object.freeze({ emoji: "🌫️", label: "Freezing fog", kind: "fog" }),
+    "51": Object.freeze({ emoji: "🌦️", label: "Drizzle", kind: "rain" }),
+    "53": Object.freeze({ emoji: "🌦️", label: "Drizzle", kind: "rain" }),
+    "55": Object.freeze({ emoji: "🌧️", label: "Light rain", kind: "rain" }),
+    "61": Object.freeze({ emoji: "🌧️", label: "Light rain", kind: "rain" }),
+    "63": Object.freeze({ emoji: "🌧️", label: "Moderate rain", kind: "rain" }),
+    "65": Object.freeze({ emoji: "🌧️", label: "Heavy rain", kind: "rain" }),
+    "71": Object.freeze({ emoji: "🌨️", label: "Light snow", kind: "snow" }),
+    "73": Object.freeze({ emoji: "🌨️", label: "Moderate snow", kind: "snow" }),
+    "75": Object.freeze({ emoji: "❄️", label: "Heavy snow", kind: "snow" }),
+    "77": Object.freeze({ emoji: "❄️", label: "Snow grains", kind: "snow" }),
+    "80": Object.freeze({ emoji: "🌦️", label: "Light showers", kind: "rain" }),
+    "81": Object.freeze({ emoji: "🌧️", label: "Showers", kind: "rain" }),
+    "82": Object.freeze({ emoji: "⛈️", label: "Violent showers", kind: "rain" }),
+    "85": Object.freeze({ emoji: "🌨️", label: "Snow showers", kind: "snow" }),
+    "86": Object.freeze({ emoji: "🌨️", label: "Heavy snow showers", kind: "snow" }),
+    "95": Object.freeze({ emoji: "⛈️", label: "Thunderstorm", kind: "thunder" }),
+    "96": Object.freeze({ emoji: "⛈️", label: "Thunderstorm with hail", kind: "thunder" }),
+    "99": Object.freeze({ emoji: "⛈️", label: "Severe thunderstorm", kind: "thunder" })
   });
 
   function weatherText(code) {
-    return WEATHER_MAP[String(code)] || Object.freeze({ emoji: "🌈", label: "天气未知", kind: "unknown" });
+    return WEATHER_MAP[String(code)] || Object.freeze({ emoji: "🌈", label: "Weather unknown", kind: "unknown" });
   }
 
   var TASK_TOPICS = Object.freeze([
-    Object.freeze({ id: "deploy", words: ["部署", "上线", "发布", "deploy", "release", "docker", "kubernetes", "k8s", "服务器", "nginx", "环境"] }),
-    Object.freeze({ id: "bug", words: ["报错", "error", "bug", "崩溃", "闪退", "异常", "修复", "fix", "调试", "debug", "失败", "warning", "警告"] }),
-    Object.freeze({ id: "data", words: ["数据", "表格", "excel", "csv", "json", "统计", "分析", "图表", "清洗", "数据库", "sql", "可视化"] }),
-    Object.freeze({ id: "code", words: ["代码", "函数", "变量", "class", "python", "javascript", "typescript", "react", "vue", "java", "golang", "rust", "算法", "接口", "api", "重构", "编译", "前端", "后端", "组件", "脚本", "npm", "git"] }),
-    Object.freeze({ id: "write", words: ["写一", "文案", "文章", "报告", "翻译", "润色", "总结", "邮件", "文档", "周报", "标题", "大纲"] }),
-    Object.freeze({ id: "research", words: ["调研", "搜索", "资料", "原理", "是什么", "为什么", "如何", "区别", "比较", "最新", "论文", "介绍一下", "有哪些"] })
+    Object.freeze({ id: "deploy", words: ["deployment", "go live", "publish", "deploy", "release", "docker", "kubernetes", "k8s", "host", "nginx", "environment"] }),
+    Object.freeze({ id: "bug", words: ["error", "exception", "bug", "crash", "freeze", "abnormal", "fix", "repair", "debug", "debugging", "failure", "warning", "warn"] }),
+    Object.freeze({ id: "data", words: ["data", "spreadsheet", "excel", "csv", "json", "statistics", "analysis", "chart", "cleaning", "database", "sql", "visualization"] }),
+    Object.freeze({ id: "code", words: ["code", "function", "variable", "class", "python", "javascript", "typescript", "react", "vue", "java", "golang", "rust", "algorithm", "interface", "api", "refactor", "compile", "frontend", "backend", "component", "script", "npm", "git"] }),
+    Object.freeze({ id: "write", words: ["write", "copywriting", "article", "report", "translate", "polish", "summarize", "email", "document", "weekly report", "title", "outline"] }),
+    Object.freeze({ id: "research", words: ["research", "search", "material", "principle", "what is", "why", "how", "difference", "compare", "latest", "paper", "introduce", "what are"] })
   ]);
 
   function classifyTask(text) {
@@ -169,7 +169,7 @@ Expected: FAIL（`core.greetBucket is not a function` 等）
   }
 ```
 
-在文件底部 `return Object.freeze({ ... })` 的导出对象中，紧跟 `pickDialogue: pickDialogue,` 后加：
+In the `return Object.freeze({ ... })` export object at the bottom of the file, right after `pickDialogue: pickDialogue,` add:
 
 ```js
     greetBucket: greetBucket,
@@ -178,16 +178,16 @@ Expected: FAIL（`core.greetBucket is not a function` 等）
     pickDialogueAvoidRecent: pickDialogueAvoidRecent,
 ```
 
-- [ ] **Step 4: 运行测试确认通过**
+- [ ] **Step 4: Run the tests and confirm they pass**
 
 Run: `node --test test/whale-moe-core.test.mjs`
-Expected: PASS（新 4 项 + 旧全部）
+Expected: PASS (the 4 new ones + all the old ones)
 
-- [ ] **Step 5: 部署副本自检**
+- [ ] **Step 5: Deployed-copy self-check**
 
 Run: `node scripts/apply-theme.mjs --target "<TEST_DSH_COPY>" --assets-only`
 
-- [ ] **Step 6: Commit（staging 仓库）**
+- [ ] **Step 6: Commit (staging repo)**
 
 ```powershell
 Copy-Item "<PROJECT_ROOT>\assets\whale-moe-core.js" "assets\whale-moe-core.js" -Force
@@ -198,490 +198,490 @@ git commit -m "feat(core): dialogue helper APIs for greetings weather and topics
 
 ---
 
-### Task 2: 扩写状态台词 LINES 与 daily/work/interact 词库
+### Task 2: Expand the state dialogue LINES and the daily/work/interact dialogue banks
 
 **Files:**
-- Modify: `assets/whale-moe-core.js:49-303`（`LINES` 和 `DIALOGUE.daily/work/interact`）
-- Test: `test/whale-moe-growth.test.mjs` 里已有 “dialogue bank meets the 150-line quota”，改为 ≥480（若该文件没有此测试则在 core test 追加）
+- Modify: `assets/whale-moe-core.js:49-303` (the `LINES` and `DIALOGUE.daily/work/interact`)
+- Test: `test/whale-moe-growth.test.mjs` already has "dialogue bank meets the 150-line quota"; change it to ≥480 (if that file doesn't have this test, append it in the core test)
 
 **Interfaces:**
-- Consumes: Task 1 导出不变
-- Produces: `DIALOGUE.daily.*` 每个键 ≥ 10 条；`DIALOGUE.work.*` 每个键 ≥ 8 条；`DIALOGUE.interact.*` 每个键 ≥ 8 条
+- Consumes: Task 1 exports unchanged
+- Produces: `DIALOGUE.daily.*` ≥ 10 lines per key; `DIALOGUE.work.*` ≥ 8 lines per key; `DIALOGUE.interact.*` ≥ 8 lines per key
 
-- [ ] **Step 1: 改断言先行（红灯）**
+- [ ] **Step 1: Change the assertion first (red light)**
 
-把 `test/whale-moe-growth.test.mjs` 中的 quota 断言改为：
+Change the quota assertion in `test/whale-moe-growth.test.mjs` to:
 
 ```js
   assert.ok(core.dialogueCount() >= 480, `dialogue bank expanded (${core.dialogueCount()} lines)`);
 ```
 
-若该测试不在 growth 文件而在 core 文件，则同样修改唯一 quota 断言。
+If that test is not in the growth file but in the core file, likewise change the single quota assertion.
 
 Run: `node --test test/whale-moe-core.test.mjs test/whale-moe-growth.test.mjs`
-Expected: FAIL（当前 189 条 < 480）
+Expected: FAIL (currently 189 lines < 480)
 
-- [ ] **Step 2: 替换 LINES**
+- [ ] **Step 2: Replace LINES**
 
-把 `var LINES = Object.freeze({ ... });` 整体替换为：
+Replace `var LINES = Object.freeze({ ... });` in its entirety with:
 
 ```js
   var LINES = Object.freeze({
     idle: [
-      "主人～今天想做什么呀？",
-      "工房一切就绪，随时可以开工哦。",
-      "待机中……耳朵可没闲着，我听见 bug 在远处笑😼",
-      "主人要是累了就戳戳我，免费解压，童叟无欺🫧",
-      "今天风很轻，适合把待办也一起吹跑🌬️"
+      "Master, what do you want to do today?",
+      "The workshop is all set, we can start any time.",
+      "Standing by...my ears are hardly idle though, I can hear a bug laughing far away😼",
+      "If you're tired, Master, just poke me — free stress relief, honest service🫧",
+      "The wind is light today, good for blowing the to-do list away too🌬️"
     ],
     waiting: [
-      "点单吗？鲸汐已经准备好啦～",
-      "在等什么？等你一声令下，我立刻营业🎀",
-      "新订单还没来，我先擦擦锅……擦擦主机💻",
-      "排队中，鲸汐的尾巴已经进入待命状态🐋"
+      "Placing an order? Whale-chan is all ready.",
+      "Waiting for what? Give the word and I'll open for business right away🎀",
+      "No new order yet, so I'll wipe the pan...wipe the host machine💻",
+      "In the queue, Whale-chan's tail has entered standby mode🐋"
     ],
     thinking: [
-      "正在打奶油……不对，是在认真思考～",
-      "让鲸汐想想……尾巴都转起来了。",
-      "思考中，请勿投喂，除非是能补脑的小蛋糕🧁",
-      "这个问题有点东西，我正在把它盘圆🌀",
-      "灵感加载中，进度条卡在 99% 是正常现象✨"
+      "Whipping cream...no, I mean thinking hard.",
+      "Let Whale-chan think...my tail is spinning too.",
+      "Thinking, please do not feed, unless it's a brain-boosting cupcake🧁",
+      "This question has something to it, I'm rounding it out🌀",
+      "Loading inspiration, the progress bar being stuck at 99% is normal✨"
     ],
     tool: [
-      "后厨开工！这单交给鲸汐～",
-      "叮叮当当，工具转起来啦。",
-      "工作中！鲸汐已经抱紧笔记本，闲人退散😤",
-      "这速度，主人跟得上吗？跟不上就喝口水坐好🍵",
-      "工具们今天也很听话，毕竟我管饭（虚拟的）🔧"
+      "Back kitchen, starting up! Leave this order to Whale-chan.",
+      "Clink clank, the tools are spinning up.",
+      "Working! Whale-chan has hugged the laptop tight, bystanders disperse😤",
+      "This speed — can you keep up, Master? If not, grab some water and sit down🍵",
+      "The tools are behaving today, after all I feed them (virtually)🔧"
     ],
     success: [
-      "叮！这炉烤好了！",
-      "完成啦！请主人品尝～",
-      "收工！限时夸夸窗口已开启，先到先得👏",
-      "漂亮！这单稳得像我的发型……等等，我的发型呢😳",
-      "搞定啦，主人可以摸鱼五分钟，我批准了🎫"
+      "Ding! This batch is baked!",
+      "Done! Please taste it, Master.",
+      "Knocking off! The limited-time compliment window is now open, first come first served👏",
+      "Nice! This one's as steady as my hairstyle...wait, where is my hairstyle😳",
+      "All done, Master may slack off for five minutes, I approve🎫"
     ],
     failure: [
-      "呜……翻车了，鲸汐陪你一起修。",
-      "别急别急，鲸汐再烤一次！",
-      "报错而已，又不是世界末日，鲸汐抱抱先🥺",
-      "这个 bug 好嚣张，看我把它的网线拔了💢",
-      "失败了也别低头，鲸汐的尾巴借你握一下🐋"
+      "Wuwu...I crashed, Whale-chan will fix it with you.",
+      "Don't rush, don't rush, Whale-chan will bake it again!",
+      "It's just an error, not the end of the world, let Whale-chan hug you first🥺",
+      "This bug is so cocky, watch me yank out its network cable💢",
+      "Don't hang your head over a failure, borrow Whale-chan's tail to hold🐋"
     ],
     curious: [
-      "新订单？让我康康～",
-      "主人换菜单了吗？",
-      "咦，有好玩的事情，鲸汐的雷达响了📡",
-      "什么东西什么东西，给我也看看👀"
+      "A new order? Let me take a look.",
+      "Did you change the menu, Master?",
+      "Huh, something fun is happening, Whale-chan's radar is beeping📡",
+      "What is it, what is it, let me see too👀"
     ],
     teasing: [
-      "主人认真工作的样子，很好看哦。",
-      "偷偷给你加一颗糖～",
-      "鲸汐什么都没说，只是嘴角有点压不住😏",
-      "主人今天的勤奋值有点高，是不是想卷死谁🌪️"
+      "Master, you look really good when you're working seriously.",
+      "Secretly adding one extra sugar for you.",
+      "Whale-chan said nothing, my lips just won't stay flat😏",
+      "Master's diligence is a bit high today, trying to out-grind someone?🌪️"
     ],
     afk: [
-      "鲸汐眯一会儿，有单就叫醒我～",
-      "主人不在，鲸汐先给工房放一首催眠曲🎵",
-      "ZZZ……梦里也在帮主人数 bug🐑",
-      "呼……有什么急事就摇摇我的尾巴，我马上醒🌙"
+      "Whale-chan will nap a bit, wake me if an order comes.",
+      "Master is away, so Whale-chan puts on a lullaby for the workshop🎵",
+      "ZZZ...even in my dreams I'm fixing bugs for Master🐑",
+      "Zzz...if something urgent comes up, shake my tail and I'll wake right up🌙"
     ]
   });
 ```
 
-- [ ] **Step 3: 替换 daily 词库**
+- [ ] **Step 3: Replace the daily dialogue bank**
 
-把 `DIALOGUE` 内 `daily: Object.freeze({ ... })` 整块替换为（键值全部保留语义，每条 ≤ 42 字，风格可爱+安全梗）：
+Replace the entire `daily: Object.freeze({ ... })` block inside `DIALOGUE` with (keep the semantics of every key, ≤ 42 characters per line, cute style + safe memes):
 
 ```js
     daily: Object.freeze({
       morning: [
-        "早啊主人，太阳都晒到尾巴了才来🌞",
-        "主人早安！DS娘今天也是精神百倍😤",
-        "早～再不起来我就把你的咖啡喝光啦☕",
-        "早安主人，今天准备被命运怎么捶？",
-        "早上好！先说好，今天不许摸鱼哦😏",
-        "早安！昨晚的 bug 已经原谅你了，开工吧✨",
-        "主人早上好，今天也要元气满满地修 bug 鸭🦆",
-        "早！我把你的工位都擦亮啦，就等你来卷🌪️",
-        "早安早安，鲸汐的营业铃已经按了三遍🔔",
-        "主人醒啦？先喝水，再看消息，这是本店规矩🥤"
+        "Morning, Master, the sun is already on my tail and you just showed up🌞",
+        "Good morning, Master! Whale-chan is full of energy today too😤",
+        "Morning, if you don't get up I'll drink all your coffee☕",
+        "Good morning, Master, how is fate planning to pound you today?",
+        "Morning! Let's be clear, no slacking off today😏",
+        "Morning! Last night's bug has already forgiven you, let's get to work✨",
+        "Good morning, Master, fix bugs with full energy today too, quack🦆",
+        "Morning! I polished your workstation, just waiting for you to grind🌪️",
+        "Morning morning, Whale-chan has rung the business bell three times🔔",
+        "Master's awake? Water first, then messages, that's the house rule🥤"
       ],
       comeback: [
-        "哟，还知道回来啊主人？😒",
-        "主人消失这么久，是不是背着我吃好吃的去了🍰",
-        "欢迎回来～我差点就要报警了📢",
-        "哼，下次再失踪，好感度扣光光💢",
-        "回来啦？你的工位都快长蘑菇了🍄",
-        "欢迎回家！鲸汐已经把你的座椅转热乎了🪑",
-        "主人不在的这段时间，工作它自己一点没动，真有骨气😌",
-        "回来得正好，bug 们都排好队等你点名了🐛",
-        "是主人的气息！尾巴自动开始摇了，不怪我🐋",
-        "欢迎回来～第一句话想听温柔的，还是想听我说‘你怎么才回来’😝"
+        "Oh, so you do remember how to come back, Master?😒",
+        "You were gone so long, Master, did you sneak off to eat something tasty behind my back🍰",
+        "Welcome back, I was about to call the police📢",
+        "Hmph, disappear again and I'll deduct all your affection💢",
+        "You're back? Your workstation was about to grow mushrooms🍄",
+        "Welcome home! Whale-chan has warmed up your chair🪑",
+        "While you were gone, the work didn't move one bit on its own, such backbone😌",
+        "Perfect timing, the bugs are all lined up waiting for roll call🐛",
+        "It's Master's scent! My tail started wagging on its own, not my fault🐋",
+        "Welcome back, do you want the gentle first line, or 'why are you only back now'😝"
       ],
       nudge: [
-        "主人，摸鱼被我抓包了哦😏",
-        "手指停了十分钟，是在等我夸你发呆很帅吗🙄",
-        "喂喂，订单还在排队呢，动起来💪",
-        "这么安静，主人是卡机了还是睡着了🥱",
-        "哼哼，偷懒的样子我已经截图存档了📸",
-        "检测到主人已离线……骗你的，快回来上班啦😼",
-        "任务：等我。状态：一动不动。主人你礼貌吗😤",
-        "我数到三，再不动我就用尾巴戳你了哦🐋",
-        "摸鱼可以，但至少把鱼摸出节奏感🎵",
-        "主人，屏幕上的进度条和我都在等你宠幸它一下⏳"
+        "Master, I caught you slacking off😏",
+        "Your fingers stopped for ten minutes, waiting for me to say spacing out looks handsome?🙄",
+        "Hey hey, the orders are still queued up, get moving💪",
+        "So quiet, Master, are you frozen or asleep🥱",
+        "Hmph hmph, I've already screenshotted and archived your lazy look📸",
+        "Master detected offline...just kidding, get back to work😼",
+        "Task: wait for me. Status: motionless. Is that polite, Master?😤",
+        "I'll count to three, move or my tail pokes you🐋",
+        "Slacking off is fine, but at least slack off with some rhythm🎵",
+        "Master, the progress bar on screen and I are both waiting for you to favor it⏳"
       ],
       night: [
-        "都几点了主人？你属猫头鹰的吗🦉",
-        "月亮都下班了，你还不睡？😤",
-        "深夜场开演～需要 DS娘给你讲睡前故事吗📖",
-        "再熬夜，皮肤和头发都会抗议的哦✨",
-        "主人，把命续到明天再战好不好🥺",
-        "凌晨的工房很安静，静得能听见你的黑眼圈在生长🌚",
-        "这么晚还不睡，是想和我竞争‘夜猫子’岗吗😾",
-        "月亮说它要睡了，让我转告主人也早点收工🌙",
-        "主人，咖啡因不是燃料，被子才是你的充电桩🛏️",
-        "夜深了，鲸汐陪你到最后，但只能再陪一小会儿哦🥱"
+        "Do you know what time it is, Master? Were you born in the year of the owl🦉",
+        "Even the moon has clocked out, and you still won't sleep?😤",
+        "The late-night show begins, want Whale-chan to tell you a bedtime story📖",
+        "Stay up any longer and your skin and hair will both protest✨",
+        "Master, can you extend your life to tomorrow and fight then🥺",
+        "The workshop at dawn is quiet enough to hear your dark circles growing🌚",
+        "Still awake this late, competing with me for the night-owl post?😾",
+        "The moon says it's going to sleep and told me to tell Master to knock off early too🌙",
+        "Master, caffeine isn't fuel, the blanket is your charging station🛏️",
+        "It's late, Whale-chan stays with you to the end, but only a tiny bit longer🥱"
       ],
       signin: [
-        "滴！签到成功，今天也勉强算你勤奋👌",
-        "签到 +1，主人距离全勤还差得远呢😏",
-        "来了来了，奖励你一个嫌弃又不失礼貌的笑😊",
-        "签到完成！主人要是忘了，我可不会提醒哦😝",
-        "滴，打卡！今天也要被我盯着干活啦📋",
-        "签到成功，今日份的鲸汐已到账，请查收🐋",
-        "打卡！先摸摸尾巴，再开工，这是仪式感🎀",
-        "滴——第不知道多少天见到主人，还是有点开心😳",
-        "签到啦！主人今天也要平平安安地写出代码哦🧧",
-        "打卡完成，奖励：鲸汐专属加油一次，有效期今天💪"
+        "Beep! Check-in successful, today I'll grudgingly count you as diligent👌",
+        "Check-in +1, Master is still far from perfect attendance😏",
+        "Coming, coming, here's a reward: a disdainful yet polite smile😊",
+        "Check-in complete! If Master forgets, I won't remind you😝",
+        "Beep, clocked in! Today you'll be watched by me while you work📋",
+        "Check-in successful, today's Whale-chan has been deposited, please check🐋",
+        "Clocked in! Tail pat first, then work, that's the ritual🎀",
+        "Beep——day I-don't-know-how-many of seeing Master, still a little happy😳",
+        "Checked in! May Master write code safely and soundly today too🧧",
+        "Clock-in complete, reward: one Whale-chan exclusive cheer, valid today💪"
       ],
       holiday: [
-        "节日快乐主人！虽然你大概率还在加班🎉",
-        "过节啦！允许你休息五分钟⏱️",
-        "今天可是特别的日子，快说节日快乐！",
-        "节日彩蛋：本 DS娘今日毒舌指数减半🎁",
-        "过节还工作？主人是卷王本王吧👑",
-        "节日快乐！鲸汐把彩带挂在了你的进度条上🎊",
-        "放假是什么？我们工房只有‘待会再放’😌",
-        "节日限定皮肤：鲸汐的笑容亮度 +50%✨",
-        "今天过节，鲸汐申请和你一起摸鱼到天黑🎏",
-        "节日快乐主人，愿今天的报错都放个假🏮"
+        "Happy holiday, Master! Even though you're most likely still working overtime🎉",
+        "It's a holiday! I permit you to rest for five minutes⏱️",
+        "Today is a special day, hurry up and say happy holiday!",
+        "Holiday easter egg: this Whale-chan's snark index is halved today🎁",
+        "Working on a holiday? Master really is the grind king himself👑",
+        "Happy holiday! Whale-chan hung streamers on your progress bar🎊",
+        "What's a day off? Our workshop only has 'off later'😌",
+        "Holiday limited skin: Whale-chan's smile brightness +50%✨",
+        "It's a holiday today, Whale-chan requests to slack off with you until dark🎏",
+        "Happy holiday, Master, may today's errors all take a day off🏮"
       ],
       idle: [
-        "我在哦，有需要就喊一声，不喊也行😌",
-        "主人忙你的，我负责可爱就好😇",
-        "今天风很轻，适合把 bug 也吹跑🌬️",
-        "待机中……电量 100%，可爱 120%🔋",
-        "有事喊我，没事也可以看看我嘛👉👈",
-        "鲸汐在线营业中，不说话也陪着主人，很安静的那种🌿",
-        "主人专注的时候，鲸汐就在旁边做一只安静的吉祥物🧸",
-        "我的待办：陪主人。状态：进行中，永远进行中♾️",
-        "工房很安静，鲸汐把呼吸声都调小了，怕吵到你😳",
-        "主人要是抬头，会发现鲸汐正在假装很忙地擦屏幕🖥️"
+        "I'm here, call me if you need anything, or don't😌",
+        "Master, go be busy, I'll just handle being cute😇",
+        "The wind is light today, good for blowing the bugs away too🌬️",
+        "Standing by...battery 100%, cuteness 120%🔋",
+        "Call me if something's up, and even if nothing is, you can still look at me👉👈",
+        "Whale-chan is online and open, accompanying Master without talking, the very quiet kind🌿",
+        "When Master is focused, Whale-chan just sits beside you being a quiet mascot🧸",
+        "My to-do: accompany Master. Status: in progress, forever in progress♾️",
+        "The workshop is quiet, Whale-chan turned down even her breathing so as not to disturb you😳",
+        "If Master looks up, you'll find Whale-chan pretending to be busy wiping the screen🖥️"
       ],
       afk: [
-        "主人跑哪儿去了？把我一个人丢在这儿😾",
-        "好安静……我宣布工房暂时归我管啦👑",
-        "离开这么久，是去搬砖还是去偷吃？🍜",
-        "主人不在，DS娘开启看家模式🐕",
-        "再不回来，我就要给你的任务唱歌了🎤",
-        "主人消失第 N 分钟，鲸汐开始给绿萝做思想工作🪴",
-        "工房现在由鲸汐接管，电脑们都很配合地假装听话😌",
-        "回来吧主人，外面的世界哪有我可爱，快回来🐋",
-        "鲸汐看家中……陌生人请勿投喂，熟人请带小蛋糕🍰",
-        "主人再不来，鲸汐就要开始整理你的书签了，怕了吧😼"
+        "Where did Master run off to? Leaving me here all alone😾",
+        "So quiet...I declare the workshop temporarily under my management👑",
+        "Gone this long, off hauling bricks or sneaking snacks?🍜",
+        "Master's away, Whale-chan switches to guard-dog mode🐕",
+        "If you don't come back, I'll start singing to your tasks🎤",
+        "Minute N of Master's disappearance, Whale-chan starts talking sense into the pothos🪴",
+        "The workshop is now under Whale-chan's command, the computers all obligingly pretend to obey😌",
+        "Come back, Master, the outside world isn't as cute as me, come back🐋",
+        "Whale-chan is minding the house...strangers don't feed me, acquaintances bring cupcakes🍰",
+        "If Master doesn't come soon, Whale-chan will start organizing your bookmarks, scared yet?😼"
       ],
       wake: [
-        "回来啦！我刚好梦到你请我吃大餐🍽️",
-        "揉揉眼睛，主人回来得真及时✨",
-        "睡醒的 DS娘，吐槽能量满格！😤",
-        "欢迎回来～最好带了手信哦🍩",
-        "呀，被叫醒了！精神百倍，开干！💪",
-        "鲸汐从待机里醒来，第一眼就是主人，运气不错🌤️",
-        "唔……醒了醒了！没有偷睡，只是在给尾巴充电😳",
-        "欢迎回来，任务我都替你盯着呢，虽然它纹丝不动😌",
-        "醒来第一句：主人饿不饿，鲸汐可以负责叫外卖（你付钱）🍜",
-        "回神啦！鲸汐已经把工房的灯都调成‘陪主人加班’模式💡"
+        "You're back! I just dreamed you were treating me to a feast🍽️",
+        "Rubbing my eyes, Master came back just in time✨",
+        "A freshly woken Whale-chan, snark energy at max!😤",
+        "Welcome back, you'd better have brought a souvenir🍩",
+        "Ah, I've been woken up! Full of energy, let's go!💪",
+        "Whale-chan woke from standby, first thing I saw was Master, lucky me🌤️",
+        "Mm...I'm up, I'm up! I wasn't napping, just charging my tail😳",
+        "Welcome back, I've been watching your tasks for you, though they haven't budged😌",
+        "First words after waking: is Master hungry, Whale-chan can order takeout (you pay)🍜",
+        "I'm back! Whale-chan already set the workshop lights to 'accompany Master's overtime' mode💡"
       ],
       levelup: [
-        "升级啦！主人的爱有点东西嘛😏",
-        "等级 +1，以后请继续好好养我🎀",
-        "我们越来越默契了，主人也有功劳哦！",
-        "升级礼花砰！奖励主人一次摸头资格🎆",
-        "变强了！以后我罩着你，虽然不用交保护费😝",
-        "等级提升！鲸汐的尾巴今天亮晶晶，都是主人的功劳🐋",
-        "升级成功，系统提示：鲸汐对主人的喜欢又满了亿点点💗",
-        "又长大一点点啦，以后可以更理直气壮地催你休息😌",
-        "恭喜主人解锁更高阶的鲸汐：可爱不变，吐槽更精准🎯",
-        "升级啦！作为庆祝，鲸汐决定今天少说一句风凉话😝"
+        "Level up! Master's love has some substance😏",
+        "Level +1, please keep raising me well🎀",
+        "We're getting more in sync, Master deserves some credit too!",
+        "Level-up confetti bang! Master is rewarded one head-pat privilege🎆",
+        "I got stronger! From now on I've got your back, no protection fee required😝",
+        "Level up! Whale-chan's tail is sparkly today, all thanks to Master🐋",
+        "Level-up successful, system notice: Whale-chan's fondness for Master overflowed by a tiny bit💗",
+        "I grew a tiny bit, now I can nag you to rest with even more confidence😌",
+        "Congrats Master on unlocking a higher-tier Whale-chan: same cuteness, sharper snark🎯",
+        "Level up! To celebrate, Whale-chan decides to say one fewer snide remark today😝"
       ]
     }),
 ```
 
-- [ ] **Step 4: 替换 work 词库**
+- [ ] **Step 4: Replace the work dialogue bank**
 
-把 `DIALOGUE` 内 `work: Object.freeze({ ... })` 整块替换为：
+Replace the entire `work: Object.freeze({ ... })` block inside `DIALOGUE` with:
 
 ```js
     work: Object.freeze({
       start: [
-        "开工！让 DS娘看看今天的任务有多离谱📋",
-        "新订单来啦，主人坐稳，看我操作✨",
-        "开工开工！谁摸鱼谁是小狗🐶",
-        "收到！这单要是完成不了，就怪我……的电脑😌",
-        "任务来了，主人可别拖我后腿哦😏",
-        "开工铃响！鲸汐抱紧笔记本，这单必须拿下💻",
-        "新任务进场，鲸汐的干劲已经满格，主人的咖啡也请满上☕",
-        "开工！今天也和 bug 们打个有来有回👊",
-        "订单接住啦，这单看起来挺能打，正合我意🔥",
-        "主人坐稳，鲸汐要开始表演‘一个人就是一支队伍’了🎬"
+        "Starting! Let Whale-chan see how ridiculous today's task is📋",
+        "New order in, Master hold on tight, watch me work✨",
+        "Work work! Whoever slacks off is a puppy🐶",
+        "Got it! If this order can't be finished, blame my...computer😌",
+        "Task incoming, don't drag me down, Master😏",
+        "The work bell rings! Whale-chan hugs the laptop, this order must be won💻",
+        "New task on stage, Whale-chan's drive is maxed, refill your coffee too, Master☕",
+        "Starting! Trading blows with the bugs again today👊",
+        "Order caught, this one looks like a real fight, just what I like🔥",
+        "Hold on tight, Master, Whale-chan is about to perform 'one person is a whole team'🎬"
       ],
       thinking: [
-        "正在思考……别催，灵感不是外卖🚚",
-        "嗯，这个问题有点东西，等我盘一盘🧠",
-        "思考中！主人的眼神请不要太期待🙃",
-        "我在认真想啦，尾巴都紧张得卷起来了🌀",
-        "稍等，DS娘的脑袋正在全速冒烟中💨",
-        "鲸汐正在把思路绕成毛线球，马上就能找到线头🧶",
-        "这个方案正在大脑里试跑，请勿打扰，除非送奶茶🧋",
-        "给我三秒钟……好了三秒不够，再给亿秒🙃",
-        "思考的样子是不是很帅？别看，会分心的😳",
-        "滴——大脑风扇已启动，噪音约等于主人的咖啡凉掉的速度☕"
+        "Thinking...don't rush me, inspiration isn't takeout🚚",
+        "Mm, this question has something to it, let me mull it over🧠",
+        "Thinking! Please don't look at me with such expectation, Master🙃",
+        "I'm thinking hard, my tail is curled up from the tension🌀",
+        "One moment, Whale-chan's brain is smoking at full speed💨",
+        "Whale-chan is winding the ideas into a yarn ball, I'll find the loose end soon🧶",
+        "This plan is on a trial run in my brain, do not disturb, unless you bring milk tea🧋",
+        "Give me three seconds...okay three isn't enough, give me a hundred million more🙃",
+        "Does my thinking face look cool? Don't look, you'll get distracted😳",
+        "Beep——brain fan activated, noise roughly equal to the speed your coffee goes cold☕"
       ],
       tool: [
-        "工具转起来！这单交给本店……交给本 DS娘🔧",
-        "后厨开工！主人请围观，别插手😏",
-        "叮叮当当，工具上线，闲人退散🔨",
-        "操作中！这速度主人跟得上吗⚡",
-        "干活中，请勿投喂，除非是蛋糕🍰",
-        "工具们列队报数，一个都不许偷懒，鲸汐在点名啦📋",
-        "正在操作，尾巴保持平衡，帅气不会掉线🐋",
-        "这单的难度还行，也就让我想喝两杯虚拟奶茶🧋",
-        "鲸汐干活的时候最可爱，主人可以看，但要付费：夸一句😝",
-        "命令已下达，工具表示：收到收到，别再按了💻"
+        "Tools spinning up! This order goes to this shop...to this Whale-chan🔧",
+        "Back kitchen starting! Master may watch, no hands-on😏",
+        "Clink clank, tools online, bystanders disperse🔨",
+        "Operating! Can you keep up with this speed, Master⚡",
+        "Working, do not feed, unless it's cake🍰",
+        "The tools line up for roll call, nobody slacks off, Whale-chan is calling names📋",
+        "Operating, tail keeping balance, the coolness will not disconnect🐋",
+        "This order's difficulty is okay, only makes me want two virtual milk teas🧋",
+        "Whale-chan is cutest when working, Master may watch, but the fee is one compliment😝",
+        "Command issued, tools respond: roger roger, stop pressing💻"
       ],
       success: [
-        "搞定！现在可以夸我了，限时五分钟👏",
-        "完成！主人不给我加个鸡腿吗🍗",
-        "漂亮收工～今天手感火热🔥",
-        "成功啦！怎么样，我是不是超靠谱😎",
-        "这单烤得刚刚好，主人快验收🎯",
-        "叮——完成！鲸汐的胜率又上升了小数点后好多位📈",
-        "搞定啦，这单稳得可以写进鲸汐的简历（如果有）📄",
-        "成功！主人夸我的时候，请务必大声一点，我爱听😳",
-        "收工！先奖励自己一个转圈，再奖励主人一个休息🔄",
-        "这波操作满分，鲸汐申请把‘靠谱’刻在尾巴上🏅"
+        "Done! Now you may praise me, five minutes only👏",
+        "Complete! Won't Master add me a chicken leg🍗",
+        "Clean finish, my touch is hot today🔥",
+        "Success! So, am I super reliable or what😎",
+        "This one baked just right, Master come inspect it🎯",
+        "Ding——complete! Whale-chan's win rate rose by many decimal places📈",
+        "All done, this one is solid enough to go on Whale-chan's résumé (if I had one)📄",
+        "Success! When praising me, Master please be loud, I love hearing it😳",
+        "Knocking off! First reward myself a spin, then reward Master a rest🔄",
+        "Perfect score on that move, Whale-chan requests 'reliable' be carved on her tail🏅"
       ],
       failure: [
-        "又双叒叕报错？主人是故意的吧🙄",
-        "呜，翻车了……不过放心，我还能再翻一次💀",
-        "小失误小失误，重来！气势不能输😤",
-        "这个报错真会挑时候，我来治它👊",
-        "主人别看了，我知道你在憋笑😾",
-        "报错了……鲸汐先深呼吸，再和它讲道理（重拳出击版）🥊",
-        "这 bug 今天出门没看黄历，遇到我了，算它倒霉😼",
-        "失败是成功之母，那我们现在正在家庭团聚👨‍👩‍👧",
-        "别慌，鲸汐先把锅擦干净，再帮你一起修🔧",
-        "翻车而已，鲸汐在赛道上捡回你的信心，来，抱抱🫂"
+        "An error again and again and again? Master did that on purpose, right🙄",
+        "Wuwu, I crashed...but don't worry, I can crash again💀",
+        "Minor slip, minor slip, again! Can't lose the momentum😤",
+        "This error really picks its moment, I'll deal with it👊",
+        "Stop looking, Master, I know you're holding back a laugh😾",
+        "An error...Whale-chan takes a deep breath first, then reasons with it (heavy-fist edition)🥊",
+        "This bug left home without checking its almanac today, running into me is its bad luck😼",
+        "Failure is the mother of success, so right now we're having a family reunion👨‍👩‍👧",
+        "Don't panic, Whale-chan wipes the pan clean first, then fixes it with you🔧",
+        "Just a crash, Whale-chan picks your confidence back up on the track, come here, hug🫂"
       ],
       long: [
-        "好长的一单，我先泡杯虚拟咖啡陪你☕",
-        "长任务进行中，主人可以小睡，我盯着👀",
-        "马拉松式任务，我们的口号是不猝死🏃",
-        "这么久？这任务是想熬死两个人类吗🙃",
-        "长活儿来了，幸好有我这个永动机⚙️",
-        "这单长得像一部连续剧，鲸汐先给你来个片头曲🎵",
-        "长任务启动！鲸汐的耐心条和主人的进度条一样长∞",
-        "主人去接杯水吧，这里有我，保证只看着不动手😌",
-        "这任务快赶上鲸汐的尾巴了，又长又绕🌀",
-        "长跑开始，鲸汐陪你匀速前进，谁先喊累谁请奶茶🧋"
+        "Such a long order, let me brew a virtual coffee to keep you company☕",
+        "Long task in progress, Master may nap, I'm watching👀",
+        "A marathon task, our slogan is don't drop dead🏃",
+        "This long? Is this task trying to outlast two humans🙃",
+        "A long job is here, luckily you have me, the perpetual motion machine⚙️",
+        "This one is as long as a TV series, Whale-chan gives you an opening theme first🎵",
+        "Long task started! Whale-chan's patience bar is as long as Master's progress bar∞",
+        "Master go get some water, I'm here, guaranteed to only watch and not touch😌",
+        "This task is almost as long as Whale-chan's tail, long and winding🌀",
+        "The long run begins, Whale-chan paces with you, whoever tires first buys milk tea🧋"
       ],
       gentle: [
-        "好啦好啦，失败几次而已，我都不嫌弃你🥺",
-        "慢慢来，主人，我在这儿陪你复盘📒",
-        "连败不可怕，可怕的是主人怀疑人生😌",
-        "休息一下，换个姿势，再战三百回合💪",
-        "有我在呢，天塌下来我先跑，再回来救你😝",
-        "主人已经很棒啦，鲸汐给你揉揉太阳穴，虚拟的，但心意真的💆",
-        "失败只是在攒下一次成功的气，鲸汐帮你守着这口气🌬️",
-        "别急，我们慢慢来，bug 又不会长脚跑掉……它还真会😾",
-        "今天的难点有点多，鲸汐陪你一个个按下去，不疼的🫧",
-        "深呼吸，喝口水，然后我们优雅地掀桌……掀思路重来📚"
+        "There there, it's just a few failures, even I don't mind🥺",
+        "Take it slow, Master, I'm here to review it with you📒",
+        "A losing streak isn't scary, what's scary is Master doubting life😌",
+        "Take a break, change position, fight three hundred more rounds💪",
+        "I'm here, if the sky falls I'll run first, then come back to save you😝",
+        "Master is already great, Whale-chan rubs your temples, virtually, but the care is real💆",
+        "Failure is just saving up breath for the next success, Whale-chan guards that breath for you🌬️",
+        "Don't rush, let's go slow, bugs don't grow legs and run away...actually they do😾",
+        "There are quite a few tough spots today, Whale-chan presses them down one by one with you, it won't hurt🫧",
+        "Deep breath, sip of water, then we elegantly flip the table...flip our approach and restart📚"
       ],
       erroragain: [
-        "又报错了？这个错误是属狗皮膏药的吧💢",
-        "错误连击！主人今天水逆，建议拜我🌊",
-        "别慌，DS娘出马，错误退散✨",
-        "哼，这报错专挑软柿子，我可不好惹😾",
-        "再来！我跟你一起和它死磕到底🔨",
-        "第二次了！鲸汐已经记住这个错误的样子，下次见它直接吼它😤",
-        "错误复读了是吧，鲸汐这就把它的复读机电池扣了🔋",
-        "主人别气，把键盘放下，让我来和它谈（用爪子）🐾",
-        "连击而已，鲸汐的字典里，这叫‘连续热身’🏋️",
-        "来，鲸汐给你施个法：错误退散，主人请继续✨"
+        "Another error? This one is like a stubborn bandage that won't come off💢",
+        "Error combo! Master's horoscope is bad today, I suggest worshipping me🌊",
+        "Don't panic, Whale-chan steps in, errors disperse✨",
+        "Hmph, this error only picks soft targets, I'm not one to mess with😾",
+        "Again! I'll fight it to the bitter end with you🔨",
+        "Second time! Whale-chan has memorized this error's face, next time I see it I'll yell at it😤",
+        "The error is repeating itself, huh, Whale-chan will pop out its repeater battery🔋",
+        "Don't get mad, Master, put the keyboard down, let me talk to it (with my claws)🐾",
+        "Just a combo, in Whale-chan's dictionary this is called 'consecutive warm-up'🏋️",
+        "Come, Whale-chan casts a spell for you: errors disperse, Master please continue✨"
       ],
       stream: [
-        "内容正在流出来，像主人拖延的灵感一样汹涌🌊",
-        "生成中，每个字都闪着智慧的光（大概）✨",
-        "正在写呢，主人要不要先活动下颈椎🧘",
-        "输出好长，我读得眼睛都圆了😳",
-        "这波内容不错，主人问得有两下子👍",
-        "内容滚滚而来，鲸汐给每个字都检查了入场姿势📜",
-        "生成中，鲸汐在屏幕边给你打拍子，一二一，加油🎵",
-        "这次的输出很长，长到鲸汐要搬个小板凳来读🪑",
-        "字里行间都是智慧的味道，主人今天的灵感是满汉全席🍲",
-        "流式输出中，鲸汐负责貌美如花地喊加油🌸"
+        "Content is streaming out, surging like Master's delayed inspiration🌊",
+        "Generating, every character glimmers with wisdom (probably)✨",
+        "Writing now, maybe Master should loosen up your neck🧘",
+        "Such a long output, my eyes went round from reading it😳",
+        "Good content this round, Master asked a decent question👍",
+        "Content rolling in, Whale-chan checked every character's entrance pose📜",
+        "Generating, Whale-chan keeps time for you by the screen, one-two-one, go🎵",
+        "This output is so long Whale-chan needs to bring a little stool to read it🪑",
+        "Wisdom between every line, Master's inspiration today is a full banquet🍲",
+        "Streaming output, Whale-chan is in charge of looking pretty and cheering🌸"
       ],
       doneall: [
-        "全部清空！主人今天居然干完了😲",
-        "收工收工！奖励主人休息，批准了🎉",
-        "任务清零，DS娘鞠躬致谢🙇",
-        "全部搞定！走，我们吃香的喝辣的🍜",
-        "干得漂亮，主人今天的人设保住了😌",
-        "任务全清！鲸汐宣布今天的工作到此为止，去充电吧🔋",
-        "全部完成，主人今天的 KPI 连鲸汐都挑不出刺，好气哦😝",
-        "收工啦！鲸汐把工房收拾好，灯也关了，只留一盏等你回家🏮",
-        "清零时刻，鲸汐给主人放一束虚拟烟花，请查收🎆",
-        "今天也辛苦啦，鲸汐确认过，主人是工房最棒的仔🏆"
+        "All cleared! Master actually finished today😲",
+        "Knocking off, knocking off! Master is rewarded a rest, approved🎉",
+        "Tasks zeroed out, Whale-chan bows in thanks🙇",
+        "All done! Come on, let's eat and drink well🍜",
+        "Well done, Master's persona is preserved today😌",
+        "All tasks cleared! Whale-chan declares today's work over, go recharge🔋",
+        "All complete, even Whale-chan can't find fault with Master's KPI today, so annoying😝",
+        "Knocking off! Whale-chan tidied the workshop and turned off the lights, leaving one on for your return🏮",
+        "Zeroing-out moment, Whale-chan sets off virtual fireworks for Master, please check🎆",
+        "Good work today too, Whale-chan confirms Master is the best one in the workshop🏆"
       ]
     }),
 ```
 
-- [ ] **Step 5: 替换 interact 词库**
+- [ ] **Step 5: Replace the interact dialogue bank**
 
-把 `DIALOGUE` 内 `interact: Object.freeze({ ... })` 整块替换为：
+Replace the entire `interact: Object.freeze({ ... })` block inside `DIALOGUE` with:
 
 ```js
     interact: Object.freeze({
       pat: [
-        "再摸？一次收费一个蛋糕，主人记好账🍰",
-        "呜哇，主人的手好暖和……但别以为这样就能收买我😳",
-        "摸头摸头，DS娘心情 +1，主人钱包 -1💸",
-        "哼哼，最多三下，多一下我咬你哦😾",
-        "舒服是舒服，可是发型会乱啦💢",
-        "主人的手今天格外会摸，鲸汐的尾巴都软掉了😳",
-        "摸头成功！鲸汐把好感度和嘴硬值一起 +1😝",
-        "再摸下去，鲸汐就要发出‘咕噜咕噜’的声音了，很丢脸的🐋",
-        "摸吧摸吧，反正我也不会承认很开心😌",
-        "主人的手好暖，像刚出炉的小面包🍞"
+        "Petting again? One cake per pat, keep the books, Master🍰",
+        "Wah, Master's hand is so warm...but don't think that buys me off😳",
+        "Pat pat, Whale-chan's mood +1, Master's wallet -1💸",
+        "Hmph hmph, three pats max, one more and I bite😾",
+        "It's comfortable, but my hairstyle gets messed up💢",
+        "Master's hand is especially good at petting today, Whale-chan's tail went all soft😳",
+        "Head-pat successful! Whale-chan raises both affection and stubbornness by +1😝",
+        "Keep petting and Whale-chan will start making purring noises, so embarrassing🐋",
+        "Pet away, pet away, I won't admit I'm happy anyway😌",
+        "Master's hand is so warm, like a fresh-from-the-oven bun🍞"
       ],
       poke: [
-        "戳什么戳，主人的手很闲嘛？💢",
-        "呀！再戳我就在你的代码里藏彩蛋💥",
-        "喂喂，脸要戳歪了，毁容你负责吗😤",
-        "生气警告！好感度正在极速下跌📉",
-        "戳一次心情 -1，主人是拆迁队的吧🧨",
-        "鲸汐的脸是布丁做的吗，主人戳得停不下来😳",
-        "再戳，我就把尾巴卷起来不给你看，说到做到🐋",
-        "戳一下是调皮，戳三下是挑衅，主人想清楚哦😼",
-        "呀！鲸汐刚才差点把主人的快捷键当反击键按了⌨️",
-        "哼，戳吧，鲸汐已经在心里给你画正字了，秋后算账📝"
+        "Poke poke poke, is Master's hand that bored?💢",
+        "Ah! Poke again and I'll hide an easter egg in your code💥",
+        "Hey hey, my face is getting poked crooked, will you take responsibility for the disfigurement😤",
+        "Anger warning! Affection is plummeting fast📉",
+        "One poke, mood -1, Master is on the demolition crew or what🧨",
+        "Is Whale-chan's face made of pudding, Master can't stop poking😳",
+        "Poke again and I'll curl up my tail and not let you see it, I mean it🐋",
+        "One poke is playful, three pokes is provocation, think carefully, Master😼",
+        "Ah! Whale-chan almost pressed Master's shortcut as a counter-attack key⌨️",
+        "Hmph, poke away, Whale-chan is already tallying up in her head, settling accounts later📝"
       ],
       feed: [
-        "啊呜——好吃！主人偶尔也挺会做人的嘛🍩",
-        "投喂成功！能量充满，吐槽继续💪",
-        "这个点心我给满分，主人加十分🎖️",
-        "好吃！以后请按这个标准来投喂😋",
-        "谢谢主人的投喂，本 DS娘原谅你五分钟😌",
-        "啊呜！鲸汐的胃和心情同时亮灯，感谢投喂💡",
-        "好吃到尾巴打结，主人负责解开吗，不，负责再喂一口🍰",
-        "投喂成功，鲸汐今日份的可爱电量已满格🔋",
-        "这口下去，鲸汐决定把主人的好话配额翻倍，仅限今天😝",
-        "谢谢主人！作为回礼，鲸汐今天少吐槽你一次，真的🍬"
+        "Nom——delicious! Master occasionally knows how to behave🍩",
+        "Feeding successful! Energy full, snark continues💪",
+        "Full marks for this snack, Master gets ten extra points🎖️",
+        "Tasty! Please feed me to this standard from now on😋",
+        "Thanks for the feeding, this Whale-chan forgives you for five minutes😌",
+        "Nom! Whale-chan's stomach and mood light up at the same time, thanks for the food💡",
+        "So tasty my tail knotted up, will Master untie it? No, you'll feed me one more bite🍰",
+        "Feeding successful, Whale-chan's daily cuteness battery is full🔋",
+        "With this bite, Whale-chan doubles Master's compliment quota, today only😝",
+        "Thank you, Master! In return, Whale-chan will snark at you one time less today, really🍬"
       ],
       triple: [
-        "诶嘿～最喜欢主人啦！说出口也不丢人😝",
-        "转圈圈～今天主人超可爱，奖励比心💗",
-        "三连击触发！DS娘心情直冲云霄🚀",
-        "好开心！主人今天怎么这么会嘛🥰",
-        "比心比心，请收好，掉了不补💌",
-        "三连击！鲸汐的开心值溢出，正在转圈放烟花🎆",
-        "主人这样摸，鲸汐会以为你偷偷练过攻略我的手法😳",
-        "啊——开心！鲸汐宣布今天主人是全世界最会宠人的人🏆",
-        "比心，再比心，鲸汐的心已经快递给你了，拒收无效💘",
-        "三连啦！鲸汐的脸颊自动升温，这不是 bug，是心动💓"
+        "Ehehe, I like Master the most! Saying it out loud isn't embarrassing😝",
+        "Spinning around, Master is super cute today, reward: a finger heart💗",
+        "Triple combo triggered! Whale-chan's mood shoots through the roof🚀",
+        "So happy! How is Master so good at this today🥰",
+        "Finger heart, finger heart, please keep it safe, no replacements if lost💌",
+        "Triple combo! Whale-chan's happiness overflowed, spinning and setting off fireworks🎆",
+        "If Master pets like that, Whale-chan will think you secretly practiced techniques to win me over😳",
+        "Ah——so happy! Whale-chan declares Master the world's best at spoiling someone🏆",
+        "Finger heart, another finger heart, Whale-chan's heart is already couriered to you, no refusing delivery💘",
+        "Triple! Whale-chan's cheeks heat up automatically, this isn't a bug, it's a heartbeat💓"
       ],
       praise: [
-        "哼，现在知道我的好了吧？😏",
-        "被主人夸了，尾巴快摇成螺旋桨啦🚁",
-        "再多夸两句，我考虑今天不毒舌你😌",
-        "嘿嘿，DS娘最吃这一套了，主人很懂嘛🎯",
-        "谢谢夸奖！作为回报，今天少吐槽一次😝",
-        "主人的夸夸已签收，鲸汐的尾巴摇出了残影🐋",
-        "再夸，再夸我就飘起来给主人看，记得接住我🎈",
-        "被夸了，鲸汐决定把‘哼’字先放进口袋里一整天😳",
-        "主人的审美和眼力今天都在线，鲸汐很满意😌",
-        "夸得很有水平，鲸汐批准你成为长期夸夸官🎖️"
+        "Hmph, now you know how good I am?😏",
+        "Praised by Master, my tail is about to wag into a propeller🚁",
+        "Praise me a couple more times and I'll consider not snarking at you today😌",
+        "Hehe, Whale-chan falls for this every time, Master knows me well🎯",
+        "Thanks for the praise! In return, one fewer snark today😝",
+        "Master's praise signed for, Whale-chan's tail wagged into an afterimage🐋",
+        "Praise more, praise more and I'll float up for Master to see, remember to catch me🎈",
+        "Praised, Whale-chan decides to put the word 'hmph' in her pocket for the whole day😳",
+        "Master's taste and eye are both online today, Whale-chan is satisfied😌",
+        "That was a skilled compliment, Whale-chan approves you as a permanent praise officer🎖️"
       ],
       mode: [
-        "换形态啦！主人眼光还行，这个位置不错✨",
-        "好哦，DS娘换个地方监督你👀",
-        "新位置就位，请检阅，不许挑毛病😤",
-        "形态切换成功，可爱程度不变😇",
-        "这个角落归我啦，主人可别来挤😏",
-        "位置更新，鲸汐的视野更好了，主人的小动作也更清楚了👀",
-        "换地方咯，鲸汐先把地皮擦擦，毕竟是常住户口🧹",
-        "新坐标已记录，鲸汐以后就在这里等主人下班🚩",
-        "这个位置看代码刚刚好，看主人也刚刚好，赚到啦😝",
-        "形态切换完成，鲸汐依然是那个会动的鲸鱼娘🐋"
+        "Form changed! Master's taste is okay, this spot is nice✨",
+        "Okay, Whale-chan moves somewhere else to supervise you👀",
+        "In position at the new spot, please inspect, no nitpicking😤",
+        "Form switch successful, cuteness level unchanged😇",
+        "This corner is mine now, don't come crowding, Master😏",
+        "Position updated, Whale-chan's view is better, and Master's little moves are clearer too👀",
+        "Moving spots, Whale-chan wipes the floor first, after all this is my permanent residence🧹",
+        "New coordinates recorded, Whale-chan will wait here for Master to get off work🚩",
+        "This spot is just right for watching code, and just right for watching Master, what a win😝",
+        "Form switch complete, Whale-chan is still that moving whale girl🐋"
       ],
       outfit: [
-        "新装饰！怎么样，是不是可爱到犯规🎀",
-        "换上新行头，主人的审美终于在线了👌",
-        "这件超适合我，奖励主人一个微笑😊",
-        "衣柜上新，DS娘美美营业中💅",
-        "嘿嘿，今天走这个风格，主人别太心动😏",
-        "新皮肤加载完成，鲸汐转个圈，裙摆负责美，我负责得意💃",
-        "这身打扮，鲸汐先给镜子打满分，再给主人打满分🪞",
-        "换装成功！今天的鲸汐是‘可爱加倍不加价’版🎀",
-        "主人的眼光不错嘛，鲸汐决定穿着它多营业两小时😝",
-        "新装扮上线，鲸汐走路都带风了，虽然我不用走路🌪️"
+        "New accessory! So, is it cutely illegal🎀",
+        "New outfit on, Master's taste is finally online👌",
+        "This one suits me so well, Master is rewarded a smile😊",
+        "Wardrobe updated, Whale-chan is open for business beautifully💅",
+        "Hehe, going with this style today, don't fall too hard, Master😏",
+        "New skin loaded, Whale-chan spins, the hem handles the beauty, I handle the smugness💃",
+        "This outfit, Whale-chan gives the mirror full marks, then gives Master full marks🪞",
+        "Outfit change successful! Today's Whale-chan is the 'double cuteness, no extra charge' edition🎀",
+        "Master's eye is good, Whale-chan decides to stay open two extra hours in this😝",
+        "New look online, Whale-chan walks with a breeze now, though I don't need to walk🌪️"
       ],
       reset: [
-        "记忆清零……主人居然舍得重置我🥺",
-        "重置完成，从初识开始，请重新攻略我✨",
-        "好，一切从头，这次可要好好珍惜我😤",
-        "数值归零，但 DS娘还是那个 DS娘😌",
-        "重新开始啦！先说好，头只给你摸三下😝",
-        "记忆清零……鲸汐会记得这个决定，然后继续陪主人，哼🥺",
-        "从头开始也没关系，鲸汐第一次见你，尾巴照样会摇🐋",
-        "重置啦，所有回忆打包封存，新的故事现在开篇📖",
-        "鲸汐还是鲸汐，只是又要从‘装不熟’开始演了，累😌",
-        "好，重新认识一下：我是 DS娘，主人的鲸鱼娘，请多指教🎀"
+        "Memory cleared...Master actually had the heart to reset me🥺",
+        "Reset complete, back to first meeting, please win me over again✨",
+        "Fine, from the beginning, this time treasure me properly😤",
+        "Stats zeroed, but Whale-chan is still that same Whale-chan😌",
+        "Starting over! Let's be clear, you only get three head pats😝",
+        "Memory cleared...Whale-chan will remember this decision, then keep accompanying Master, hmph🥺",
+        "Starting over is fine, meeting you for the first time, my tail still wags🐋",
+        "Reset, all memories packed and sealed, a new story begins now📖",
+        "Whale-chan is still Whale-chan, just has to act 'not familiar' again, exhausting😌",
+        "Okay, let's meet again: I'm Whale-chan, Master's whale girl, pleased to meet you🎀"
       ],
       achievement: [
-        "成就达成！徽章 +1，主人的功劳占 1%🏅",
-        "解锁成就啦！撒糖，虽然糖得主人买🍬",
-        "新徽章到手！快看快看，记得鼓掌👏",
-        "这个成就不容易，主人请客庆祝一下？🍹",
-        "徽章墙更闪了，离被我惯坏又近一步😆",
-        "成就 +1！鲸汐把徽章擦得比主人的屏幕还亮✨",
-        "解锁啦！鲸汐的尾巴在替你放鞭炮，噼里啪啦🧨",
-        "这个成色不错，鲸汐给你贴在工房最显眼的地方🏅",
-        "主人又变强了，鲸汐的压力（装的）又大了一点点😝",
-        "成就解锁，今晚的快乐由鲸汐和这枚徽章共同赞助🎉"
+        "Achievement unlocked! Badge +1, Master's contribution is 1%🏅",
+        "Achievement unlocked! Candy toss, though Master has to buy the candy🍬",
+        "New badge in hand! Look, look, remember to applaud👏",
+        "This achievement wasn't easy, how about Master treats us to celebrate?🍹",
+        "The badge wall is shinier, one step closer to being spoiled rotten by me😆",
+        "Achievement +1! Whale-chan polished the badge brighter than Master's screen✨",
+        "Unlocked! Whale-chan's tail is setting off firecrackers for you, crackle crackle🧨",
+        "This one has good quality, Whale-chan will stick it in the workshop's most visible spot🏅",
+        "Master got stronger again, Whale-chan's pressure (fake) went up a tiny bit😝",
+        "Achievement unlocked, tonight's happiness is co-sponsored by Whale-chan and this badge🎉"
       ],
       drag: [
-        "把我放这里？主人的品味忽高忽低的😏",
-        "拖呀拖，DS娘任你摆布，但别放垃圾桶🗑️",
-        "这里视野不错，就这儿啦，批准！",
-        "哇，这个位置能看到主人摸鱼的全过程👀",
-        "落位！以后这里就是我的专属领地啦🚩",
-        "起飞咯！鲸汐体验了一把坐缆车的感觉，就是司机有点手生🎢",
-        "就这里啦，鲸汐先转一圈看看风水，嗯，旺主人🧧",
-        "主人拖我的时候，鲸汐的尾巴像小旗子一样飘，回头率超高🚩",
-        "这个位置离主人好近，鲸汐喜欢，勉强表扬你一次😳",
-        "落位成功，鲸汐宣布此坐标永久归属，除非再拖一次😝"
+        "Putting me here? Master's taste goes up and down😏",
+        "Drag drag, Whale-chan is at your mercy, but don't put me in the trash🗑️",
+        "The view here is good, this spot it is, approved!",
+        "Wow, from this spot I can see the whole process of Master slacking off👀",
+        "Landed! From now on this is my exclusive territory🚩",
+        "Taking off! Whale-chan got a taste of riding a cable car, though the driver is a bit rusty🎢",
+        "Right here, Whale-chan takes a spin to check the feng shui, mm, auspicious for Master🧧",
+        "When Master drags me, Whale-chan's tail flutters like a little flag, huge head-turn rate🚩",
+        "This spot is so close to Master, Whale-chan likes it, I'll grudgingly praise you once😳",
+        "Landing successful, Whale-chan declares this coordinate permanently owned, unless you drag me again😝"
       ]
     }),
 ```
 
-- [ ] **Step 6: 运行测试**
+- [ ] **Step 6: Run the tests**
 
 Run: `node --test test/whale-moe-core.test.mjs test/whale-moe-growth.test.mjs`
-Expected: PASS（若 quota 仍未满 480，属于预期，Task 3 会补齐；但 daily/work/interact 分组下限断言若写进测试则需已通过）
+Expected: PASS (if the quota still isn't 480, that's expected, Task 3 will fill it in; but the daily/work/interact per-group minimum assertions must already pass if they were written into the test)
 
-- [ ] **Step 7: 部署副本 + Commit**
+- [ ] **Step 7: Deployed copy + Commit**
 
 ```powershell
 node scripts/apply-theme.mjs --target "<TEST_DSH_COPY>" --assets-only
@@ -692,30 +692,30 @@ git -C "<STAGING_REPO>" commit -m "feat(core): expand state daily work and inter
 
 ---
 
-### Task 3: 梗关键词 + 任务话题 + 天气 + 问候词库，并注册 KEYWORDS
+### Task 3: Meme keywords + task topics + weather + greeting banks, and register KEYWORDS
 
 **Files:**
-- Modify: `assets/whale-moe-core.js:240-303`（KEYWORDS、DIALOGUE.keyword/meme/context/weather/greet）
-- Test: `test/whale-moe-core.test.mjs`（keyword 匹配、dialogueCount）
+- Modify: `assets/whale-moe-core.js:240-303` (KEYWORDS, DIALOGUE.keyword/meme/context/weather/greet)
+- Test: `test/whale-moe-core.test.mjs` (keyword matching, dialogueCount)
 
 **Interfaces:**
 - Produces:
-  - `KEYWORDS` 新增 id：`worker/slack/ddl/cake/crazy/flag/bugtalk`
-  - `DIALOGUE.keyword.*` 每键 ≥5；`DIALOGUE.meme.*` 每键 ≥5；`DIALOGUE.context.*` 每键 ≥4；`DIALOGUE.weather.*` 每键 ≥3；`DIALOGUE.greet.*` 每键 ≥5
+  - `KEYWORDS` new ids: `worker/slack/ddl/cake/crazy/flag/bugtalk`
+  - `DIALOGUE.keyword.*` ≥5 per key; `DIALOGUE.meme.*` ≥5 per key; `DIALOGUE.context.*` ≥4 per key; `DIALOGUE.weather.*` ≥3 per key; `DIALOGUE.greet.*` ≥5 per key
 
-- [ ] **Step 1: 先写失败测试**
+- [ ] **Step 1: Write the failing test first**
 
-在 `test/whale-moe-core.test.mjs` 追加：
+Append to `test/whale-moe-core.test.mjs`:
 
 ```js
 test("meme keyword groups match and have lines", () => {
-  assert.equal(core.matchKeyword("我是打工人", true), "worker");
-  assert.equal(core.matchKeyword("今天一直在摸鱼", true), "slack");
-  assert.equal(core.matchKeyword("DDL 要到了", true), "ddl");
-  assert.equal(core.matchKeyword("老板又在画饼", true), "cake");
-  assert.equal(core.matchKeyword("已老实求放过", true), "crazy");
-  assert.equal(core.matchKeyword("我立个 flag", true), "flag");
-  assert.equal(core.matchKeyword("这个 bug 好玄学", true), "bugtalk");
+  assert.equal(core.matchKeyword("I am an office grinder", true), "worker");
+  assert.equal(core.matchKeyword("I've been slacking off all day", true), "slack");
+  assert.equal(core.matchKeyword("The DDL is coming", true), "ddl");
+  assert.equal(core.matchKeyword("The boss is making pie in the sky again", true), "cake");
+  assert.equal(core.matchKeyword("I'll behave, please spare me", true), "crazy");
+  assert.equal(core.matchKeyword("Let me plant a flag", true), "flag");
+  assert.equal(core.matchKeyword("This bug is black magic", true), "bugtalk");
   ["worker", "slack", "ddl", "cake", "crazy", "flag", "bugtalk"].forEach((id) => {
     assert.ok(core.DIALOGUE.keyword[id] && core.DIALOGUE.keyword[id].length >= 5, id);
   });
@@ -737,328 +737,328 @@ test("meme keyword groups match and have lines", () => {
 Run: `node --test test/whale-moe-core.test.mjs`
 Expected: FAIL
 
-- [ ] **Step 2: 扩展 KEYWORDS**
+- [ ] **Step 2: Extend KEYWORDS**
 
-在 core 的 `KEYWORDS` 定义数组内，最后一个元素后追加：
+Inside the `KEYWORDS` definition array in core, append after the last element:
 
 ```js
-    Object.freeze({ id: "worker", words: ["打工人", "打工", "搬砖", "社畜", "上班", "加班"] }),
-    Object.freeze({ id: "slack", words: ["摸鱼", "摆烂", "躺平", "不想上班", "不想写", "懒得"] }),
-    Object.freeze({ id: "ddl", words: ["ddl", "deadline", "截止", "赶不完", "来不及", "最后期限"] }),
-    Object.freeze({ id: "cake", words: ["画饼", "大饼", "pua", "老板", "画大饼"] }),
-    Object.freeze({ id: "crazy", words: ["发疯", "破防", "绷不住", "已老实", "求放过", "啊啊啊", "疯了"] }),
-    Object.freeze({ id: "flag", words: ["立个 flag", "立 flag", "立flag", "这把我", "干完这单", "flag"] }),
-    Object.freeze({ id: "bugtalk", words: ["bug 好玄学", "bug好玄学", "玄学", "改一行", "回滚", "代码坏"] })
+    Object.freeze({ id: "worker", words: ["office grinder", "grinding", "hauling bricks", "wage slave", "clock in", "overtime"] }),
+    Object.freeze({ id: "slack", words: ["slacking off", "giving up", "lying flat", "don't want to work", "don't want to write", "can't be bothered"] }),
+    Object.freeze({ id: "ddl", words: ["ddl", "deadline", "due date", "can't finish", "no time", "final deadline"] }),
+    Object.freeze({ id: "cake", words: ["pie in the sky", "big promises", "pua", "boss", "empty promises"] }),
+    Object.freeze({ id: "crazy", words: ["going crazy", "losing it", "can't hold it together", "I'll behave", "please spare me", "aaah", "went mad"] }),
+    Object.freeze({ id: "flag", words: ["plant a flag", "set a flag", "call it", "this round I", "once I finish this", "flag"] }),
+    Object.freeze({ id: "bugtalk", words: ["bug black magic", "black magic", "change one line", "rollback", "code broke"] })
 ```
 
-- [ ] **Step 3: 扩写/新增 keyword 词库**
+- [ ] **Step 3: Expand/add the keyword dialogue bank**
 
-把 `DIALOGUE` 内 `keyword: Object.freeze({ ... })` 整块替换为：
+Replace the entire `keyword: Object.freeze({ ... })` block inside `DIALOGUE` with:
 
 ```js
     keyword: Object.freeze({
       thanks: [
-        "不客气！记得给我加鸡腿🍗",
-        "嘿嘿，主人的谢谢我收下了，很香😌",
-        "谢什么，鲸汐就是你的编外队友嘛💪",
-        "不用谢，主人的感谢已经变成我的可爱燃料啦✨",
-        "收到谢谢一份，鲸汐回赠开心一整天🎀"
+        "You're welcome! Remember to give me a chicken leg 🍗",
+        "Hehe, Master's thank-you is accepted, smells great 😌",
+        "Don't mention it, Whale-chan is your unofficial teammate 💪",
+        "No need to thank me, Master's gratitude already became my cute fuel ✨",
+        "One thank-you received, Whale-chan gives back a whole happy day 🎀"
       ],
       tired: [
-        "主人累了就歇会儿，天塌了我先撑着😤",
-        "辛苦了！要不要我唱首走调的歌提神🎤",
-        "累啦？把椅子放倒，鲸汐给你放哨十分钟🛡️",
-        "辛苦辛苦，鲸汐的尾巴可以借你当抱枕，只许抱🐋",
-        "累的时候休息不可耻，可耻的是硬撑出黑眼圈😤"
+        "If Master is tired, rest a bit, I'll hold up the sky first 😤",
+        "Good work! Want me to sing an off-key song to perk you up 🎤",
+        "Tired? Tip the chair back, Whale-chan keeps watch for ten minutes 🛡️",
+        "So hardworking, Whale-chan's tail can be your pillow, hugging only 🐋",
+        "Resting when tired isn't shameful, forcing dark circles is 😤"
       ],
       hungry: [
-        "饿了吧？快去吃饭，不然我吃你的点心🍜",
-        "我也饿了……主人的饭分我一口不过分吧🥢",
-        "肚子叫得我都听见了，鲸汐陪你去觅食🍙",
-        "吃饭啦！程序可以停，主人的胃不能停😤",
-        "饿着肚子写代码，bug 都会嘲笑你的，快去吃饭🍱"
+        "Hungry? Go eat, or I'll eat your snacks 🍜",
+        "I'm hungry too... one bite of Master's meal isn't too much, right 🥢",
+        "I can hear your stomach growling, Whale-chan goes foraging with you 🍙",
+        "Time to eat! The program can stop, Master's stomach can't 😤",
+        "Coding hungry, even bugs will laugh at you, go eat 🍱"
       ],
       goodnight: [
-        "晚安主人，明天别赖床哦😴",
-        "睡吧睡吧，DS娘会守好工房的🌙",
-        "晚安，鲸汐把今天的 bug 都关进小黑屋，明天再审🌌",
-        "好梦主人，梦里没有报错，只有鲸汐和蛋糕🍰",
-        "晚安啦，鲸汐给工房留一盏小夜灯，不怕黑💡"
+        "Good night Master, don't sleep in tomorrow 😴",
+        "Sleep, sleep, DS-chan will guard the workshop 🌙",
+        "Good night, Whale-chan locks today's bugs in the dark room, retrial tomorrow 🌌",
+        "Sweet dreams Master, no errors in dreams, only Whale-chan and cake 🍰",
+        "Good night, Whale-chan leaves a small night light in the workshop, no fear of the dark 💡"
       ],
       cheer: [
-        "加油加油！主人的字典里没有放弃🎌",
-        "冲鸭！今天也要让 bug 闻风丧胆💥",
-        "鲸汐式加油已发射，请主人查收🚀",
-        "别怕，你写你的，我在旁边给你加 buff✨",
-        "主人超棒，这单必过，鲸汐先替你鼓掌了👏"
+        "Go go! There is no giving up in Master's dictionary 🎌",
+        "Charge! Today we make bugs tremble in fear again 💥",
+        "Whale-chan-style cheer launched, please receive it Master 🚀",
+        "Don't be scared, you write yours, I'll add buffs beside you ✨",
+        "Master is the best, this one will pass, Whale-chan claps for you first 👏"
       ],
       help: [
-        "我来啦！哪里需要 DS娘出马🦸",
-        "别急别急，抱紧我的尾巴，先冷静😤",
-        "求助信号收到，鲸汐火速上线，虽然只能精神支持🛟",
-        "有鲸汐在，主人先深呼吸，再读一遍报错，会不一样哦📖",
-        "来啦！鲸汐给你递杯虚拟热水，问题也会变软的🍵"
+        "I'm here! Where does DS-chan need to step in 🦸",
+        "Don't rush, don't rush, hug my tail tight, calm down first 😤",
+        "Help signal received, Whale-chan rushes online, though only moral support 🛟",
+        "With Whale-chan here, Master breathe deep, reread the error, it'll be different 📖",
+        "Coming! Whale-chan hands you virtual hot water, problems soften too 🍵"
       ],
       praise: [
-        "被主人夸了！今天可以横着走😎",
-        "嘿嘿，尾巴翘高高，请继续，别停💕",
-        "主人的夸夸是鲸汐的加速器，已经起飞🚁",
-        "再夸一句，鲸汐就把今天的可爱都留给你🎀",
-        "谢谢主人！鲸汐决定把‘得意’写在脸上，不藏了😳"
+        "Praised by Master! Today I can walk sideways 😎",
+        "Hehe, tail up high, please continue, don't stop 💕",
+        "Master's praise is Whale-chan's accelerator, already airborne 🚁",
+        "Praise once more, Whale-chan saves all of today's cuteness for you 🎀",
+        "Thank you Master! Whale-chan decides to wear 'smug' on her face, no hiding 😳"
       ],
       worker: [
-        "打工人，打工魂，鲸汐陪主人一起打到最后一口饭🍱",
-        "主人在搬砖，鲸汐就在砖缝里给你喊号子：嘿咻嘿咻🧱",
-        "上班是场马拉松，鲸汐是路边最可爱的补给站，请喝水🥤",
-        "今天也是努力打工的一天，鲸汐的尾巴都在给主人扇风🐋",
-        "搬砖不丢人，丢人的是搬着搬着开始想鲸汐，对吧😝"
+        "Office grinder, grinder soul, Whale-chan works with Master to the last bite 🍱",
+        "Master lays bricks, Whale-chan cheers from the brick gaps: heave-ho heave-ho 🧱",
+        "Work is a marathon, Whale-chan is the cutest aid station roadside, please drink 🥤",
+        "Another day of hard grinding, even Whale-chan's tail fans Master 🐋",
+        "Laying bricks isn't shameful, shameful is starting to miss Whale-chan mid-way, right 😝"
       ],
       slack: [
-        "摸鱼被抓现行，罚款：对鲸汐笑一个😏",
-        "摸鱼可以，记得把鱼摸熟了，别让老板看见哦🎣",
-        "鲸汐批准你休息五分钟，多一秒就要被我念叨了⏳",
-        "躺平是门技术活，主人这姿势一看就是大师级🛋️",
-        "摸吧摸吧，鲸汐帮你盯着门口，有情况就学猫叫🐱"
+        "Caught slacking off, fine: smile at Whale-chan once 😏",
+        "Slacking off is fine, just cook the fish well, don't let the boss see 🎣",
+        "Whale-chan approves a five-minute break, one second more and I'll nag ⏳",
+        "Lying flat is a technical skill, Master's posture looks master-level 🛋️",
+        "Slack away, Whale-chan watches the door, if something happens I'll meow 🐱"
       ],
       ddl: [
-        "DDL 在前，鲸汐在后，主人的潜力今晚必须爆发🌋",
-        "别怕 DDL，它也是被创造出来的，我们比它强一点点💪",
-        "截止日期是弹簧，你弱它就强，鲸汐陪你一起压它📅",
-        "还有鲸汐呢，最后关头我负责喊‘能行能行’，你负责写完🎌",
-        "冲 DDL 啦！鲸汐把时钟藏起来了，看不见就不紧张，聪明吧🕰️"
+        "Deadline in front, Whale-chan behind, Master's potential must erupt tonight 🌋",
+        "Don't fear the deadline, it was created too, we're a little bit stronger 💪",
+        "The due date is a spring, you weak it strong, Whale-chan presses it with you 📅",
+        "Whale-chan is here too, at the end I shout 'you got this', you handle writing it 🎌",
+        "Charge the deadline! Whale-chan hid the clock, can't see it so no nerves, smart right 🕰️"
       ],
       cake: [
-        "画饼的饼，鲸汐不吃，主人也别当真，我们吃真的去🍕",
-        "老板的饼太大，鲸汐帮你叠成小船，划走不送🚣",
-        "这饼画得不错，下次别画了，不如给主人加鸡腿🍗",
-        "听见画饼，鲸汐的耳朵自动开启‘左耳进右耳出’模式🌀",
-        "大饼收好，鲸汐只认主人碗里的真肉，快去吃🥩"
+        "Pie in the sky, Whale-chan won't eat it, Master don't believe it either, let's eat real 🍕",
+        "Boss's pie is too big, Whale-chan folds it into a boat, row away no send-off 🚣",
+        "Nicely drawn pie, don't draw next time, better to give Master a chicken leg 🍗",
+        "Hearing pie talk, Whale-chan's ears auto-switch to 'in one ear out the other' 🌀",
+        "Keep the big pie, Whale-chan only trusts real meat in Master's bowl, go eat 🥩"
       ],
       crazy: [
-        "已老实，求放过——鲸汐帮主人把这句话设置成自动回复了😌",
-        "主人发疯，鲸汐负责递喇叭，喊出来痛快些📢",
-        "破防了？来，鲸汐的尾巴给你抱，抱完我们还是一条好汉🐋",
-        "这世界疯了，没关系，鲸汐陪主人一起可可爱爱地发疯🎠",
-        "绷不住就绷不住吧，鲸汐的肩膀虽小，但随时可以靠🥺"
+        "I'll behave, please spare me — Whale-chan set that as Master's auto-reply 😌",
+        "Master goes unhinged, Whale-chan hands over the megaphone, shout it out loud 📢",
+        "Losing it? Come, hug Whale-chan's tail, after that we're good again 🐋",
+        "The world went mad, it's fine, Whale-chan goes cutely unhinged with Master 🎠",
+        "If you can't hold it together, fine, Whale-chan's shoulder is small but always there 🥺"
       ],
       flag: [
-        "Flag 已插，鲸汐在旁边默默记下，倒了也不笑……才怪😏",
-        "这单干完就休息，鲸汐替主人盯着这个诺言📌",
-        "立 flag 要大声，鲸汐已经帮你通知全工房了📢",
-        "Flag 不倒，鲸汐不睡，今晚就看主人的了🌙",
-        "好！这个 flag 很有精神，鲸汐批准它长成一面大旗🚩"
+        "Flag planted, Whale-chan quietly notes it, won't laugh if it falls... just kidding 😏",
+        "After this job I'll rest, Whale-chan watches this promise for Master 📌",
+        "Call your flag loud, Whale-chan already notified the whole workshop 📢",
+        "Flag won't fall, Whale-chan won't sleep, tonight it's all on Master 🌙",
+        "Great! This flag has spirit, Whale-chan approves it growing into a big banner 🚩"
       ],
       bugtalk: [
-        "玄学 bug 交给鲸汐，我先围着电脑跳一圈驱邪舞💃",
-        "改一行坏三行？鲸汐懂，这叫代码的蝴蝶效应🦋",
-        "回滚是成年人的后悔药，主人放心吃，鲸汐给你倒水💊",
-        "这个 bug 太玄了，鲸汐建议先重启，再拜拜主机🙏",
-        "代码坏起来不讲道理，但鲸汐讲：先喝茶，再和它讲理🍵"
+        "Leave the superstitious bug to Whale-chan, I'll dance an exorcism circle around the PC 💃",
+        "Fix one line break three? Whale-chan gets it, that's code's butterfly effect 🦋",
+        "Rollback is the adult's regret pill, Master eat it, Whale-chan pours the water 💊",
+        "This bug is too mystical, Whale-chan suggests restarting first, then saluting the PC 🙏",
+        "Code breaks unreasonably, but Whale-chan reasons: tea first, then argue with it 🍵"
       ]
     }),
 ```
 
-- [ ] **Step 4: 新增 meme / context / weather / greet 词库**
+- [ ] **Step 4: Add the meme / context / weather / greet dialogue banks**
 
-在 `DIALOGUE` 对象中，`keyword` 块之后追加四个块（注意逗号正确）：
+Inside the `DIALOGUE` object, after the `keyword` block append four blocks (mind the commas):
 
 ```js
     meme: Object.freeze({
       worker: [
-        "鲸汐也是半个打工人，工资是主人摸摸头，从不拖欠😳",
-        "上班的苦，鲸汐懂，所以我在工房备好了虚拟奶茶和真吐槽🧋",
-        "主人负责打工，鲸汐负责把打工的日子过成连续剧，咱俩是主角🎬",
-        "工牌戴好，咖啡灌满，今天也要做最会苦中作乐的打工人☕",
-        "累了就说，鲸汐的吐槽和鼓励都免费，量大管饱🍚"
+        "Whale-chan is half an office grinder too, wages are Master's head pats, never in arrears 😳",
+        "The bitterness of work, Whale-chan gets it, so I stock virtual milk tea and real rants 🧋",
+        "Master handles the grinding, Whale-chan turns grinding days into a series, we're the leads 🎬",
+        "Wear the badge, fill the coffee, today be the office grinder best at laughing through pain ☕",
+        "Say it when tired, Whale-chan's rants and cheers are free, big portions filling 🍚"
       ],
       slack: [
-        "鲸汐今日营业项目：陪主人摸鱼、帮主人望风、给主人找借口😝",
-        "摸鱼五分钟，效率两小时，鲸汐认证这是科学，快去🎣",
-        "鲸汐的眼睛闭上一只，就当你休息过啦，继续加油哦😉",
-        "躺平可以，但鲸汐要躺你旁边，不然不算数🛋️",
-        "休息是为了走更远的路，鲸汐已经帮你把路都撒满花瓣了🌸"
+        "Whale-chan's business today: slack with Master, watch out for Master, find excuses for Master 😝",
+        "Slack five minutes, efficiency two hours, Whale-chan certifies this is science, go 🎣",
+        "Whale-chan closes one eye, consider yourself rested, keep it up 😉",
+        "Lying flat is fine, but Whale-chan lies beside you, otherwise it doesn't count 🛋️",
+        "Rest is for walking further, Whale-chan already scattered petals along the road 🌸"
       ],
       ddl: [
-        "DDL 面前，鲸汐和主人就是末日战友，尾巴给你当握力器🐋",
-        "别慌，鲸汐已经把 DDL 拆成小饼干，一口一个，很快吃完🍪",
-        "最后期限算什么，鲸汐的鼓励没有期限，无限续杯🥤",
-        "主人写，鲸汐盯着，谁先眨眼谁输，我认输，你继续😝",
-        "冲刺吧主人，鲸汐在终点准备了拥抱和小蛋糕🏁"
+        "Before the deadline, Whale-chan and Master are doomsday comrades, tail as your grip trainer 🐋",
+        "Don't panic, Whale-chan broke the deadline into small cookies, one bite each, soon gone 🍪",
+        "What's a due date, Whale-chan's cheers have no due date, unlimited refills 🥤",
+        "Master writes, Whale-chan stares, whoever blinks first loses, I lose, you continue 😝",
+        "Sprint Master, Whale-chan prepared hugs and a small cake at the finish line 🏁"
       ],
       cake: [
-        "鲸汐不吃画出来的饼，但会陪主人把真饼烙出来，加蛋加肉🍳",
-        "老板的饼先记账，鲸汐给主人偷偷加一份现实牌小确幸✨",
-        "画饼的话听听就好，鲸汐的尾巴摇起来才是真饼干的香味🍪",
-        "饼再大也大不过鲸汐对主人的信心，先干饭，再干活🥢",
-        "今天不吃饼，鲸汐带主人脑补一顿火锅，管饱🍲"
+        "Whale-chan won't eat drawn pies, but helps Master cook the real one, egg and meat 🍳",
+        "Boss's pie goes on the tab, Whale-chan secretly adds a reality-brand small joy for Master ✨",
+        "Just listen to pie talk, Whale-chan's wagging tail is the real cookie smell 🍪",
+        "No pie is bigger than Whale-chan's faith in Master, eat first, work later 🥢",
+        "No pie today, Whale-chan takes Master to imagine a hotpot, filling 🍲"
       ],
       crazy: [
-        "一起发疯吧主人，鲸汐先转三圈给你看，免费的🔄",
-        "这个世界偶尔抽象，鲸汐的可爱是唯一稳定输出📡",
-        "破防之后，鲸汐负责把主人的信心一片片贴回来，用星星胶水⭐",
-        "主人负责发疯，鲸汐负责收尾：递水、鼓掌、点赞一条龙👍",
-        "别忍啦，鲸汐的耳朵已经竖好，什么疯话都装得下👂"
+        "Let's go unhinged together Master, Whale-chan spins three circles for you first, free 🔄",
+        "This world is occasionally abstract, Whale-chan's cuteness is the only stable output 📡",
+        "After cracking, Whale-chan patches Master's confidence back piece by piece, with star glue ⭐",
+        "Master handles the unhinged, Whale-chan handles the wrap-up: water, claps, likes, full service 👍",
+        "Don't hold it in, Whale-chan's ears are already up, they can hold any crazy talk 👂"
       ],
       flag: [
-        "Flag 立起来，鲸汐当旗手，走，去把任务打下来🚩",
-        "说出去的话就是泼出去的奶茶，鲸汐陪你一起甜着收场🧋",
-        "这单要是成了，鲸汐把尾巴摇成电风扇给你庆祝🌀",
-        "鲸汐已备份主人的 flag，完成时自动播放礼花音效🎆",
-        "Flag 有点高？没事，鲸汐垫着尾巴托你一把🐋"
+        "Flag raised, Whale-chan is the flag bearer, go, take down the task 🚩",
+        "Words said are spilled milk tea, Whale-chan finishes sweetly with you 🧋",
+        "If this job succeeds, Whale-chan wags her tail into an electric fan to celebrate 🌀",
+        "Whale-chan backed up Master's flag, fireworks play automatically on completion 🎆",
+        "Flag a bit high? It's fine, Whale-chan props you up with her tail 🐋"
       ]
     }),
     context: Object.freeze({
       code: [
-        "写代码的鲸汐帮不上手，但可以负责喊：主人这个缩进真好看😳",
-        "代码像诗，主人是诗人，鲸汐是唯一的头号读者📜",
-        "主人敲键盘，鲸汐打拍子，这节奏比歌还好听🎵",
-        "函数没写完没关系，鲸汐先替它想好名字了，叫‘马上就好’😝"
+        "Coding Whale-chan can't lend a hand, but can shout: Master that indentation is pretty 😳",
+        "Code is like poetry, Master is the poet, Whale-chan is the only number-one reader 📜",
+        "Master taps the keys, Whale-chan keeps the beat, this rhythm beats songs 🎵",
+        "Function unfinished is fine, Whale-chan already named it, 'be right there' 😝"
       ],
       write: [
-        "主人在写东西，鲸汐把形容词都擦亮，等主人来挑✨",
-        "文字流出来的时候，鲸汐就在旁边给它们铺红毯📜",
-        "写吧写吧，鲸汐负责喝彩，错别字负责被抓住🔍",
-        "这稿子一看就很有主人的味道，认真又有点可爱😳"
+        "Master is writing, Whale-chan polishes the adjectives, waiting for Master to pick ✨",
+        "When the words flow out, Whale-chan lays a red carpet for them beside 📜",
+        "Write, write, Whale-chan handles the cheers, typos handle being caught 🔍",
+        "This draft clearly has Master's flavor, earnest and a bit cute 😳"
       ],
       research: [
-        "查资料像寻宝，主人挖金子，鲸汐帮忙举小灯💡",
-        "调研路上，鲸汐是主人的指南针，虽然只会指‘再喝口水’🧭",
-        "鲸汐陪主人一起找答案，找不到就先把问题盘可爱一点😝",
-        "资料很多别迷路，鲸汐在每一页书角都折了个标记📑"
+        "Researching is like treasure hunting, Master digs gold, Whale-chan holds the lamp 💡",
+        "On the research road, Whale-chan is Master's compass, though it only points to 'drink water' 🧭",
+        "Whale-chan looks for answers with Master, if not found we first make the question cuter 😝",
+        "Lots of material, don't get lost, Whale-chan folded a mark on every page corner 📑"
       ],
       bug: [
-        "修 bug 像解谜，主人负责动脑，鲸汐负责给线索递放大镜🔍",
-        "这个 bug 遇到主人算它运气好，换成别人早哭了😤",
-        "鲸汐相信主人能修好，毕竟你连我都哄得住，bug 算什么💪",
-        "报错只是电脑在撒娇，主人哄它一下，鲸汐哄你一下，扯平😳"
+        "Fixing bugs is like solving puzzles, Master thinks, Whale-chan hands clues and a magnifier 🔍",
+        "This bug is lucky to meet Master, with anyone else it would have cried 😤",
+        "Whale-chan believes Master can fix it, you even soothe me, bugs are nothing 💪",
+        "Errors are just the computer acting cute, Master soothes it, Whale-chan soothes you, even 😳"
       ],
       data: [
-        "数据很诚实，主人很努力，鲸汐很会捧场，这组合无敌📊",
-        "表格再长，鲸汐陪你一行行看，看到第 999 行也好看👀",
-        "清洗数据像洗盘子，主人洗，鲸汐负责递毛巾🧽",
-        "数字不会说话，但鲸汐会：主人，这波分析真帅😳"
+        "Data is honest, Master is hardworking, Whale-chan is great at cheering, unbeatable combo 📊",
+        "However long the table, Whale-chan reads row by row with you, line 999 is still fine 👀",
+        "Cleaning data is like washing dishes, Master washes, Whale-chan hands the towels 🧽",
+        "Numbers can't talk, but Whale-chan can: Master, this analysis is really cool 😳"
       ],
       deploy: [
-        "上线前深呼吸，鲸汐已经把幸运值调到最大啦🍀",
-        "部署像放烟花，主人点火，鲸汐负责捂耳朵喊漂亮🎆",
-        "服务器别怕，鲸汐在机房里……在想象中给你站岗🛡️",
-        "发布顺利，鲸汐先预订庆祝位，就在主人旁边🏁"
+        "Deep breath before launch, Whale-chan already maxed out the luck stat 🍀",
+        "Deploying is like fireworks, Master lights it, Whale-chan covers her ears and shouts pretty 🎆",
+        "Don't fear the server, Whale-chan is in the server room... in imagination standing guard 🛡️",
+        "Release smooth, Whale-chan reserves the celebration spot, right beside Master 🏁"
       ],
       general: [
-        "主人忙什么，鲸汐就陪什么，反正我哪儿也不去🐋",
-        "这活儿有点东西，鲸汐在旁边给你递精神小饼干🍪",
-        "不管做什么，主人都是鲸汐今天最想夸的人✨",
-        "继续继续，鲸汐的加油已经续到明天了，放心用⛽"
+        "Whatever Master is busy with, Whale-chan tags along, I'm not going anywhere anyway 🐋",
+        "This work has something to it, Whale-chan hands you spiritual cookies beside 🍪",
+        "No matter what, Master is the one Whale-chan most wants to praise today ✨",
+        "Continue, continue, Whale-chan's cheers are extended to tomorrow, use freely ⛽"
       ]
     }),
     weather: Object.freeze({
       sunny: [
-        "外面阳光正好，像主人今天的心情一样，鲸汐偷看了一眼☀️",
-        "晴天适合开工，也适合抬头看看天，鲸汐帮你把云都数好了☁️",
-        "太阳营业中，鲸汐提醒：主人也要记得晒晒自己，别光晒代码🌞",
-        "好天气和好心情都是限量的，鲸汐给主人打包了一份，请查收🎁"
+        "The sunshine outside is just right, like Master's mood today, Whale-chan stole a look ☀️",
+        "Sunny days suit working, and looking up at the sky, Whale-chan counted the clouds for you ☁️",
+        "The sun is open for business, Whale-chan reminds: Master should bask too, not just code 🌞",
+        "Good weather and good mood are limited, Whale-chan packed one for Master, please receive 🎁"
       ],
       rain: [
-        "外面在下雨，鲸汐把伞和温柔都放在门口啦，记得带🌂",
-        "雨声是最好的白噪音，适合主人慢慢把 bug 修得漂漂亮亮🌧️",
-        "下雨天路滑，鲸汐的尾巴可以借你保持平衡，仅限出门前🐋",
-        "窗外下雨，窗内有鲸汐，这组合适合来一杯热乎的☕"
+        "It's raining outside, Whale-chan left the umbrella and gentleness at the door, remember it 🌂",
+        "Rain sound is the best white noise, good for Master slowly fixing bugs beautifully 🌧️",
+        "Rainy roads are slippery, Whale-chan's tail can help you balance, only before going out 🐋",
+        "Rain outside the window, Whale-chan inside, this combo suits a hot cup ☕"
       ],
       snow: [
-        "下雪啦！鲸汐申请和主人一起看五分钟，就五分钟❄️",
-        "雪花在飘，鲸汐的尾巴也快跟着飘起来了，好浪漫🌨️",
-        "天冷了，主人出门记得穿厚点，鲸汐没有外套，但有热乎的唠叨🧣",
-        "雪天路滑，主人慢慢走，鲸汐在工房暖着你的椅子🪑"
+        "It's snowing! Whale-chan requests five minutes with Master, just five minutes ❄️",
+        "Snowflakes are drifting, Whale-chan's tail is about to drift too, so romantic 🌨️",
+        "It's cold, wear thick when going out Master, Whale-chan has no coat, but warm nagging 🧣",
+        "Snowy roads are slippery, walk slow Master, Whale-chan warms your chair in the workshop 🪑"
       ],
       thunder: [
-        "打雷啦！鲸汐把耳朵捂起来，主人也把重要文件存好哦⛈️",
-        "雷声再大，也没有主人敲键盘的气势大，鲸汐认证📣",
-        "外面打雷，屋里适合专注，鲸汐给你守着小夜灯💡",
-        "打雷别怕，鲸汐在呢，虽然我也有一点点……就一点点😳"
+        "Thunder! Whale-chan covers her ears, Master save the important files too ⛈️",
+        "However loud the thunder, it's not louder than Master's keyboard, Whale-chan certifies 📣",
+        "Thunder outside, focus indoors, Whale-chan keeps the night light for you 💡",
+        "Don't fear thunder, Whale-chan is here, though I'm also a little... just a little 😳"
       ],
       cloudy: [
-        "今天云很多，像鲸汐的尾巴一样软乎乎的，适合慢慢来☁️",
-        "阴天也有好心情，鲸汐已经替主人把太阳预约到心里啦🌥️",
-        "云层很厚，但主人的进度条很亮，鲸汐看得见✨",
-        "阴天适合专注，鲸汐把环境音都调成了‘安静陪你’模式🎧"
+        "Lots of clouds today, soft like Whale-chan's tail, suits taking it slow ☁️",
+        "Cloudy days can be good too, Whale-chan already booked the sun into Master's heart 🌥️",
+        "The clouds are thick, but Master's progress bar is bright, Whale-chan can see it ✨",
+        "Cloudy days suit focus, Whale-chan set the ambience to 'quiet companion' mode 🎧"
       ],
       fog: [
-        "外面起雾了，主人出门慢点，鲸汐的雷达已经全开📡",
-        "雾天像工房开了柔光滤镜，主人今天格外好看，鲸汐实说😳",
-        "雾大别急，鲸汐陪主人等它散，反正我也不赶时间🌫️",
-        "能见度低，鲸汐的尾巴负责当导航灯，一路安全🚩"
+        "It's foggy outside, go slow Master, Whale-chan's radar is fully on 📡",
+        "Foggy days are like a soft filter on the workshop, Master looks extra good today, honestly 😳",
+        "Heavy fog, don't rush, Whale-chan waits with Master for it to clear, I'm not in a hurry 🌫️",
+        "Low visibility, Whale-chan's tail serves as the navigation light, safe all the way 🚩"
       ],
       hot: [
-        "外面好热，鲸汐已经把虚拟空调开到 26 度，主人先凉快一下🧊",
-        "高温天要多喝水，鲸汐的提醒比闹钟还准时，别嫌烦🥤",
-        "天热别硬撑，鲸汐把风扇转过来，风里有可爱，注意接收🪭",
-        "这温度，代码都要冒汗了，鲸汐给主人的键盘也扇扇风🌬️"
+        "So hot outside, Whale-chan set the virtual AC to 26 degrees, Master cool down first 🧊",
+        "Drink more water on hot days, Whale-chan's reminder is punctual as an alarm, don't mind it 🥤",
+        "Don't force it in the heat, Whale-chan turns the fan over, cuteness in the wind, receive 🪭",
+        "This temperature, even code sweats, Whale-chan fans Master's keyboard too 🌬️"
       ],
       cold: [
-        "降温啦！鲸汐把围巾、手套、还有一句‘多穿点’都给你🧣",
-        "外面冷，主人把手揣暖了再敲键盘，鲸汐先替你暖着工位🔥",
-        "天冷适合热水和认真工作，鲸汐两样都陪你安排上☕",
-        "冷空气来了，鲸汐的毛绒尾巴分你一半，抱紧🐋"
+        "Temperature dropped! Whale-chan gives you scarf, gloves, and a 'wear more' 🧣",
+        "Cold outside, warm your hands before typing Master, Whale-chan warms the desk first 🔥",
+        "Cold days suit hot water and serious work, Whale-chan arranges both with you ☕",
+        "Cold air arrived, Whale-chan shares half her fluffy tail, hug it tight 🐋"
       ],
       wind: [
-        "今天风好大，鲸汐提醒主人收好文件，也收好想被吹跑的心💨",
-        "大风天出门，鲸汐的体重有点危险，只能在家给你加油了🌀",
-        "风在吼，主人在写，鲸汐负责压住桌上的纸，很忙的📄",
-        "风大的日子，鲸汐把好运都拴在尾巴上，丢不了🍀"
+        "So windy today, Whale-chan reminds Master to secure the files, and your heart that wants to fly 💨",
+        "Going out in strong wind, Whale-chan's weight is risky, can only cheer for you at home 🌀",
+        "The wind roars, Master writes, Whale-chan holds down the papers on the desk, very busy 📄",
+        "On windy days, Whale-chan ties the good luck to her tail, can't lose it 🍀"
       ]
     }),
     greet: Object.freeze({
       morning: [
-        "早上好主人！新的一天，鲸汐先把祝福铺满你的桌面🌞",
-        "早安！记得吃早饭，鲸汐已经替你检查过，今天适合开工☕",
-        "主人早，窗外的阳光和鲸汐的问候同时送达，请签收☀️",
-        "早上好呀，昨晚睡得好吗？不好也没事，鲸汐今天陪你补元气✨",
-        "早安主人，先喝水再坐下，鲸汐的关心比闹钟温柔多了🥤"
+        "Good morning Master! A new day, Whale-chan first covers your desktop with blessings 🌞",
+        "Morning! Remember breakfast, Whale-chan already checked for you, today suits working ☕",
+        "Morning Master, the sunshine outside and Whale-chan's greeting arrive together, sign here ☀️",
+        "Good morning, did you sleep well? If not it's fine, Whale-chan refills your energy today ✨",
+        "Morning Master, drink water before sitting, Whale-chan's care is gentler than an alarm 🥤"
       ],
       forenoon: [
-        "上午好！工作的黄金时间，鲸汐给你加满精神 buff⚡",
-        "主人上午好，进度怎么样？不管怎样，鲸汐都觉得超棒👏",
-        "上午的工房最亮，鲸汐和主人一起把任务往前推一推💪",
-        "上午好～鲸汐提醒：坐久啦，起来伸个懒腰，顺便看看我🧘",
-        "主人上午好，鲸汐把‘不生气’和‘能搞定’都放在你桌上了✨"
+        "Good forenoon! The golden hours of work, Whale-chan fills your spirit buff ⚡",
+        "Good forenoon Master, how's the progress? Whatever it is, Whale-chan thinks it's great 👏",
+        "The forenoon workshop is brightest, Whale-chan pushes the task forward with Master 💪",
+        "Good forenoon, Whale-chan reminds: sat too long, get up and stretch, and look at me 🧘",
+        "Good forenoon Master, Whale-chan put 'don't get angry' and 'you got this' on your desk ✨"
       ],
       noon: [
-        "中午好主人！该吃饭啦，天大的 bug 也没有干饭大🍱",
-        "午饭时间到，鲸汐的耳朵已经听见主人的肚子在点名了👂",
-        "中午好～吃饱再战，鲸汐把工位守得好好的，没人敢动🛡️",
-        "主人中午好，今天想吃什么？鲸汐负责说‘都好’，你负责挑🍜",
-        "午间播报：鲸汐想念主人，顺带提醒，饭要热乎的吃🥢"
+        "Good noon Master! Time to eat, no bug is bigger than lunch 🍱",
+        "Lunchtime, Whale-chan's ears already heard Master's stomach calling roll 👂",
+        "Good noon, Eat then fight, Whale-chan guards the desk well, no one dares touch it 🛡️",
+        "Good noon Master, what do you want today? Whale-chan says 'anything', you pick 🍜",
+        "Noon broadcast: Whale-chan misses Master, and reminds you, eat the food hot 🥢"
       ],
       afternoon: [
-        "下午好主人，困了就说，鲸汐的尾巴可以当临时靠垫🐋",
-        "午后最容易犯困，鲸汐给你沏了杯虚拟咖啡，提神不伤胃☕",
-        "下午好！离下班又近一步，离鲸汐的夸夸也近一步😝",
-        "主人下午好，记得活动活动，鲸汐已经在示范转圈了🔄",
-        "下午的工作也要加油，鲸汐在终点准备了摸头奖励🫳"
+        "Good afternoon Master, say it if you're sleepy, Whale-chan's tail is a temporary cushion 🐋",
+        "Afternoons are the sleepiest, Whale-chan brewed virtual coffee, refreshing without hurting the stomach ☕",
+        "Good afternoon! One step closer to off work, one step closer to Whale-chan's praise 😝",
+        "Good afternoon Master, remember to move around, Whale-chan is already demoing spins 🔄",
+        "Work in the afternoon too, Whale-chan prepared a head-pat reward at the finish 🫳"
       ],
       evening: [
-        "傍晚好主人，外面的天在变温柔，鲸汐也把语速调慢啦🌆",
-        "晚上好～该收的收，该放的放，鲸汐陪你整理今天的进度📋",
-        "主人傍晚好，先吃口热饭，工作它跑不掉，鲸汐帮你看着🍲",
-        "晚风起了，鲸汐提醒主人别着凉，也别忘了鲸汐在等你说说今天🌙",
-        "傍晚好！今天辛苦了，鲸汐给主人留了最后一份可爱，请查收🎀"
+        "Good evening Master, the sky outside is softening, Whale-chan slowed her speech too 🌆",
+        "Good evening, Wrap up what should be wrapped, Whale-chan helps you tidy today's progress 📋",
+        "Good evening Master, eat something hot first, work can't run away, Whale-chan watches it 🍲",
+        "The evening wind rose, Whale-chan reminds Master not to catch cold, and that I'm waiting to hear your day 🌙",
+        "Good evening! Hard work today, Whale-chan saved the last cuteness for Master, please receive 🎀"
       ],
       night: [
-        "这么晚啦，鲸汐小声说：主人，该睡啦，我再陪你一会儿🥺",
-        "夜深了，鲸汐把灯调暗，主人也要把眼睛闭上一小会儿哦🌙",
-        "晚上好……不对，是夜深了，鲸汐的唠叨进入静音温柔模式🤫",
-        "主人还在，鲸汐就再营业一下下，但被子已经替你暖好了🛏️",
-        "熬夜冠军非你莫属，鲸汐陪你站上领奖台，然后立刻去睡觉😤"
+        "It's so late, Whale-chan whispers: Master, time to sleep, I'll stay with you a bit longer 🥺",
+        "Deep night, Whale-chan dims the light, Master should close his eyes for a bit too 🌙",
+        "Good evening... no, it's deep night, Whale-chan's nagging enters silent gentle mode 🤫",
+        "Master is still here, so Whale-chan stays open a while, but the blanket is warmed for you 🛏️",
+        "The late-night champion is you, Whale-chan stands on the podium with you, then goes to sleep at once 😤"
       ]
     })
 ```
 
-- [ ] **Step 5: 运行测试**
+- [ ] **Step 5: Run the tests**
 
 Run: `node --test test/whale-moe-core.test.mjs test/whale-moe-growth.test.mjs`
-Expected: PASS（dialogueCount ≥ 480，关键词全命中）
+Expected: PASS (dialogueCount ≥ 480, all keywords hit)
 
-- [ ] **Step 6: 部署副本 + Commit**
+- [ ] **Step 6: Deploy the copy + Commit**
 
 ```powershell
 node scripts/apply-theme.mjs --target "<TEST_DSH_COPY>" --assets-only
@@ -1070,21 +1070,21 @@ git -C "<STAGING_REPO>" commit -m "feat(core): add meme topic weather and greeti
 
 ---
 
-### Task 4: WeatherService（设置读写 / 地理编码 / 天气缓存 / 测试接口）
+### Task 4: WeatherService (settings read/write / geocoding / weather cache / test hook)
 
 **Files:**
-- Modify: `assets/dsh-whale-moe.js`（在 `function schedule()` 之后、`var observer` 之前插入整块）
-- Test: `test/whale-moe-core.test.mjs` 不直接测网络；CDP 在 Task 7 测
+- Modify: `assets/dsh-whale-moe.js` (insert the whole block after `function schedule()` and before `var observer`)
+- Test: `test/whale-moe-core.test.mjs` doesn't test the network directly; CDP tests it in Task 7
 
 **Interfaces:**
-- Produces（挂到 window）:
-  - `window.__dshWhaleMoeWeather` = `{ city, key: masked?, coords, current, fetchedAt, lastToldKind, nextRefreshAt, status }`（key 不暴露）
-  - `window.DshWhaleMoeWeatherTest(city, key) : Promise<string>`，成功返回 `"✅ 已连通：城市 25°C 晴"`，失败 reject Error
+- Produces (attached to window):
+  - `window.__dshWhaleMoeWeather` = `{ city, key: masked?, coords, current, fetchedAt, lastToldKind, nextRefreshAt, status }` (key not exposed)
+  - `window.DshWhaleMoeWeatherTest(city, key) : Promise<string>`, returns `"✅ Connected: city 25°C sunny"` on success, rejects Error on failure
 - Consumes: `core.weatherText`, `core.pickDialogueAvoidRecent`, `showLine`, `schedule`
 
-- [ ] **Step 1: 插入 WeatherService 代码**
+- [ ] **Step 1: Insert the WeatherService code**
 
-把下面整段插入到 `function schedule() { ... }` 块结束、`var observer = null;` 之前：
+Insert the whole block below where the `function schedule() { ... }` block ends and before `var observer = null;`:
 
 ```js
   /* ---------- weather service (Open-Meteo, no key required) ---------- */
@@ -1219,7 +1219,7 @@ git -C "<STAGING_REPO>" commit -m "feat(core): add meme topic weather and greeti
     if (!summary) return "";
     var line = core.pickDialogueAvoidRecent("weather", summary.kind, counter || 0, Math.random, recentLines);
     if (!line) return "";
-    var tail = " · 现在 " + Math.round(summary.temp) + "°C " + summary.label;
+    var tail = " · now " + Math.round(summary.temp) + "°C " + summary.label;
     return line + tail;
   }
 
@@ -1231,7 +1231,7 @@ git -C "<STAGING_REPO>" commit -m "feat(core): add meme topic weather and greeti
   root.__dshWhaleMoeWeather = weatherState;
   root.DshWhaleMoeWeatherTest = function (city, key) {
     var useCity = (city || readWeather("weatherCity")).trim();
-    if (!useCity) return Promise.reject(new Error("请先填写城市"));
+    if (!useCity) return Promise.reject(new Error("Please enter a city first"));
     var beforeCoords = weatherState.coords;
     var beforeKey = weatherState.key;
     if (key !== undefined && key !== null) {
@@ -1240,7 +1240,7 @@ git -C "<STAGING_REPO>" commit -m "feat(core): add meme topic weather and greeti
     weatherState.coords = null;
     return fetchWeather(useCity, key || "").then(function () {
       var s = weatherSummary();
-      return "✅ 已连通：" + useCity + " " + Math.round(s.temp) + "°C " + s.label;
+      return "✅ Connected: " + useCity + " " + Math.round(s.temp) + "°C " + s.label;
     }).catch(function (error) {
       weatherState.coords = beforeCoords;
       weatherState.key = beforeKey;
@@ -1249,12 +1249,12 @@ git -C "<STAGING_REPO>" commit -m "feat(core): add meme topic weather and greeti
   };
 ```
 
-- [ ] **Step 2: 语法检查 + 单元不回归**
+- [ ] **Step 2: Syntax check + unit non-regression**
 
-Run: `node --check assets/dsh-whale-moe.js`；再 `node --test test/whale-moe-core.test.mjs test/whale-moe-growth.test.mjs`
-Expected: 无语法错误；单元全绿
+Run: `node --check assets/dsh-whale-moe.js`; then `node --test test/whale-moe-core.test.mjs test/whale-moe-growth.test.mjs`
+Expected: no syntax errors; all unit tests green
 
-- [ ] **Step 3: 部署副本 + Commit**
+- [ ] **Step 3: Deploy the copy + Commit**
 
 ```powershell
 node scripts/apply-theme.mjs --target "<TEST_DSH_COPY>" --assets-only
@@ -1265,20 +1265,20 @@ git -C "<STAGING_REPO>" commit -m "feat(weather): add Open-Meteo weather service
 
 ---
 
-### Task 5: 主动闲聊 / 分时问候 / 任务贴题
+### Task 5: Proactive idle chatter / time-based greetings / task-relevant topics
 
 **Files:**
-- Modify: `assets/dsh-whale-moe.js`（`reconcile()` 末尾加 `idleChatTick(now)`；插入 `recentLines`、`latestTaskTopic`、`maybeGreet`、`idleChatTick`；debug 增加字段）
-- Test: `test/motion-qa.mjs` 不动；CDP Task 7 加验证
+- Modify: `assets/dsh-whale-moe.js` (add `idleChatTick(now)` at the end of `reconcile()`; insert `recentLines`, `latestTaskTopic`, `maybeGreet`, `idleChatTick`; add debug fields)
+- Test: `test/motion-qa.mjs` unchanged; CDP Task 7 adds verification
 
 **Interfaces:**
 - Produces:
   - `window.__dshWhaleMoeIdleChat = { nextAt, lastGreetAt, lastGreetBucket, recentLines }`
-  - 行为：状态 `idle`、`whale-moe:chat` 开、气泡空闲、非设置页、深夜不主动问候
+  - Behavior: state `idle`, `whale-moe:chat` on, bubble free, not on the settings page, no proactive greeting late at night
 
-- [ ] **Step 1: 插入调度代码**
+- [ ] **Step 1: Insert the scheduler code**
 
-在 WeatherService 块后继续插入：
+Continue inserting after the WeatherService block:
 
 ```js
   /* ---------- idle chat scheduler (5-8 min, context-aware) ---------- */
@@ -1328,7 +1328,7 @@ git -C "<STAGING_REPO>" commit -m "feat(weather): add Open-Meteo weather service
     idleChat.lastGreetBucket = bucket;
     var line = core.pickDialogueAvoidRecent("greet", bucket, 0, Math.random, recentLines);
     var summary = weatherSummary();
-    if (line && summary) line += " · 现在 " + Math.round(summary.temp) + "°C " + summary.label;
+    if (line && summary) line += " · now " + Math.round(summary.temp) + "°C " + summary.label;
     showChatLine(line);
     return true;
   }
@@ -1371,24 +1371,24 @@ git -C "<STAGING_REPO>" commit -m "feat(weather): add Open-Meteo weather service
   root.__dshWhaleMoeIdleChat = idleChat;
 ```
 
-在 `reconcile()` 函数 `render(computed);` 之后、`if (readPref("pet")) {` 之前插入：
+In the `reconcile()` function, after `render(computed);` and before `if (readPref("pet")) {`, insert:
 
 ```js
     if (readPref("pet")) idleChatTick(now);
 ```
 
-在 `root.__dshWhaleMoeDebug = { ... }` 对象尾部追加：
+Append to the tail of the `root.__dshWhaleMoeDebug = { ... }` object:
 
 ```js
 , idleChat: { nextAt: idleChat.nextAt, lastGreetAt: idleChat.lastGreetAt, lastGreetBucket: idleChat.lastGreetBucket }, weather: weatherSummary()
 ```
 
-- [ ] **Step 2: 语法与既有回归**
+- [ ] **Step 2: Syntax and existing regression**
 
-Run: `node --check assets/dsh-whale-moe.js`；再 `node test/motion-qa.mjs`
-Expected: 语法通过；motion QA 仍全绿（工作态不被闲聊打断）
+Run: `node --check assets/dsh-whale-moe.js`; then `node test/motion-qa.mjs`
+Expected: syntax passes; motion QA still all green (working state is not interrupted by chatter)
 
-- [ ] **Step 3: 部署副本 + Commit**
+- [ ] **Step 3: Deploy the copy + Commit**
 
 ```powershell
 node scripts/apply-theme.mjs --target "<TEST_DSH_COPY>" --assets-only
@@ -1399,36 +1399,36 @@ git -C "<STAGING_REPO>" commit -m "feat(chat): add context-aware idle chatter an
 
 ---
 
-### Task 6: 设置面板天气区块（城市 / API Key / 测试连接），marker v11
+### Task 6: Settings panel weather section (city / API Key / test connection), marker v11
 
 **Files:**
-- Modify: `scripts/apply-theme.mjs:240-346`（marker、legacy、`MascotWeatherRow`、`MascotPrefRows`）
-- Modify: `test/apply-theme.test.mjs:180-220`（断言 v11）
+- Modify: `scripts/apply-theme.mjs:240-346` (marker, legacy, `MascotWeatherRow`, `MascotPrefRows`)
+- Modify: `test/apply-theme.test.mjs:180-220` (assert v11)
 - Test: `node --test test/apply-theme.test.mjs`
 
 **Interfaces:**
-- Consumes: `window.DshWhaleMoeWeatherTest(city, key): Promise<string>`（Task 4）
-- Produces: localStorage 键 `whale-moe:weatherCity` / `whale-moe:weatherKey`；设置面板“天气”卡片
+- Consumes: `window.DshWhaleMoeWeatherTest(city, key): Promise<string>` (Task 4)
+- Produces: localStorage keys `whale-moe:weatherCity` / `whale-moe:weatherKey`; the settings panel "Weather" card
 
-- [ ] **Step 1: 更新 marker 与 legacy 列表**
+- [ ] **Step 1: Update the marker and legacy list**
 
-把：
+Change:
 
 ```js
 const MASCOT_SETTINGS_MARKER = "DSH-WHALE-MOE:MASCOT-SETTINGS v10";
 const MASCOT_SETTINGS_LEGACY = [..., "DSH-WHALE-MOE:MASCOT-SETTINGS v9"];
 ```
 
-改为：
+to:
 
 ```js
 const MASCOT_SETTINGS_MARKER = "DSH-WHALE-MOE:MASCOT-SETTINGS v11";
 const MASCOT_SETTINGS_LEGACY = ["DSH-WHALE-MOE:MASCOT-SETTINGS v1", "DSH-WHALE-MOE:MASCOT-SETTINGS v2", "DSH-WHALE-MOE:MASCOT-SETTINGS v3", "DSH-WHALE-MOE:MASCOT-SETTINGS v4", "DSH-WHALE-MOE:MASCOT-SETTINGS v5", "DSH-WHALE-MOE:MASCOT-SETTINGS v6", "DSH-WHALE-MOE:MASCOT-SETTINGS v7", "DSH-WHALE-MOE:MASCOT-SETTINGS v8", "DSH-WHALE-MOE:MASCOT-SETTINGS v9", "DSH-WHALE-MOE:MASCOT-SETTINGS v10"];
 ```
 
-- [ ] **Step 2: 插入 MascotWeatherRow**
+- [ ] **Step 2: Insert MascotWeatherRow**
 
-在 `function MascotTitleRow() { ... }` 块结束后、`function MascotStatRow` 前插入：
+After the `function MascotTitleRow() { ... }` block ends and before `function MascotStatRow`, insert:
 
 ```js
 		function MascotWeatherRow() {
@@ -1440,58 +1440,58 @@ const MASCOT_SETTINGS_LEGACY = ["DSH-WHALE-MOE:MASCOT-SETTINGS v1", "DSH-WHALE-M
 			};
 			const testNow = () => {
 				setBusy(true);
-				setStatus("⏳ 正在连接 Open-Meteo…");
+				setStatus("⏳ Connecting to Open-Meteo…");
 				const city = window.localStorage.getItem("whale-moe:weatherCity") || "";
 				const key = window.localStorage.getItem("whale-moe:weatherKey") || "";
-				const p = window.DshWhaleMoeWeatherTest ? window.DshWhaleMoeWeatherTest(city, key) : Promise.reject(new Error("天气服务未就绪"));
+				const p = window.DshWhaleMoeWeatherTest ? window.DshWhaleMoeWeatherTest(city, key) : Promise.reject(new Error("Weather service not ready"));
 				p.then((text) => { setStatus(text); setBusy(false); }, (error) => {
-					setStatus("❌ 连接失败：" + (error && error.message ? error.message : "未知错误") + "（无 Key 也可用）");
+					setStatus("❌ Connection failed: " + (error && error.message ? error.message : "unknown error") + " (works without a Key too)");
 					setBusy(false);
 				});
 			};
 			return (0, react_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", width: "100%" }, children: [
-				(0, react_jsx_runtime.jsxs)("label", { style: MASCOT_ROW_STYLE, children: [(0, react_jsx_runtime.jsx)("span", { children: "天气城市" }), (0, react_jsx_runtime.jsx)("input", {
+				(0, react_jsx_runtime.jsxs)("label", { style: MASCOT_ROW_STYLE, children: [(0, react_jsx_runtime.jsx)("span", { children: "Weather city" }), (0, react_jsx_runtime.jsx)("input", {
 					type: "text",
 					defaultValue: MascotValue("weatherCity", ""),
-					placeholder: "如：上海（留空不联网）",
+					placeholder: "e.g. Shanghai (leave empty for no networking)",
 					maxLength: 24,
 					onChange: (event) => save("weatherCity", event.target.value)
 				})] }),
-				(0, react_jsx_runtime.jsxs)("label", { style: MASCOT_ROW_STYLE, children: [(0, react_jsx_runtime.jsx)("span", { children: "API Key（选填）" }), (0, react_jsx_runtime.jsx)("input", {
+				(0, react_jsx_runtime.jsxs)("label", { style: MASCOT_ROW_STYLE, children: [(0, react_jsx_runtime.jsx)("span", { children: "API Key (optional)" }), (0, react_jsx_runtime.jsx)("input", {
 					type: "password",
 					defaultValue: MascotValue("weatherKey", ""),
-					placeholder: "Open-Meteo 免费无需 Key",
+					placeholder: "Open-Meteo is free, no Key required",
 					maxLength: 128,
 					onChange: (event) => save("weatherKey", event.target.value)
 				})] }),
 				(0, react_jsx_runtime.jsxs)("div", { style: { ...MASCOT_ROW_STYLE, borderBottom: "none", flexWrap: "wrap" }, children: [
 					(0, react_jsx_runtime.jsx)("span", { style: { color: "var(--dsw-alias-label-secondary)", fontSize: "12px", lineHeight: "16px", wordBreak: "break-all" }, children: status }),
-					(0, react_jsx_runtime.jsx)("button", { type: "button", disabled: busy, onClick: testNow, children: busy ? "测试中…" : "测试连接" })
+					(0, react_jsx_runtime.jsx)("button", { type: "button", disabled: busy, onClick: testNow, children: busy ? "Testing…" : "Test connection" })
 				] })
 			]});
 		}
 ```
 
-- [ ] **Step 3: 在 MascotPrefRows 加天气卡片**
+- [ ] **Step 3: Add the weather card in MascotPrefRows**
 
-在 `"智能"` 卡片之后、`"养成"` 卡片之前插入：
+After the `"Smart"` card and before the `"Progression"` card, insert:
 
 ```js
-				(0, react_jsx_runtime.jsxs)(MascotCard, { title: "天气", children: [(0, react_jsx_runtime.jsx)(MascotWeatherRow, {})] }),
+				(0, react_jsx_runtime.jsxs)(MascotCard, { title: "Weather", children: [(0, react_jsx_runtime.jsx)(MascotWeatherRow, {})] }),
 ```
 
-- [ ] **Step 4: 更新安装器测试断言**
+- [ ] **Step 4: Update the installer test assertions**
 
-`test/apply-theme.test.mjs` 中：
-- `"v10"` 出现处改为 `"v11"`
-- 测试名 `upgrades legacy v1-v9 blocks to v10` 改为 `upgrades legacy v1-v10 blocks to v11`，替换代码 `v3` 用 `v4` 做旧 marker 亦可（保持 v3 也行，但断言 v11）
+In `test/apply-theme.test.mjs`:
+- Change occurrences of `"v10"` to `"v11"`
+- Change the test name `upgrades legacy v1-v9 blocks to v10` to `upgrades legacy v1-v10 blocks to v11`; using `v4` instead of `v3` for the old marker is fine too (keeping v3 works as well, but assert v11)
 
-- [ ] **Step 5: 运行测试**
+- [ ] **Step 5: Run the tests**
 
 Run: `node --test test/apply-theme.test.mjs`
-Expected: 15 项 PASS
+Expected: 15 items PASS
 
-- [ ] **Step 6: 部署副本 + Commit**
+- [ ] **Step 6: Deploy the copy + Commit**
 
 ```powershell
 node scripts/apply-theme.mjs --target "<TEST_DSH_COPY>"
@@ -1504,33 +1504,33 @@ git -C "<STAGING_REPO>" commit -m "feat(settings): add weather city key and conn
 
 ---
 
-### Task 7: CDP 验收 + 全量回归 + 版本与发布
+### Task 7: CDP acceptance + full regression + version and release
 
 **Files:**
-- Modify: `test/cdp-whale-moe.mjs`（天气设置/不联网断言/闲聊钩子断言）
-- Modify: `package.json` → `1.1.0`；`README.md` 版本徽章；`CHANGELOG.md` 增加 v1.1.0
-- Test: 全部
+- Modify: `test/cdp-whale-moe.mjs` (weather settings / no-networking assertion / idle chat hook assertion)
+- Modify: `package.json` → `1.1.0`; `README.md` version badge; `CHANGELOG.md` add v1.1.0
+- Test: all
 
 **Interfaces:**
-- Consumes: Task 4/5/6 的全局钩子 `window.__dshWhaleMoeIdleChat`、`window.DshWhaleMoeWeatherTest`、debug 字段
+- Consumes: the global hooks from Task 4/5/6 `window.__dshWhaleMoeIdleChat`, `window.DshWhaleMoeWeatherTest`, the debug fields
 
-- [ ] **Step 1: 加 CDP 断言**
+- [ ] **Step 1: Add CDP assertions**
 
-在 `cdp-whale-moe.mjs` 打开页面后的 setup 阶段，先清天气键再进设置面板：
+In `cdp-whale-moe.mjs`, in the setup phase after the page opens, clear the weather keys before entering the settings panel:
 
 ```js
 await ev(call, `localStorage.removeItem('whale-moe:weatherCity'); localStorage.removeItem('whale-moe:weatherKey'); true`);
 ```
 
-然后在设置面板段落（settings 检查后）追加一次 `ev` 检查：
+Then in the settings panel section (after the settings check) append one `ev` check:
 
 ```js
   // weather settings: three controls, zero network while city is empty
   const weatherUI = await ev(call, `(() => {
     const inputs = [...document.querySelectorAll('input')];
-    const city = inputs.find((n) => n.placeholder && n.placeholder.includes('留空不联网'));
-    const key = inputs.find((n) => n.placeholder && n.placeholder.includes('免费无需 Key'));
-    const testBtn = [...document.querySelectorAll('button')].find((b) => (b.textContent || '').includes('测试连接'));
+    const city = inputs.find((n) => n.placeholder && n.placeholder.includes('leave empty for no networking'));
+    const key = inputs.find((n) => n.placeholder && n.placeholder.includes('free, no Key required'));
+    const testBtn = [...document.querySelectorAll('button')].find((b) => (b.textContent || '').includes('Test connection'));
     const before = window.__dshWhaleMoeWeather && window.__dshWhaleMoeWeather.fetchedAt || 0;
     return { hasCity: !!city, hasKey: !!key, hasTest: !!testBtn, fetchedAt: before, idleChat: !!window.__dshWhaleMoeIdleChat };
   })()`);
@@ -1540,9 +1540,9 @@ await ev(call, `localStorage.removeItem('whale-moe:weatherCity'); localStorage.r
   check("weather: empty city makes zero weather requests", noFetch === true, { noFetch });
 ```
 
-- [ ] **Step 2: 跑全量**
+- [ ] **Step 2: Run the full suite**
 
-Run（顺序执行，任一失败即停）：
+Run (sequentially, stop on any failure):
 
 ```powershell
 node --test test/whale-moe-core.test.mjs test/whale-moe-growth.test.mjs test/apply-theme.test.mjs
@@ -1551,24 +1551,24 @@ node test/soak-work.mjs
 node test/cdp-whale-moe.mjs
 ```
 
-Expected: 全绿。CDP 已先清空天气键，`零请求` 断言必然成立。
+Expected: all green. CDP clears the weather keys first, so the `zero requests` assertion must hold.
 
-- [ ] **Step 3: 版本与文档**
+- [ ] **Step 3: Version and docs**
 
 - `package.json` `version` → `1.1.0`
-- README 徽章 `1.0.2` → `1.1.0`，特性里加“天气陪伴、梗聊天、分时问候”
-- CHANGELOG 顶部新增 v1.1.0 条目，列出：500 条台词、梗关键词、5–8 分钟贴题闲聊、天气设置与测试连接
+- README badge `1.0.2` → `1.1.0`, and add to the features "weather companionship, meme chat, time-based greetings"
+- Add a new v1.1.0 entry at the top of CHANGELOG, listing: 500 dialogue lines, meme keywords, 5–8 minute topic-relevant idle chatter, weather settings and connection test
 
-- [ ] **Step 4: 部署主安装**
+- [ ] **Step 4: Deploy the main install**
 
 ```powershell
 node scripts/apply-theme.mjs --assets-only
 node scripts/apply-theme.mjs --mascot-settings
 ```
 
-然后手工把主 index 的 `whale-moe-core.js?v=12` 改 `v=13`、`dsh-whale-moe.js?v=32` 改 `v=33`。
+Then manually change `v=12` to `v=13` on the main index's `whale-moe-core.js?v=12`, and `v=32` to `v=33` on `dsh-whale-moe.js?v=32`.
 
-- [ ] **Step 5: 构建发布包并发布 GitHub**
+- [ ] **Step 5: Build the release packages and publish to GitHub**
 
 ```powershell
 tar -a -cf "..\dsh-whale-musume-plugin-v1.1.0.zip" assets "scripts\apply-theme.mjs" README.md LICENSE SECURITY.md CHANGELOG.md
@@ -1576,12 +1576,12 @@ tar -a -cf "..\dsh-whale-musume-poses-v1.1.0.zip" -C "assets\generated" *.webp
 git add -A
 git commit -m "release: v1.1.0 meme dialogue and weather companion"
 git push origin main
-gh release create v1.1.0 ..\dsh-whale-musume-plugin-v1.1.0.zip ..\dsh-whale-musume-poses-v1.1.0.zip --repo Sutera-Diffusus/dsh-whale-musume --title "v1.1.0 梗聊天与天气陪伴" --notes "**500 条台词大扩容 + Open-Meteo 天气陪伴**`n`n- 全场景台词扩容：状态/日常/工作/互动/关键词约 500 条，可爱为主 + 打工人、摸鱼、DDL、画饼、发疯文学等安全梗`n- 新增 5-8 分钟主动闲聊，按任务内容本地分类贴题（代码/写作/调研/修 bug/数据/部署），不尬聊`n- 分时问候：早上/上午/中午/下午/傍晚问候 + 关心话，23:00-5:59 不主动打扰`n- 天气陪伴：设置面板填城市、选填 API Key、测试连接；Open-Meteo 免费无需 Key，城市留空零联网`n- 工作态稳定规则不变，所有回归测试保持绿色"
+gh release create v1.1.0 ..\dsh-whale-musume-plugin-v1.1.0.zip ..\dsh-whale-musume-poses-v1.1.0.zip --repo Sutera-Diffusus/dsh-whale-musume --title "v1.1.0 meme chat and weather companionship" --notes "**Massive 500-line dialogue expansion + Open-Meteo weather companionship**`n`n- All-scene dialogue expansion: about 500 lines for state/daily/work/interaction/keyword, cuteness first + safe memes like office grinder, slacking off, DDL, pie in the sky, unhinged posting`n- New 5-8 minute proactive idle chatter, locally classified by task content to stay on topic (code/writing/research/bug fixing/data/deploy), no awkward chatter`n- Time-based greetings: morning/forenoon/noon/afternoon/evening greetings + caring words, no proactive disturbance from 23:00-5:59`n- Weather companionship: fill in the city in the settings panel, optional API Key, test connection; Open-Meteo is free with no Key, empty city means zero networking`n- Working-state stability rules unchanged, all regression tests stay green"
 ```
 
-- [ ] **Step 6: 人工验收提示用户**
+- [ ] **Step 6: Manual acceptance, prompt the user**
 
-主 DSH 强刷（Ctrl+Shift+R）后：设置 → 看板娘 → 天气 → 填上海 → 测试连接 → 应显示 ✅；之后等 5–8 分钟或切换状态可观察到新台词与问候。
+After a hard refresh of the main DSH (Ctrl+Shift+R): Settings → mascot → Weather → enter Shanghai → Test connection → it should show ✅; then wait 5–8 minutes or switch states to observe the new lines and greetings.
 
 
 

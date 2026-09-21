@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import { patchHost, patchClient, patchIndexHtml, unpatchHost, unpatchClient, patchMascotClient, apply, untheme, mascotSettings, rollback } from "../scripts/apply-theme.mjs";
 
 const HOST_BASE = 'const STYLE_PACKS = [\n\t"default",\n\t"whale-maid"\n];';
-const CLIENT_BASE = 'children: [(0, react_jsx_runtime.jsx)("option", { value: "default", children: "默认" }), (0, react_jsx_runtime.jsx)("option", { value: "whale-maid", children: "鲸汐侍礼（鲸鱼娘）" })]';
+const CLIENT_BASE = 'children: [(0, react_jsx_runtime.jsx)("option", { value: "default", children: "Default" }), (0, react_jsx_runtime.jsx)("option", { value: "whale-maid", children: "Whale Tide Ceremony" })]';
 const HTML_BASE = '  <head>\n    <link rel="stylesheet" crossorigin href="/assets/index-X.css">\n    <!-- DSH-VICTORIAN-THEME v3 -->\n    <link rel="stylesheet" crossorigin href="/assets/dsh-victorian-theme.css">\n    <script src="/assets/dsh-victorian-theme.js"></script>\n  </head>';
 
 test("patchHost adds whale-moe exactly once and is idempotent", () => {
@@ -31,7 +31,7 @@ test("patchHost tolerates an existing third pack after whale-maid", () => {
 test("patchClient appends the option after the whale-maid option and is idempotent", () => {
   const first = patchClient(CLIENT_BASE);
   assert.equal(first.changed, true);
-  assert.ok(first.source.includes('{ value: "whale-moe", children: "鲸鱼娘·海洋甜点工房" }'));
+  assert.ok(first.source.includes('value: "whale-moe"') && first.source.includes("Whale-chan"));
   assert.equal((first.source.match(/value: "whale-moe"/g) || []).length, 1);
   const second = patchClient(first.source);
   assert.equal(second.changed, false);
@@ -91,7 +91,7 @@ test("apply + rollback round-trip on a fixture install", () => {
 });
 
 test("patchClient accepts the migrated victorian label anchor", () => {
-  const migrated = 'children: [(0, react_jsx_runtime.jsx)("option", { value: "default", children: "默认" }), (0, react_jsx_runtime.jsx)("option", { value: "whale-maid", children: "维多利亚航海书房" })]';
+  const migrated = 'children: [(0, react_jsx_runtime.jsx)("option", { value: "default", children: "Default" }), (0, react_jsx_runtime.jsx)("option", { value: "whale-maid", children: "Victorian Nautical Study" })]';
   const out = patchClient(migrated);
   assert.equal(out.changed, true);
   assert.ok(out.source.includes('value: "whale-moe"'));
@@ -189,31 +189,31 @@ test("patchMascotClient adds the mascot settings section and is idempotent", () 
   assert.equal(out.changed, true);
   assert.ok(out.source.includes("/* DSH-WHALE-MOE:MASCOT-SETTINGS v27 */"));
   assert.ok(out.source.includes('id: "mascot"'));
-  assert.ok(out.source.includes('label: "看板娘"'));
-  assert.ok(out.source.includes('label: "鲸鱼娘"'));
+  assert.ok(out.source.includes('label: "Mascot"'));
+  assert.ok(out.source.includes('label: "Whale-chan"'));
   assert.ok(!out.source.includes('MascotModeRow'));
-  assert.ok(!out.source.includes('悬浮（可拖拽）'));
-  assert.ok(out.source.includes('重置到默认位置'));
-  assert.ok(out.source.includes('重置养成'));
-  assert.ok(!out.source.includes('装饰衣柜'));
-  assert.ok(out.source.includes('如何称呼我'));
-  assert.ok(out.source.includes('关键词感知'));
-  assert.ok(out.source.includes('天气城市'));
-  assert.ok(out.source.includes('API Key（选填）'));
-  assert.ok(out.source.includes('测试连接'));
-  assert.ok(out.source.includes('留空不联网'));
-  assert.ok(out.source.includes('陪伴'));
-  assert.ok(out.source.includes('成就墙'));
-  assert.ok(out.source.includes('余额告急'));
-  assert.ok(out.source.includes('工具百连'));
+  assert.ok(!out.source.includes('Floating (draggable)'));
+  assert.ok(out.source.includes("Reset to default position"));
+  assert.ok(out.source.includes("Reset progression"));
+  assert.ok(!out.source.includes("Decoration wardrobe"));
+  assert.ok(out.source.includes("What should I call you"));
+  assert.ok(out.source.includes("Keyword awareness"));
+  assert.ok(out.source.includes("Weather city"));
+  assert.ok(out.source.includes("API Key (optional)"));
+  assert.ok(out.source.includes("Test connection"));
+  assert.ok(out.source.includes("stay offline"));
+  assert.ok(out.source.includes("Company"));
+  assert.ok(out.source.includes("Achievement wall"));
+  assert.ok(out.source.includes("Low Balance"));
+  assert.ok(out.source.includes("Hundred Tools"));
   assert.ok(out.source.includes('MASCOT_CARD_STYLE'));
-  assert.ok(out.source.includes('label: "小游戏"') && out.source.includes('prefKey: "game"'));
-  assert.ok(out.source.includes('label: "天气特效"') && out.source.includes('prefKey: "weatherFx"'));
+  assert.ok(out.source.includes('label: "Mini games"') && out.source.includes('prefKey: "game"'));
+  assert.ok(out.source.includes('label: "Weather effects"') && out.source.includes('prefKey: "weatherFx"'));
   assert.ok(out.source.includes('MascotDailyQuests') && out.source.includes('MascotWeekSignin') && out.source.includes('MascotBadgeRow'));
-  assert.ok(out.source.includes('title: "陪伴表现"') && out.source.includes('title: "天气"') && out.source.includes('title: "日常与养成"') && out.source.includes('title: "成就墙"') && out.source.includes('title: "数据与重置"'));
+  assert.ok(out.source.includes('title: "Companion behaviour"') && out.source.includes('title: "Weather"') && out.source.includes('title: "Daily and progression"') && out.source.includes('title: "Achievement wall"') && out.source.includes('title: "Data and reset"'));
   assert.ok(out.source.includes('function MascotOverviewCard') && out.source.includes('function MascotSwitchGrid'));
   assert.ok(out.source.includes('margin: "10px auto 0", padding: "8px 14px", width: "95%"'));
-  assert.ok(out.source.includes('label: "今日任务"') && out.source.includes('label: "本周签到"') && out.source.includes('label: "称号"'));
+  assert.ok(out.source.includes('label: "Today\'s quests"') && out.source.includes('label: "This week\'s check-ins"') && out.source.includes('label: "Title"'));
   assert.ok(out.source.includes('function MascotAccordion') && out.source.includes('function MascotTabs') && out.source.includes('function MascotDailyCard'));
   assert.ok(out.source.includes('borderRadius: "999px"') && out.source.includes('mascotReact.useState'));
   assert.ok(out.source.includes('"whale-moe-prefs-change"'));

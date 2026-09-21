@@ -17,9 +17,9 @@
   var HEART_CHARS = ["♥", "✿", "☆", "♪"];
 
   var PREFS = [
-    { key: "pet", label: "看板娘" },
-    { key: "chat", label: "台词气泡" },
-    { key: "particles", label: "粒子效果" }
+    { key: "pet", label: "Mascot" },
+    { key: "chat", label: "Dialogue bubbles" },
+    { key: "particles", label: "Particles" }
   ];
 
   var VIEW_SELECTORS = Object.freeze({
@@ -144,13 +144,13 @@
     btn.type = "button";
     btn.setAttribute("data-dsh-whale-toggle", key);
     btn.setAttribute("aria-pressed", String(readPref(key)));
-    btn.textContent = label + (readPref(key) ? "：开" : "：关");
+    btn.textContent = label + (readPref(key) ? ": on" : ": off");
     btn.addEventListener("click", function (event) {
       event.stopPropagation();
       var next = !readPref(key);
       writePref(key, next);
       btn.setAttribute("aria-pressed", String(next));
-      btn.textContent = label + (next ? "：开" : "：关");
+      btn.textContent = label + (next ? ": on" : ": off");
       reconcile();
     });
     return btn;
@@ -204,7 +204,8 @@
         applyLayers();
         return;
       }
-      /* 待机微动作和换图动画不能叠在同一节点上，先取消 */
+      /* Idle micro-motion and the pose-swap animation must not stack on the
+         same node, so cancel first. */
       motionNode.classList.remove("dsh-whale-hop", "dsh-whale-squint");
       var swapGen = layerState.gen;
       layerState.pendingSwap = src;
@@ -219,9 +220,10 @@
       hide.oncancel = function () {
         hide.onfinish = null;
         if (swapGen !== layerState.gen) {
-          /* 本次换图已被更新的换图取代：只清理属于自己的标记，
-             绝不能把新一代动画的 pendingSwap 一起抹掉，否则渲染循环
-             会反复重启同一组动画，表现为“抽搐”。 */
+          /* This swap was superseded by a newer one: only clear our own
+             marker. Never wipe the next generation's pendingSwap as well,
+             or the render loop restarts the same animation set over and over,
+             which shows up as "twitching". */
           if (layerState.pendingSwap === src) {
             layerState.pendingSwap = "";
             layerState.pendingSince = 0;
@@ -336,7 +338,7 @@
       textNode.insertBefore(doc.createTextNode(ch), caret);
       index += 1;
       var delay = 64;
-      if ("，。！？～…".indexOf(ch) !== -1) delay = 260;
+      if (",.!?~…".indexOf(ch) !== -1) delay = 260;
       else if (ch === " ") delay = 90;
       else if (index % 5 === 0) delay = 130;
       typingTimer = root.setTimeout(tick, delay);
@@ -381,7 +383,7 @@
     var gear = doc.createElement("button");
     gear.type = "button";
     gear.setAttribute("data-dsh-whale-gear", "true");
-    gear.setAttribute("aria-label", "鲸鱼娘偏好");
+    gear.setAttribute("aria-label", "Whale-chan preferences");
     gear.textContent = "⚙";
     gear.addEventListener("click", function (event) {
       event.stopPropagation();
@@ -393,7 +395,7 @@
     var gearMini = doc.createElement("button");
     gearMini.type = "button";
     gearMini.setAttribute("data-dsh-whale-gear-mini", "true");
-    gearMini.setAttribute("aria-label", "鲸鱼娘偏好");
+    gearMini.setAttribute("aria-label", "Whale-chan preferences");
     gearMini.textContent = "⚙";
     gearMini.addEventListener("click", function (event) {
       event.stopPropagation();
@@ -473,7 +475,7 @@
     node.style.left = Math.round(clamp(left, 8, root.innerWidth - width - 8)) + "px";
     node.style.top = Math.round(clamp(top, 8, root.innerHeight - height - 8)) + "px";
     if (dragState.moved) {
-      /* 摇摆跟随光标水平速度，而不是自动动画 */
+      /* Wobble follows the cursor's horizontal speed rather than an auto animation */
       var motionNode = node.querySelector("[data-dsh-whale-motion]");
       if (motionNode) {
         var vx = event.clientX - dragState.lastX;
@@ -481,15 +483,17 @@
         motionNode.style.setProperty("--wm-drag-angle", angle.toFixed(1) + "deg");
       }
     }
-    /* 记录瞬时速度，供松手时的惯性使用 */
+    /* Record instantaneous velocity, used for inertia on release */
     dragState.vx = event.clientX - dragState.lastX;
     dragState.vy = event.clientY - dragState.lastY;
     dragState.lastX = event.clientX;
     dragState.lastY = event.clientY;
   }
-  /* ── 拖拽物理（v1.7.0）────────────────────────────────────────────────
-     松手后按瞬时速度滑行一小段并回正；撞到屏幕边缘就停住（"抓住"边缘），
-     不再继续转。速度太小时只做一次轻微回弹，避免抖一下。 */
+  /* ── Drag physics (v1.7.0) ─────────────────────────────────────────────
+     On release she glides a short distance at the instantaneous velocity and
+     rotates back upright; hitting a screen edge stops her there ("grabbing"
+     the edge) instead of spinning on. Very low speeds get one gentle bounce
+     so she doesn't just jitter. */
   function dragPhysicsEnabled() {
     try { return root.localStorage.getItem("whale-moe:dragPhysics") !== "0"; } catch (e) { return true; }
   }
@@ -503,7 +507,7 @@
     var maxTop = Math.max(8, root.innerHeight - height - 8);
 
     if (speed < 6) {
-      /* 轻放：小回弹即可 */
+      /* Gentle drop: a small bounce is enough */
       if (motionNode) {
         motionNode.style.setProperty("--wm-drag-angle", "0deg");
         motionNode.style.transition = "transform 300ms cubic-bezier(.34,1.3,.64,1)";
@@ -555,7 +559,7 @@
     if (state && state.moved && state.node) {
       var node = state.node;
       if (dragPhysicsEnabled()) applyReleasePhysics(node, state.vx || 0, state.vy || 0);
-      /* 物理滑行之后再落盘，保存的是最终位置 */
+      /* Only persist after the physics glide finishes, so the final position is saved */
       writeFloatPos(parseFloat(node.style.left), parseFloat(node.style.top));
       if (node.__dshWhaleMoeSuppressClick) node.__dshWhaleMoeSuppressClick();
     }
@@ -574,28 +578,29 @@
     var menu = doc.createElement("div");
     menu.setAttribute("data-dsh-whale-context", "true");
     var items = [
-      { label: "投喂小点心", action: function () { var out = applyGrowth({ type: "feed" }, Date.now(), 0); applyQuestSignal("feed", 1); burst("🍰"); showMood("eat", 3000); var line = say("interact", "feed"); if (line) showLine(line); if (out.unlocks.length) announceUnlocks(out.unlocks); } },
-      { label: "戳一下", action: function () { applyGrowth({ type: "poke" }, Date.now(), 0); burst("💢"); showMood("angry", 3000); var line = say("interact", "poke"); if (line) showLine(line); } },
-      { label: "夸夸 鲸鱼娘", action: function () { applyGrowth({ type: "praise" }, Date.now(), 0); burst("✨"); showMood("tail-swing", 3000, true); var line = say("interact", "praise"); if (line) showLine(line); } }
+      { label: "Feed a snack", action: function () { var out = applyGrowth({ type: "feed" }, Date.now(), 0); applyQuestSignal("feed", 1); burst("🍰"); showMood("eat", 3000); var line = say("interact", "feed"); if (line) showLine(line); if (out.unlocks.length) announceUnlocks(out.unlocks); } },
+      { label: "Poke her", action: function () { applyGrowth({ type: "poke" }, Date.now(), 0); burst("💢"); showMood("angry", 3000); var line = say("interact", "poke"); if (line) showLine(line); } },
+      { label: "Praise Whale-chan", action: function () { applyGrowth({ type: "praise" }, Date.now(), 0); burst("✨"); showMood("tail-swing", 3000, true); var line = say("interact", "praise"); if (line) showLine(line); } }
     ];
     if (readPref("game")) {
-      items.push({ label: "小游戏：戳泡泡", action: function () { openGame(); } });
-      items.push({ label: "小游戏：接点心", action: function () { openCatchGame(); } });
+      items.push({ label: "Mini game: Bubble Pop", action: function () { openGame(); } });
+      items.push({ label: "Mini game: Catch the Snacks", action: function () { openCatchGame(); } });
     }
     items.push(
-      { label: "回到原位", action: function () { try { root.localStorage.removeItem("whale-moe:floatX"); root.localStorage.removeItem("whale-moe:floatY"); } catch (e) { /* ignore */ } reconcile(); } },
-      { label: "打开看板娘设置", action: function () {
-        /* DSH 新版设置入口是纯图标按钮(无文本),旧版是文本“设置”按钮:
-           按 结构 slot → settings.trigger 宿主按钮 → 文本兜底 的顺序查找。 */
+      { label: "Back to default spot", action: function () { try { root.localStorage.removeItem("whale-moe:floatX"); root.localStorage.removeItem("whale-moe:floatY"); } catch (e) { /* ignore */ } reconcile(); } },
+      { label: "Open mascot settings", action: function () {
+        /* New DSH builds expose the settings entry as an icon-only button (no
+           text); older builds use a text "settings" button. Look up in the
+           order: structural slot → settings.trigger host button → text fallback. */
         var btn = doc.querySelector('[data-slot="sidebar.settings"] button');
         if (!btn) {
           var trigger = doc.querySelector('[data-slot="settings.trigger"]');
           btn = trigger && trigger.closest ? trigger.closest("button") : null;
         }
-        if (!btn) btn = [...doc.querySelectorAll("button")].find(function (n) { return (n.textContent || "").trim() === "设置"; });
+        if (!btn) btn = [...doc.querySelectorAll("button")].find(function (n) { return (n.textContent || "").trim().toLowerCase() === "settings"; });
         if (btn) btn.click();
       } },
-      { label: "关闭菜单", action: function () { menu.remove(); } }
+      { label: "Close menu", action: function () { menu.remove(); } }
     );
     for (var i = 0; i < items.length; i += 1) {
       (function (item) {
@@ -672,7 +677,7 @@
     try {
       root.dispatchEvent(new root.CustomEvent(MIMO_TTS_EVENT, { detail: { text: text } }));
     } catch (e) {
-      /* 可选 bundle 桥接不可用时静默跳过。 */
+      /* Optional bundle bridge: silently skip when unavailable. */
     }
   }
 
@@ -704,7 +709,8 @@
     var now = Date.now();
     if (now < celebrateUntil) return;
     var busyNow = BUSY_STATES[memory.state.state] === 1;
-    /* 分区反应:非忙态下肚皮/尾巴/头各有专属反应;忙态一律 work-pat/work-ram */
+    /* Zone reactions: when idle, belly/tail/head each have their own reaction;
+       when busy, always work-pat/work-ram */
     if (!busyNow && readPref("zones") && zone === "tail") { tailReact(now); return; }
     if (!busyNow && readPref("zones") && zone === "belly") { bellyReact(now); return; }
     patHistory = patHistory.filter(function (t) { return now - t < 2000; });
@@ -718,7 +724,7 @@
       spawnParticles(12, now);
       showMood("star", 2200);
       var trip = applyGrowth({ type: "triple" }, now, 0);
-      if (readPref("chat")) emitInteractionLine(localizeLine("诶嘿～最喜欢主人啦！"));
+      if (readPref("chat")) emitInteractionLine(localizeLine("Ehehe~ I like Master best!"));
       if (trip.unlocks.length) announceUnlocks(trip.unlocks);
       var node = doc.querySelector("[data-dsh-whale-root]");
       if (node && !motionReduced()) {
@@ -730,7 +736,7 @@
       }
     } else {
       /* rapid-fire clicks: keep pose/particle feedback but skip growth and
-         speech churn so the bubble never stutters 诶嘿诶嘿 repeatedly */
+         speech churn so the bubble never stutters the same line repeatedly */
       var rapid = now - lastPatProcessedAt < 450;
       lastPatProcessedAt = now;
       showMood(busyNow ? (Math.random() < 0.5 ? "work-pat" : "work-ram") : (zone === "head" ? "react-head" : "blush"), busyNow ? 2400 : 2600, true);
@@ -794,13 +800,13 @@
   }
 
   function announceUnlocks(ids) {
-    var label = core.ACHIEVEMENTS.filter(function (a) { return ids.indexOf(a.id) !== -1; }).map(function (a) { return a.name; }).join("、");
+    var label = core.ACHIEVEMENTS.filter(function (a) { return ids.indexOf(a.id) !== -1; }).map(function (a) { return a.name; }).join(", ");
     if (!label) return;
     if (!BUSY_STATES[memory.state.state]) showMood("achievement", 3500, true);
     burst("🏅");
-    showLine("成就达成：" + label + "！");
-    journalAdd("achievement", "解锁成就：" + label);
-    announceLive("解锁成就：" + label);
+    showLine("Achievement unlocked: " + label + "!");
+    journalAdd("achievement", "Achievement unlocked: " + label);
+    announceLive("Achievement unlocked: " + label);
   }
 
   function spawnParticles(count, now) {
@@ -881,14 +887,14 @@
     var panel = doc.createElement("div");
     panel.setAttribute("data-dsh-whale-game", "true");
     panel.setAttribute("role", "region");
-    panel.setAttribute("aria-label", "小游戏：戳泡泡");
+    panel.setAttribute("aria-label", "Mini game: Bubble Pop");
     panel.setAttribute("tabindex", "-1");
     panel.innerHTML = "";
     var head = doc.createElement("div");
     head.setAttribute("data-dsh-whale-game-head", "true");
     var score = doc.createElement("span");
     score.setAttribute("data-dsh-whale-game-score", "true");
-    score.textContent = "得分 0";
+    score.textContent = "Score 0";
     var time = doc.createElement("span");
     time.setAttribute("data-dsh-whale-game-time", "true");
     time.textContent = "30s";
@@ -897,7 +903,7 @@
     combo.textContent = "";
     var best = doc.createElement("span");
     best.setAttribute("data-dsh-whale-game-best", "true");
-    best.textContent = "最佳 " + (gameStats ? gameStats.best : 0);
+    best.textContent = "Best " + (gameStats ? gameStats.best : 0);
     head.appendChild(score);
     head.appendChild(time);
     head.appendChild(combo);
@@ -910,7 +916,7 @@
         var btn = doc.createElement("button");
         btn.type = "button";
         btn.setAttribute("data-dsh-whale-cell", String(cell));
-        btn.setAttribute("aria-label", "第 " + (cell + 1) + " 格");
+        btn.setAttribute("aria-label", "Cell " + (cell + 1));
         btn.addEventListener("pointerdown", function (event) {
           event.preventDefault();
           event.stopPropagation();
@@ -922,7 +928,7 @@
     panel.appendChild(grid);
     var paused = doc.createElement("div");
     paused.setAttribute("data-dsh-whale-game-paused", "true");
-    paused.textContent = "⏸ 已暂停";
+    paused.textContent = "⏸ Paused";
     paused.hidden = true;
     panel.appendChild(paused);
     doc.body.appendChild(panel);
@@ -935,13 +941,13 @@
     var badge = doc.querySelector("[data-dsh-whale-game-paused]");
     if (!badge) return;
     badge.hidden = !on;
-    if (on) badge.textContent = reason === "hidden" ? "⏸ 页面已隐藏，回来继续" : "⏸ 已暂停";
+    if (on) badge.textContent = reason === "hidden" ? "⏸ Page hidden, come back to continue" : "⏸ Paused";
   }
 
   function openGame() {
     if (!readPref("game")) return;
     if (gameOpen) return;
-    if (detectView() === "settings") return; /* 看板娘在设置页隐藏，无入口;此处防御 */
+    if (detectView() === "settings") return; /* Whale-chan is hidden on the settings page, no entry point; defensive here */
     if (catchOpen) closeCatchGame();
     loadGameStats();
     gameState = core.gameNewState(Date.now(), Math.random);
@@ -964,10 +970,10 @@
     var time = panel.querySelector("[data-dsh-whale-game-time]");
     var combo = panel.querySelector("[data-dsh-whale-game-combo]");
     var best = panel.querySelector("[data-dsh-whale-game-best]");
-    if (score) score.textContent = "得分 " + gameState.score;
+    if (score) score.textContent = "Score " + gameState.score;
     if (time) time.textContent = Math.ceil(gameState.remainingMs / 1000) + "s";
-    if (combo) combo.textContent = gameState.combo > 1 ? "连击 x" + gameState.combo : "";
-    if (best) best.textContent = "最佳 " + (gameStats ? gameStats.best : 0);
+    if (combo) combo.textContent = gameState.combo > 1 ? "Combo x" + gameState.combo : "";
+    if (best) best.textContent = "Best " + (gameStats ? gameStats.best : 0);
     var cells = panel.querySelectorAll("[data-dsh-whale-cell]");
     for (var i = 0; i < cells.length; i += 1) {
       var bubble = gameState.board[i];
@@ -977,9 +983,9 @@
       if (bubble) {
         cells[i].setAttribute("data-dsh-whale-bubble-kind", bubble.kind);
         cells[i].textContent = bubble.kind === "star" ? "⭐" : (bubble.kind === "bomb" ? "💣" : "");
-        cells[i].setAttribute("aria-label", "第 " + (i + 1) + " 格，" + (bubble.kind === "bomb" ? "炸弹" : "泡泡"));
+        cells[i].setAttribute("aria-label", "Cell " + (i + 1) + ", " + (bubble.kind === "bomb" ? "bomb" : "bubble"));
       } else {
-        cells[i].setAttribute("aria-label", "第 " + (i + 1) + " 格");
+        cells[i].setAttribute("aria-label", "Cell " + (i + 1));
       }
       if (i === gameCursor) cells[i].classList.add("dsh-whale-cursor");
     }
@@ -1067,22 +1073,22 @@
     if (panel) {
       var overlay = doc.createElement("div");
       overlay.setAttribute("data-dsh-whale-game-overlay", "true");
-      var titleText = result.grade === "win" ? "🎉 大胜利！" : (result.grade === "draw" ? "及格！" : "再接再厉～");
+      var titleText = result.grade === "win" ? "🎉 Big win!" : (result.grade === "draw" ? "Passing!" : "Keep at it~");
       var line = doc.createElement("div");
-      line.textContent = titleText + " 得分 " + result.score + " · 最佳 " + gameStats.best + " · 最高连击 " + result.comboMax + (extraText ? " · " + extraText : "") + (rewardAllowed ? "" : "（今日奖励已达上限）");
+      line.textContent = titleText + " Score " + result.score + " · Best " + gameStats.best + " · Max combo " + result.comboMax + (extraText ? " · " + extraText : "") + (rewardAllowed ? "" : " (today's reward limit reached)");
       overlay.appendChild(line);
       if (unlocks.length) {
         var ach = doc.createElement("div");
-        ach.textContent = "🏅 新成就解锁！";
+        ach.textContent = "🏅 New achievement unlocked!";
         overlay.appendChild(ach);
       }
       var again = doc.createElement("button");
       again.type = "button";
-      again.textContent = "再玩一局";
+      again.textContent = "Play again";
       again.addEventListener("click", function (event) { event.stopPropagation(); againFn(); });
       var close = doc.createElement("button");
       close.type = "button";
-      close.textContent = "关闭";
+      close.textContent = "Close";
       close.addEventListener("click", function (event) { event.stopPropagation(); closeFn(); });
       overlay.appendChild(again);
       overlay.appendChild(close);
@@ -1119,13 +1125,13 @@
     var panel = doc.createElement("div");
     panel.setAttribute("data-dsh-whale-catch", "true");
     panel.setAttribute("role", "region");
-    panel.setAttribute("aria-label", "小游戏：接点心");
+    panel.setAttribute("aria-label", "Mini game: Catch the Snacks");
     panel.setAttribute("tabindex", "-1");
     var head = doc.createElement("div");
     head.setAttribute("data-dsh-whale-catch-head", "true");
     var score = doc.createElement("span");
     score.setAttribute("data-dsh-whale-catch-score", "true");
-    score.textContent = "得分 0";
+    score.textContent = "Score 0";
     var time = doc.createElement("span");
     time.setAttribute("data-dsh-whale-catch-time", "true");
     time.textContent = "30s";
@@ -1134,7 +1140,7 @@
     combo.textContent = "";
     var best = doc.createElement("span");
     best.setAttribute("data-dsh-whale-catch-best", "true");
-    best.textContent = "最佳 " + (gameStats ? gameStats.best : 0);
+    best.textContent = "Best " + (gameStats ? gameStats.best : 0);
     head.appendChild(score);
     head.appendChild(time);
     head.appendChild(combo);
@@ -1149,7 +1155,7 @@
     panel.appendChild(arena);
     var paused = doc.createElement("div");
     paused.setAttribute("data-dsh-whale-catch-paused", "true");
-    paused.textContent = "⏸ 页面已隐藏，回来继续";
+    paused.textContent = "⏸ Page hidden, come back to continue";
     paused.hidden = true;
     panel.appendChild(paused);
     doc.body.appendChild(panel);
@@ -1174,10 +1180,10 @@
     var best = panel.querySelector("[data-dsh-whale-catch-best]");
     var arena = panel.querySelector("[data-dsh-whale-catch-arena]");
     var basket = panel.querySelector("[data-dsh-whale-catch-basket]");
-    if (score) score.textContent = "得分 " + catchState.score;
+    if (score) score.textContent = "Score " + catchState.score;
     if (time) time.textContent = Math.ceil(catchState.remainingMs / 1000) + "s";
-    if (combo) combo.textContent = catchState.combo > 1 ? "连击 x" + catchState.combo : "";
-    if (best) best.textContent = "最佳 " + (gameStats ? gameStats.best : 0);
+    if (combo) combo.textContent = catchState.combo > 1 ? "Combo x" + catchState.combo : "";
+    if (best) best.textContent = "Best " + (gameStats ? gameStats.best : 0);
     if (basket) basket.style.left = (catchState.basketX * 100) + "%";
     var existing = arena.querySelectorAll("[data-dsh-whale-catch-item]");
     for (var i = 0; i < existing.length; i += 1) existing[i].remove();
@@ -1239,7 +1245,7 @@
     if (!catchOpen) return;
     catchOpen = false;
     if (catchTimer) { root.clearInterval(catchTimer); catchTimer = null; }
-    settleGame(catchPanel(), result, function () { openCatchGame(); }, function () { closeCatchGame(); }, "接到 " + result.caught + " 个");
+    settleGame(catchPanel(), result, function () { openCatchGame(); }, function () { closeCatchGame(); }, "caught " + result.caught);
   }
 
   /* ---------- state plumbing ---------- */
@@ -1456,30 +1462,33 @@
     if (growth.level >= 7 && unlocks.egg) line = say("bond", "l7");
     else if (growth.level >= 5 && unlocks.badge) line = say("bond", "l5");
     else if (unlocks.action) line = say("bond", "l3");
-    /* 自称/称呼替换统一在 showLineNow 内做一次，此处不再重复 localizeLine。 */
+    /* Self-name/title substitution happens once inside showLineNow, so it is
+       not repeated here with localizeLine. */
     if (line && !BUSY_STATES[memory.state.state] && readPref("chat")) showLine(line);
-    journalAdd("bond", "羁绊达到 Lv." + growth.level + "（" + title() + "的" + selfName() + "）");
+    journalAdd("bond", "Bond reached Lv." + growth.level + " (" + title() + "'s " + selfName() + ")");
     if (!BUSY_STATES[memory.state.state]) showMood("levelup", 4200, true);
   }
   function keywordsEnabled() {
     try { return root.localStorage.getItem("whale-moe:keywords") === "1"; } catch (e) { return false; }
   }
   function title() {
-    try { var t = root.localStorage.getItem("whale-moe:title"); return t && t.trim() ? t.trim() : "主人"; } catch (e) { return "主人"; }
+    try { var t = root.localStorage.getItem("whale-moe:title"); return t && t.trim() ? t.trim() : "Master"; } catch (e) { return "Master"; }
   }
-  /* 看板娘的自称（对应「如何称呼我」的另一半）：留空或异常时回落「鲸鱼娘」。
-     台词库里 363 处自称都在这里统一替换，不逐条改写。 */
+  /* Whale-chan's self-name (the counterpart of "what should I call you"):
+     falls back to "Whale-chan" when empty or unavailable.
+     The hundreds of self-references in the dialogue library are all swapped
+     here in one place rather than rewritten line by line. */
   function selfName() {
     try {
       var n = root.localStorage.getItem("whale-moe:selfName");
-      if (!n || !n.trim()) return "鲸鱼娘";
+      if (!n || !n.trim()) return "Whale-chan";
       var v = n.trim();
       return v.length > 12 ? v.slice(0, 12) : v;
-    } catch (e) { return "鲸鱼娘"; }
+    } catch (e) { return "Whale-chan"; }
   }
   function localizeLine(line) {
     if (core && typeof core.applyNames === "function") return core.applyNames(line, title(), selfName());
-    return String(line).split("主人").join(title()).split("鲸鱼娘").join(selfName());
+    return String(line).split("Master").join(title()).split("Whale-chan").join(selfName());
   }
   function isNight(now) {
     var h = new Date(now || Date.now()).getHours();
@@ -1498,7 +1507,7 @@
      every error node seen within this window as historical, so a reload never
      starts in the error pose. */
   var SETTLE_MS = 10000;
-  var STATE_CHIP = Object.freeze({ thinking: "思考中", tool: "工作中", success: "完成", failure: "出错", curious: "好奇" });
+  var STATE_CHIP = Object.freeze({ thinking: "Thinking", tool: "Working", success: "Done", failure: "Error", curious: "Curious" });
   var BUSY_STATES = Object.freeze({ thinking: 1, tool: 1, success: 1, failure: 1 });
 
   function holdSignals(signals, now) {
@@ -1640,8 +1649,9 @@
       var nodes = doc.querySelectorAll(SIGNAL_BANKS.tool[i]);
       for (var j = 0; j < nodes.length; j += 1) {
         var n = nodes[j];
-        /* 历史步骤卡片会永久带着 data-state="running"；会话消息流内的
-           视为历史，消息流之外的运行标记才代表当前正在工作。 */
+        /* Historical step cards keep data-state="running" forever; inside the
+           conversation message stream they count as history, and only running
+           markers outside the stream mean work is happening right now. */
         if (SIGNAL_BANKS.tool[i] === '[data-state="running"]') {
           if (typeof n.closest === "function" && n.closest('[data-slot="conversation.chat.node"]')) continue;
         }
@@ -1656,9 +1666,10 @@
     var view = detectView();
     var rawTool = toolVisible();
     var rawThinking = anyVisible(SIGNAL_BANKS.thinking);
-    /* 消抖：信号必须连续存在 300ms 才算数；消失后按场景保持——
-       主页 4s、工作台 8s。工作台的工具面板在任务间会短暂空白，
-       拉长保持时间让工作姿势在整段工作期间钉住，不再反复切换。 */
+    /* Debounce: a signal must persist for 300ms to count; after it disappears
+       it is held per context — 4s on home, 8s on the workbench. The workbench
+       tool panel briefly blanks between tasks, so a longer hold keeps the
+       working pose pinned for the whole work stretch instead of flip-flopping. */
     var goneHold = view === "workbench" ? 8000 : 4000;
     var wasRawTool = memory.toolRawSeen;
     if (rawTool) {
@@ -1666,7 +1677,8 @@
       memory.toolRawSeen = true;
     } else {
       memory.toolSeenAt = 0;
-      /* 只在下沿记录“开始消失的时刻”，中间回来又消失则重新起算 */
+      /* Only record "the moment it started disappearing" on the falling edge;
+         if it returns and vanishes again midway, restart the count */
       if (wasRawTool || !memory.toolGoneAt) memory.toolGoneAt = now;
       memory.toolRawSeen = false;
     }
@@ -1679,8 +1691,9 @@
       if (wasRawThinking || !memory.thinkingGoneAt) memory.thinkingGoneAt = now;
       memory.thinkingRawSeen = false;
     }
-    /* 关键：信号短暂消失又回来时，seenAt 会归零重算。不能因此把
-       active 直接打回 false —— 只要没离开满 goneHold，就一直钉在工作态。 */
+    /* Key point: when a signal briefly disappears and comes back, seenAt is
+       reset and recounted. That must not flip active straight back to false —
+       as long as it has not been gone for the full goneHold, stay pinned busy. */
     var toolActive = rawTool
       ? (now - memory.toolSeenAt >= 300 || (memory.toolGoneAt !== 0 && now - memory.toolGoneAt < goneHold))
       : memory.toolGoneAt !== 0 && now - memory.toolGoneAt < goneHold;
@@ -1707,10 +1720,13 @@
     };
   }
 
-  /* ── 找回入口 ────────────────────────────────────────────────────────────
-     关掉看板娘后她会彻底离开 DOM，此前没有任何把她叫回来的途径（issue #5）。
-     这里在左下角留一枚唤回按钮，仅在「用户主动关闭」时出现；因所在页面而
-     自动隐藏的场景（设置页等）不打扰，重新打开开关后按钮自动消失。 */
+  /* ── Recall entry point ────────────────────────────────────────────────
+     Once the mascot is switched off she leaves the DOM entirely, and there
+     used to be no way to call her back (issue #5). This leaves a recall
+     button in the bottom-left corner, shown only when the user turned her off
+     deliberately. Scenes where she hides automatically (the settings page and
+     so on) are not interrupted, and the button disappears once the toggle is
+     back on. */
   var recallNode = null;
 
   function ensureRecall() {
@@ -1719,8 +1735,8 @@
     var btn = doc.createElement("button");
     btn.setAttribute("data-dsh-whale-recall", "true");
     btn.type = "button";
-    btn.title = "把" + selfName() + "唤回来";
-    btn.setAttribute("aria-label", "把" + selfName() + "唤回来");
+    btn.title = "Bring " + selfName() + " back";
+    btn.setAttribute("aria-label", "Bring " + selfName() + " back");
     btn.textContent = "🐋";
     var st = btn.style;
     st.position = "fixed";
@@ -1769,7 +1785,7 @@
     }
     hideRecall();
     var rootNode = ensureRoot();
-    /* 主题只在变化时写入，避免每帧都探测 */
+    /* Theme is only written when it changes, so we don't probe every frame */
     var theme = detectTheme();
     if (theme !== memory.theme) {
       memory.theme = theme;
@@ -1783,8 +1799,9 @@
     /* layout routing */
     var layout = resolveLayout(view, computed);
     var moodActive = memory.moodUntil > Date.now() && !!memory.moodPose;
-    /* 工作态优先级最高：只要在忙，情绪姿势一律让位给 running，
-       只有点击互动专用的 work-pat/work-ram 可以短暂覆盖。 */
+    /* Busy state has the highest priority: whenever she's working, mood poses
+       give way to running, and only the click-interaction work-pat/work-ram
+       may briefly override it. */
     var moodAllowed = BUSY_STATES[computed.state] !== 1 || memory.moodPose === "work-pat" || memory.moodPose === "work-ram";
     if (!layout || layout.hidden) {
       rootNode.style.display = "none";
@@ -1802,7 +1819,8 @@
       rootNode.setAttribute("data-dsh-whale-mode", layout.kind);
       if (layout.kind === "mini") rootNode.setAttribute("data-dsh-whale-dense", "true");
       else rootNode.removeAttribute("data-dsh-whale-dense");
-      /* 忙闲视觉：工作中持续亮状态签 + 光晕，空闲立即撤掉 */
+      /* Busy/idle visuals: while working, keep the state chip and glow lit;
+         remove them immediately when idle */
       if (BUSY_STATES[computed.state] === 1) {
         rootNode.setAttribute("data-dsh-whale-busy", "true");
         var chipNow = rootNode.querySelector("[data-dsh-whale-chip]");
@@ -1818,7 +1836,7 @@
     /* celebration override: 3 quick pats — type once, then keep the finished
        bubble stable so repeated renders/reconciles can never re-jump it */
     if (Date.now() < celebrateUntil && view !== "settings" && readPref("chat")) {
-      var celebLine = localizeLine("诶嘿～最喜欢主人啦！");
+      var celebLine = localizeLine("Ehehe~ I like Master best!");
       if (!memory.celebrationVisible) {
         memory.celebrationVisible = true;
         memory.lastLine = celebLine;
@@ -1871,7 +1889,7 @@
         addUsageStat("failures", 1);
         applyQuestSignal("failure", 1);
         applyGrowth({ type: "failure" }, Date.now(), 0);
-        burst("！");
+        burst("!");
         if (view === "workbench") {
           var fLine = say("work", memory.failureStreak >= 3 ? "gentle" : "failure");
           if (fLine) showLine(fLine);
@@ -1916,21 +1934,24 @@
     root.__dshWhaleMoeDebug = { state: computed.state, pose: computed.pose, line: computed.line, view: view, mode: readMode(), layout: layout.kind, failed: memory.failed, errorMatches: memory.lastErrorMatches, errorActive: memory.lastErrorActive, lastEventState: memory.lastEventState, stateHoldUntil: memory.stateHoldUntil, holdLeft: Math.max(0, memory.stateHoldUntil - Date.now()), moodPose: memory.moodPose, moodUntil: memory.moodUntil, moodAnimate: memory.moodAnimate, layers: { active: layerState.active, loaded: layerState.loaded, gen: layerState.gen, pendingSwap: layerState.pendingSwap, pendingSince: layerState.pendingSince }, toolWasActive: memory.toolWasActive, lastSuccessAt: memory.lastSuccessAt, toolGoneAt: memory.toolGoneAt, toolSeenAt: memory.toolSeenAt, at: Date.now(), idleChat: { nextAt: idleChat.nextAt, lastGreetAt: idleChat.lastGreetAt, lastGreetBucket: idleChat.lastGreetBucket }, weather: weatherSummary() };
   }
 
-  /* 待机 base 稳定为 idle-cute；情绪动作只由随机低频的 showMood 覆盖。
-     拖拽中显示“被拎起来”并交给 CSS 左右摇摆。 */
-  /* ── 工具类型细分（v1.7.0）────────────────────────────────────────────
-     复用已有的 work-* 立绘，把常见的工具动作映射到对应姿态。
-     只在确实读到工具卡片文本时切换；识别不了就回落到通用 running，
-     绝不因为猜错而乱切姿势。可用设置面板的「工具细分」开关关闭。 */
+  /* The idle base stays pinned to idle-cute; mood actions are only layered on
+     by the low-frequency random showMood calls.
+     While dragging she shows the "picked up" pose and CSS handles the sway. */
+  /* ── Tool type breakdown (v1.7.0) ──────────────────────────────────────
+     Reuses the existing work-* pose art to map common tool actions onto the
+     matching pose. It only switches when tool card text is actually read; if
+     nothing is recognized it falls back to the generic running pose, and never
+     switches wildly on a wrong guess. Can be turned off with the "Tool poses"
+     toggle in the settings panel. */
   var TOOL_POSES = Object.freeze([
-    { id: "deploy", pose: "work-deploy", words: ["deploy", "rollout", "发布", "上线"] },
-    { id: "test", pose: "work-review", words: ["test", "vitest", "jest", "pytest", "测试", "跑测试"] },
-    { id: "debug", pose: "work-debug", words: ["debug", "traceback", "报错", "修 bug", "fix bug"] },
-    { id: "search", pose: "work-idea", words: ["search", "grep", "glob", "ripgrep", "搜索", "查找"] },
-    { id: "write", pose: "work-meeting", words: ["write", "edit", "patch", "写入", "编辑", "修改文件"] },
-    { id: "bash", pose: "work-slack-phone", words: ["bash", "shell", "terminal", "npm ", "pnpm ", "git ", "命令"] },
-    { id: "review", pose: "work-review", words: ["review", "diff", "评审", "审查"] },
-    { id: "plan", pose: "work-idea", words: ["plan", "todo", "计划"] }
+    { id: "deploy", pose: "work-deploy", words: ["deploy", "rollout", "release", "ship it", "go live"] },
+    { id: "test", pose: "work-review", words: ["test", "vitest", "jest", "pytest", "spec", "coverage"] },
+    { id: "debug", pose: "work-debug", words: ["debug", "traceback", "stack trace", "error", "fix bug"] },
+    { id: "search", pose: "work-idea", words: ["search", "grep", "glob", "ripgrep", "find", "look up"] },
+    { id: "write", pose: "work-meeting", words: ["write", "edit", "patch", "apply", "modify file"] },
+    { id: "bash", pose: "work-slack-phone", words: ["bash", "shell", "terminal", "npm ", "pnpm ", "git ", "command"] },
+    { id: "review", pose: "work-review", words: ["review", "diff", "critique", "audit"] },
+    { id: "plan", pose: "work-idea", words: ["plan", "todo", "roadmap"] }
   ]);
 
   function toolPoseEnabled() {
@@ -1942,7 +1963,7 @@
     try {
       var nodes = doc.querySelectorAll('[data-role="tool"], [data-tool="true"], [data-tool-card="true"], [data-running], [data-state="ongoing"]');
       if (!nodes || !nodes.length) return "";
-      /* 取最后一个：通常是最新的那个工具 */
+      /* Take the last one: usually the most recent tool */
       var node = nodes[nodes.length - 1];
       var text = String(node.textContent || "").toLowerCase();
       if (text.length < 2 || text.length > 4000) return "";
@@ -1958,7 +1979,8 @@
 
   function statePose(computed, view) {
     if (dragState && dragState.moved) return "pick-up";
-    /* 忙时情绪让位：running 优先，仅点击互动专用的两个姿势可覆盖 */
+    /* When busy, moods give way: running wins, and only the two poses reserved
+       for click interaction may override it */
     var busy = BUSY_STATES[computed.state] === 1;
     var moodOk = !busy || memory.moodPose === "work-pat" || memory.moodPose === "work-ram";
     if (memory.moodUntil > Date.now() && memory.moodPose && moodOk) return memory.moodPose;
@@ -2016,7 +2038,8 @@
       var sidebar = firstVisible('[data-slot="sidebar"] > *') || firstVisible('[data-slot="sidebar"]') || firstVisible('[data-slot="sidebar.workspaces"]');
       if (!sidebar || !isVisible(sidebar)) return { hidden: true, src: "", kind: "side", w: 0, h: 0 };
       var srect = sidebar.getBoundingClientRect();
-      /* 忙闲两态：工作区有任务在跑 → 完整“工作中”立绘；空闲 → 探头 */
+      /* Two busy/idle states: a task is running in the workspace → full
+         "working" pose art; idle → the peeking pose */
       var busy = BUSY_STATES[computed.state] === 1;
       if (view === "workbench" && busy) {
         return {
@@ -2333,7 +2356,7 @@
     if (!summary) return "";
     var line = core.pickDialogueAvoidRecent("weather", summary.kind, counter || 0, Math.random, recentLines);
     if (!line) return "";
-    var tail = " · 现在 " + Math.round(summary.temp) + "°C " + summary.label;
+    var tail = " · now " + Math.round(summary.temp) + "°C " + summary.label;
     return line + tail;
   }
 
@@ -2345,7 +2368,7 @@
   root.__dshWhaleMoeWeather = weatherState;
   root.DshWhaleMoeWeatherTest = function (city, key) {
     var useCity = (city || readWeather("weatherCity")).trim();
-    if (!useCity) return Promise.reject(new Error("请先填写城市"));
+    if (!useCity) return Promise.reject(new Error("Please enter a city first"));
     var beforeCoords = weatherState.coords;
     var beforeKey = weatherState.key;
     if (key !== undefined && key !== null) {
@@ -2354,7 +2377,7 @@
     weatherState.coords = null;
     return fetchWeather(useCity, key || "").then(function () {
       var s = weatherSummary();
-      return "✅ 已连通：" + useCity + " " + Math.round(s.temp) + "°C " + s.label;
+      return "✅ Connected: " + useCity + " " + Math.round(s.temp) + "°C " + s.label;
     }).catch(function (error) {
       weatherState.coords = beforeCoords;
       weatherState.key = beforeKey;
@@ -2363,10 +2386,12 @@
   };
 
   /* ---------- weather visual fx (gated canvas layer) ----------
-     rAF 门控例外(相对文件头 "no ambient rAF" 约定):
-     仅在 motion/flash kind 激活 && 特效开关开 && 城市已填 && 天气新鲜(<2h)
-     && 非 forced-colors && 非 reduced-motion && 页面可见时运行;
-     任一条件翻转即 weatherFxStop() 取消循环并摘除节点,不养常驻循环。 */
+     rAF gating exception (relative to the file header's "no ambient rAF" rule):
+     it only runs when a motion/flash kind is active && the fx toggle is on &&
+     a city is set && the weather is fresh (<2h) && not forced-colors && not
+     reduced-motion && the page is visible; flipping any condition calls
+     weatherFxStop() to cancel the loop and detach the node, so no permanent
+     loop is kept alive. */
 
   var WEATHER_FX_PARTICLE_MAX = 160;
   var weatherFxState = {
@@ -2624,15 +2649,18 @@
     showLine(line);
   }
 
-  /* ── 余额关心（v1.6.0）────────────────────────────────────────────────
-     数据来自本机余额代理（dsh-statusbar 的 balance-proxy，默认 3020）。
-     代理只监听 127.0.0.1、不回显密钥，上游请求在服务端完成，因此浏览器侧
-     依然只访问本机，不违背「无外部请求」的承诺。
-     默认关闭；代理未运行或取不到数据时静默失败，不弹错、不刷日志。 */
+  /* ── Balance concern (v1.6.0) ──────────────────────────────────────────
+     Data comes from the local balance proxy (balance-proxy from
+     dsh-statusbar, port 3020 by default). The proxy only listens on
+     127.0.0.1 and never echoes the key, and the upstream request happens
+     server-side, so the browser still only talks to the local machine and the
+     "no external requests" promise holds.
+     Off by default; when the proxy isn't running or returns nothing it fails
+     silently — no error dialog, no log spam. */
   var BALANCE_ENDPOINT = "http://127.0.0.1:3020/balance";
-  var BALANCE_POLL_MS = 60000;           /* 与代理侧缓存时长对齐 */
+  var BALANCE_POLL_MS = 60000;           /* aligned with the proxy's cache window */
   var BALANCE_ANNOUNCE_MS = 30 * 60 * 1000;
-  var BALANCE_CALM_ANNOUNCE_MS = 6 * 60 * 60 * 1000;  /* 充裕时几乎不提 */
+  var BALANCE_CALM_ANNOUNCE_MS = 6 * 60 * 60 * 1000;  /* barely mentioned when comfortable */
   var balanceState = {
     at: 0, ok: false, amount: null, currency: "CNY",
     tier: "unknown", announcedAt: 0, pending: false
@@ -2658,7 +2686,8 @@
       currency: balanceState.currency,
       tier: balanceState.tier
     };
-    /* 沿用既有的低余额通道（立绘 + 成就），只是判定改由真实金额得出 */
+    /* Reuses the existing low-balance channel (pose art + achievement), only
+       the decision now comes from the real amount */
     if (balanceState.tier === "critical" || balanceState.tier === "empty") {
       try { root.localStorage.setItem("dsh.balance.low", "1"); } catch (e) { /* ignore */ }
     } else {
@@ -2687,7 +2716,8 @@
     }
   }
 
-  /* 播报：只在待机时开口，充裕时极少提，避免变成噪音。 */
+  /* Announcements: she only speaks while idle, and rarely when comfortable,
+     so it never turns into noise. */
   function maybeAnnounceBalance(now) {
     if (!balanceEnabled() || !balanceState.ok) return false;
     if (memory.state.state !== "idle" || !bubbleFree()) return false;
@@ -2702,10 +2732,12 @@
     return true;
   }
 
-  /* ── 素材预加载（v1.6.0）──────────────────────────────────────────────
-     立绘 90+ 张，冷启动后第一次切到冷门姿势会有一帧空白或迟滞。
-     策略：首屏只预载最常用的几张，其余在空闲时段每隔 120ms 取一张，
-     避免一次性发起几十个请求抢带宽。失败静默，不影响正常显示。 */
+  /* ── Asset preloading (v1.6.0) ─────────────────────────────────────────
+     There are 90+ pose images, and the first switch to an uncommon pose after
+     a cold start would blank a frame or lag. Strategy: the first screen only
+     preloads the few most common ones; the rest are fetched one every 120ms
+     during idle time so dozens of requests never fight over bandwidth at once.
+     Failures are silent and never affect the normal display path. */
   var POSE_PRELOAD_CORE = ["idle-cute", "running", "success", "failure", "thinking"];
   var POSE_PRELOAD_EXTRA = [
     "work-deploy", "work-meeting", "work-review", "work-debug", "work-deadline",
@@ -2728,7 +2760,7 @@
       var img = new Image();
       if ("decoding" in img) img.decoding = "async";
       img.src = poseUrl(name);
-    } catch (e) { /* 预取失败无所谓，正常显示路径仍会加载 */ }
+    } catch (e) { /* prefetch failure is harmless, the normal display path still loads it */ }
   }
 
   function preloadCore() {
@@ -2749,7 +2781,7 @@
         if (typeof v !== "string") continue;
         if (names.indexOf(v) === -1) names.push(v);
       }
-    } catch (e) { /* 取不到就只预热内置的额外列表 */ }
+    } catch (e) { /* if unreadable, only the built-in extra list is prewarmed */ }
     var idx = 0;
     var step = function () {
       if (idx >= names.length) return;
@@ -2769,9 +2801,11 @@
     root.setTimeout(kick, 2500);
   }
 
-  /* ── 主动关怀（v1.8.0）────────────────────────────────────────────────
-     四条触发线：久坐、深夜、卡住、回来。铁律是"陪着，不是指挥"——
-     工作态绝不插嘴，问候类仍遵守深夜免打扰（深夜劝休息属于关怀，保留）。 */
+  /* ── Proactive care (v1.8.0) ───────────────────────────────────────────
+     Four trigger lines: long sitting, late night, stuck, and coming back. The
+     iron rule is "company, not commands" — she never interrupts while you're
+     working, and the greeting kinds still respect the late-night do-not-disturb
+     window (the late-night rest nudge counts as care and is kept). */
   var PROACTIVE = Object.freeze({
     longWorkMs: 25 * 60 * 1000,
     nightWorkMs: 10 * 60 * 1000,
@@ -2811,7 +2845,8 @@
     if (busy) {
       if (!proactiveState.busySince) proactiveState.busySince = now;
     } else {
-      /* 转入待机：连续忙碌够久就说一句，说完即清零避免反复 */
+      /* Back to idle: if the busy stretch ran long enough, say one line, then
+         reset immediately so it doesn't repeat */
       if (proactiveState.busySince && now - proactiveState.busySince > PROACTIVE.longWorkMs) {
         proactiveState.busySince = 0;
         sayProactive("long-work", now);
@@ -2819,13 +2854,13 @@
       }
       proactiveState.busySince = 0;
     }
-    /* 深夜关怀：正在忙，且已过 23 点或凌晨 */
+    /* Late-night care: currently busy, and it's past 23:00 or the small hours */
     if (busy && isLateNightHours(now) && proactiveState.busySince &&
         now - proactiveState.busySince > PROACTIVE.nightWorkMs) {
       if (sayProactive("late-night", now)) proactiveState.busySince = now;
       return;
     }
-    /* 卡住：同一状态长时间没有推进 */
+    /* Stuck: the same state has not advanced for a long time */
     var sig = computed.state + "|" + (memory.view || "");
     if (sig !== proactiveState.lastSignature) {
       proactiveState.lastSignature = sig;
@@ -2846,16 +2881,19 @@
       var away = proactiveState.awayAt ? Date.now() - proactiveState.awayAt : 0;
       proactiveState.awayAt = 0;
       if (away > PROACTIVE.awayMs) {
-        /* 稍等一下再说，避免页面刚恢复就抢话 */
+        /* Wait a moment before speaking, so she doesn't grab the mic the instant the page returns */
         root.setTimeout(function () { sayProactive("welcome-back", Date.now()); }, 1200);
       }
     });
   }
 
-  /* ── 无障碍（v1.8.0）──────────────────────────────────────────────────
-     桌宠默认是纯装饰（aria-hidden），不给读屏用户添噪音。开启「无障碍」后：
-     可 Tab 聚焦、Enter/Space 摸头、方向键微调位置，并用 aria-live 播报状态。
-     默认关闭，开启与否都不影响她对其他人的表现。 */
+  /* ── Accessibility (v1.8.0) ────────────────────────────────────────────
+     The desktop pet is purely decorative by default (aria-hidden) so it adds
+     no noise for screen reader users. With "Accessibility" on: Tab focus,
+     Enter/Space to pat her head, arrow keys to nudge her position, and state
+     changes announced through aria-live.
+     Off by default, and either way it does not change how she behaves toward
+     anyone else. */
   function a11yEnabled() {
     try { return root.localStorage.getItem("whale-moe:a11y") === "1"; } catch (e) { return false; }
   }
@@ -2866,7 +2904,7 @@
       node.removeAttribute("aria-hidden");
       node.setAttribute("role", "button");
       node.setAttribute("tabindex", "0");
-      node.setAttribute("aria-label", selfName() + "，按 Enter 摸头，方向键移动位置");
+      node.setAttribute("aria-label", selfName() + ", press Enter to pat her head, arrow keys to move");
     } else {
       node.setAttribute("aria-hidden", "true");
       node.removeAttribute("role");
@@ -2901,7 +2939,7 @@
       showMood("blush", 2600, true);
       var line = say("interact", "pat");
       if (line) showLine(line);
-      announceLive(selfName() + "被摸了摸头");
+      announceLive(selfName() + " got a headpat");
       return;
     }
     var step = event.shiftKey ? 40 : 12;
@@ -2920,10 +2958,12 @@
     writeFloatPos(parseFloat(node.style.left), parseFloat(node.style.top));
   }
 
-  /* ── 成长日记（v1.9.0）────────────────────────────────────────────────
-     养成数据原本只能重置、不能回看。这里按时间记下关键节点（升级、羁绊、
-     成就、首次互动），设置面板据此渲染一条时间线。只留在 localStorage，
-     不上传；同一天同类事件只记一条，避免刷屏。 */
+  /* ── Growth journal (v1.9.0) ───────────────────────────────────────────
+     Progression data used to be resettable but not reviewable. This records
+     key moments over time (level-ups, bonds, achievements, first
+     interactions) and the settings panel renders a timeline from it. It stays
+     in localStorage only and is never uploaded; same-kind events on the same
+     day are recorded just once so it doesn't flood. */
   var JOURNAL_MAX = 80;
   var JOURNAL_KEY = "whale-moe:journal";
 
@@ -2939,7 +2979,7 @@
   function writeJournal(list) {
     try {
       root.localStorage.setItem(JOURNAL_KEY, JSON.stringify(list.slice(-JOURNAL_MAX)));
-    } catch (e) { /* 容量或隐私模式下失败都无所谓 */ }
+    } catch (e) { /* failure under quota limits or private mode is fine either way */ }
   }
 
   function journalAdd(kind, text) {
@@ -2955,9 +2995,10 @@
     writeJournal(list);
   }
 
-  /* ── 主题适配（v1.9.0）────────────────────────────────────────────────
-     跟随宿主明暗主题，只影响气泡/菜单这类 UI 元素，立绘本身不做滤镜，
-     避免把画风改坏。识别不了时回落系统偏好。 */
+  /* ── Theme adaptation (v1.9.0) ─────────────────────────────────────────
+     Follows the host's light/dark theme, affecting only UI elements like the
+     bubble and menu. The pose art itself is never filtered, so the art style
+     can't be ruined. Falls back to the system preference when undetectable. */
   function detectTheme() {
     try {
       var el = doc.documentElement;
@@ -2983,7 +3024,7 @@
     idleChat.lastGreetBucket = bucket;
     var line = core.pickDialogueAvoidRecent("greet", bucket, 0, Math.random, recentLines);
     var summary = weatherSummary();
-    if (line && summary) line += " · 现在 " + Math.round(summary.temp) + "°C " + summary.label;
+    if (line && summary) line += " · now " + Math.round(summary.temp) + "°C " + summary.label;
     showChatLine(line);
     return true;
   }
@@ -3076,7 +3117,7 @@
         var now = Date.now();
         var node = doc.querySelector("[data-dsh-whale-root]");
         if (node && memory.state.state === "idle") {
-          /* 微动作：随机 18-28s 一次，幅度轻 */
+          /* Micro-motion: every 18-28s at random, small amplitude */
           if (!memory.nextIdleMicroAt) memory.nextIdleMicroAt = now + 18000 + Math.floor(Math.random() * 10000);
           if (now >= memory.nextIdleMicroAt) {
             memory.nextIdleMicroAt = now + 18000 + Math.floor(Math.random() * 10000);
@@ -3089,9 +3130,11 @@
               root.setTimeout(function () { motionNode.classList.remove("dsh-whale-hop", "dsh-whale-squint"); }, 900);
             }
           }
-          /* 大动作：随机 35-60s 一次，无固定顺序，每张停留 4.2-5.8s。
-             D7: 复活低频毒舌(teasing)——仅非工作台视图、待机态、按
-             TEASE_CHANCE 概率触发，不进入状态机，工作态稳定规则不受影响。 */
+          /* Big action: every 35-60s at random, no fixed order, each held for
+             4.2-5.8s. D7: revives the low-frequency teasing snark — only on
+             non-workbench views, only while idle, triggered with TEASE_CHANCE
+             probability, and it never enters the state machine so the busy-state
+             stability rules are unaffected. */
           if (!memory.nextIdleActionAt) memory.nextIdleActionAt = now + 35000 + Math.floor(Math.random() * 25000);
           if (now >= memory.nextIdleActionAt) {
             memory.nextIdleActionAt = now + 35000 + Math.floor(Math.random() * 25000);
@@ -3107,8 +3150,9 @@
             }
           }
         }
-        /* 工作状态保持 running 姿势稳定，不再随机切工作小剧场；
-           低余额提示也只在不忙时露脸，免得打断工作态。 */
+        /* While working, the running pose is held stable and the work skit no
+           longer switches at random; the low-balance hint likewise only shows
+           up when idle, so it never interrupts the busy state. */
         try {
           var low = root.localStorage.getItem("dsh.balance.low") === "1";
           if (low && !BUSY_STATES[memory.state.state] && now - lastBalanceLowAt > 60000) {

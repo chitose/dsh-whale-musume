@@ -1,8 +1,8 @@
-# Whale Musume Promo Poster Implementation Plan
+# Whale-chan Promo Poster Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Produce one reviewable `2048 x 1152` PNG preview that presents the whale musume as a real DeepSeek Harness desktop companion.
+**Goal:** Produce one reviewable `2048 x 1152` PNG preview that presents Whale-chan as a real DeepSeek Harness desktop companion.
 
 **Architecture:** Build a deterministic fixed-size HTML/CSS composition from the current DSH QA screenshot and three transparent project WebP assets. Render it locally with Microsoft Edge headless, then verify exact dimensions, thumbnail readability, character edges, and the two-line copy constraint before showing it to the user.
 
@@ -12,8 +12,8 @@
 
 - Preview workspace: `<ARTIFACT_DIR>`.
 - Canvas: exactly `2048 x 1152` pixels.
-- Main title: `我来陪你啦！`.
-- Subtitle: `DeepSeek Harness 桌面看板娘插件`.
+- Main title: `I'm here to keep you company!`.
+- Subtitle: `A DeepSeek Harness desktop mascot plugin`.
 - Do not add feature rows, trust rows, version metadata, CTA text, or fabricated DSH UI copy.
 - Use only the current DSH QA screenshot and original transparent WebP character assets.
 - Do not use the existing `promo-poster-v1` through `v4`, their backgrounds, or their scripts.
@@ -52,8 +52,8 @@ Use installed `Noto Sans SC`, zero letter spacing, and no text container:
 
 ```html
 <section class="copy">
-  <h1>我来陪你啦！</h1>
-  <p>DeepSeek Harness 桌面看板娘插件</p>
+  <h1>I'm here to keep you company!</h1>
+  <p>A DeepSeek Harness desktop mascot plugin</p>
 </section>
 ```
 
@@ -77,7 +77,7 @@ Run:
 & '<EDGE_EXE>' --headless=new --disable-gpu --allow-file-access-from-files --dump-dom 'file:///<ARTIFACT_DIR>/poster.html'
 ```
 
-Expected: output contains `我来陪你啦！`, all three `<img>` elements, and no browser load error.
+Expected: output contains `I'm here to keep you company!`, all three `<img>` elements, and no browser load error.
 
 ### Task 2: Export the PNG
 
@@ -127,7 +127,7 @@ Expected: exit code `0` with no exception.
 Use the local image viewer on `poster.png`. Confirm:
 
 ```text
-first focus = whale musume + 我来陪你啦！
+first focus = Whale-chan + I'm here to keep you company!
 second focus = recognizable DeepSeek Harness workspace
 only added copy = title + subtitle
 running = only large character

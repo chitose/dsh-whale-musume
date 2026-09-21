@@ -1,8 +1,8 @@
 <div align="center">
   <a href="https://github.com/Sutera-Diffusus/dsh-whale-musume">
-    <img src="docs/images/logo.png" alt="Whale Musume logo" width="128">
+    <img src="docs/images/logo.png" alt="Whale-chan logo" width="128">
   </a>
-  <h1>Whale Musume · dsh-whale-musume</h1>
+  <h1>Whale-chan · dsh-whale-musume</h1>
   <p>A desktop mascot (Kanban Musume) plugin for <a href="https://github.com/deepseek-ai/deepseek-harness">DeepSeek Harness</a>.</p>
   <p>A whale girl who codes alongside you: she idles quietly by your side, and the moment work starts she picks up her laptop and gets busy with you.<br>Headpat her, raise her, unlock achievements, or drag her around the screen. Everything runs locally — no telemetry, no external requests.</p>
 
@@ -30,11 +30,11 @@
   </p>
 
   <p>
-    <a href="README.en.md">English</a> · <a href="README.md">中文</a>
+    <a href="README.md">Main README</a>
   </p>
 </div>
 
-![Whale Musume: here I come!](docs/images/homepage-promo.png)
+![Whale-chan: here I come!](docs/images/homepage-promo.png)
 
 ---
 
@@ -114,7 +114,7 @@
 
 - Single-click headpat: blushing artwork + floating hearts/stars emoji;
 - Zone interactions: clicking different parts of her (head / belly / tail) has dedicated artwork, effects and voice lines;
-- Keyword expressions: when the chat hits one of the 13 meme keywords, Whale Musume transforms into a reaction image live;
+- Keyword expressions: when the chat hits one of the 13 meme keywords, Whale-chan transforms into a reaction image live;
 - Triple-click: starry-eyed celebration + particle effects + spin animation;
 - Right-click menu: feed / poke / praise / mini-game: bubble pop / back to home position / open mascot settings;
 - Click reactions switch instantly, with no sluggish transitions.
@@ -151,7 +151,7 @@
 - Off by default: line narration, keyword awareness (involves reading chat content), accessibility, balance care, show balance number (involves your account balance);
 - With `dsh-xiaomi-tts` installed and enabled, you can optionally narrate lines triggered by head, belly, and tail clicks or a triple click; a missing, unconfigured, or failed TTS service never affects existing interactions;
 - Daily & Growth uses tabs: Today's Quests / Weekly Check-in / Titles, managed alongside the achievement wall;
-- The overview card lets you edit "How to address me" and **"her self-name"** — leave the latter empty and she defaults to "Whale Musume"; every self-reference in her 363-line dialogue library is replaced consistently;
+- The overview card lets you edit "How to address me" and **"her self-name"** — leave the latter empty and she defaults to "Whale-chan"; every self-reference in her 612-line dialogue library is replaced consistently;
 - Growth data is displayed as compact horizontal cards with sensible information density.
 
 ### 🧩 Engineering
@@ -204,7 +204,7 @@
 
 ## Installation
 
-Whale Musume offers two installation methods. **Pick one — do not mix them:**
+Whale-chan offers two installation methods. **Pick one — do not mix them:**
 
 | Method | How it works | Best for |
 | --- | --- | --- |
@@ -213,13 +213,13 @@ Whale Musume offers two installation methods. **Pick one — do not mix them:**
 
 ### Method A: Bundle Install (non-invasive, recommended)
 
-Whale Musume also ships as a standard DSH bundle that can be installed directly via `dsh plugin` or a plugin marketplace (e.g. mydsh.dev):
+Whale-chan also ships as a standard DSH bundle that can be installed directly via `dsh plugin` or a plugin marketplace (e.g. mydsh.dev):
 
 ```powershell
 dsh plugin --profile web add github:Sutera-Diffusus/dsh-whale-musume
 ```
 
-After installing, restart `dsh web` and hard-refresh the page (`Ctrl+F5`) — Whale Musume appears automatically. This mode:
+After installing, restart `dsh web` and hard-refresh the page (`Ctrl+F5`) — Whale-chan appears automatically. This mode:
 
 - The host plugin only registers a read-only static asset route `/api/dsh-whale-musume/assets`, serving styles/scripts/artwork to the browser;
 - The browser plugin injects the mascot itself; all assets come from the local machine — no external requests, no telemetry;
@@ -277,7 +277,7 @@ The `Backup:` path in the script output is the backup directory for this run —
 
 1. Open the DSH web page (default `http://127.0.0.1:3080`);
 2. Hard refresh: `Ctrl + F5`;
-3. Once the page finishes loading, Whale Musume should appear in the bottom-right corner.
+3. Once the page finishes loading, Whale-chan should appear in the bottom-right corner.
 
 ---
 
@@ -285,10 +285,10 @@ The `Backup:` path in the script output is the backup directory for this run —
 
 After installation, verify the core features in this order:
 
-1. **Click Whale Musume**: you should see a blush/hearts effect;
+1. **Click Whale-chan**: you should see a blush/hearts effect;
 2. **Click three times quickly**: you should see a starry-eyed celebration + particle effects;
-3. **Drag Whale Musume**: she should switch to the "picked up" artwork and sway with the cursor, and her position should be saved on release;
-4. **Right-click Whale Musume**: you should see the menu — feed / poke / praise / bubble-pop mini-game / back to home position / open mascot settings;
+3. **Drag Whale-chan**: she should switch to the "picked up" artwork and sway with the cursor, and her position should be saved on release;
+4. **Right-click Whale-chan**: you should see the menu — feed / poke / praise / bubble-pop mini-game / back to home position / open mascot settings;
 5. **Open DSH Settings → Mascot**: you should see the pill toggles, growth data and the achievement wall;
 6. **Run a tool call**: she should automatically switch to "working with her laptop" with a soft blue glow.
 
@@ -300,7 +300,7 @@ Once all of the above pass, you can enable the weather companion in Settings →
 
 ### Dragging
 
-- Hold and move Whale Musume; her position is saved automatically on release;
+- Hold and move Whale-chan; her position is saved automatically on release;
 - Right-click her → **Back to home position** restores the default bottom-right spot.
 
 ### Right-Click Menu
@@ -309,7 +309,7 @@ Once all of the above pass, you can enable the weather companion in Settings →
 | --- | --- |
 | Feed a snack | Raises Fullness and Affinity |
 | Poke | Lowers mood and triggers the annoyed artwork |
-| Praise Whale Musume | Raises mood and Affinity, triggers starry eyes |
+| Praise Whale-chan | Raises mood and Affinity, triggers starry eyes |
 | Back to home position | Clears the saved floating position |
 | Open mascot settings | Jumps to the DSH settings page |
 
@@ -455,4 +455,4 @@ It is recommended to develop against a separate DSH copy to avoid polluting your
 
 ---
 
-**Whale Musume keeps you company while you code — and while you slack off.** 🐳
+**Whale-chan keeps you company while you code — and while you slack off.** 🐳

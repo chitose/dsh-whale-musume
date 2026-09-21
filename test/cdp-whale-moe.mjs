@@ -85,11 +85,11 @@ async function waitReady(call) {
 
 const DISMISS = `(() => {
   const dialogs = [...document.querySelectorAll('[role="dialog"]')].filter((n) => n.offsetParent !== null);
-  const labels = ['稍后配置', '保存并继续', '继续', '我知道了', '关闭'];
+  const labels = ['\u7a0d\u540e\u914d\u7f6e', '\u4fdd\u5b58\u5e76\u7ee7\u7eed', '\u7ee7\u7eed', '\u6211\u77e5\u9053\u4e86', '\u5173\u95ed', 'later', 'save and continue', 'continue', 'got it', 'close'];
   for (const label of labels) {
-    const target = dialogs.find((n) => [...n.querySelectorAll('button')].some((b) => (b.textContent || '').trim() === label));
+    const target = dialogs.find((n) => [...n.querySelectorAll('button')].some((b) => (b.textContent || '').trim().toLowerCase() === label));
     if (!target) continue;
-    [...target.querySelectorAll('button')].find((b) => (b.textContent || '').trim() === label).click();
+    [...target.querySelectorAll('button')].find((b) => (b.textContent || '').trim().toLowerCase() === label).click();
     return true;
   }
   return false;
@@ -196,8 +196,8 @@ async function main() {
     const b = document.querySelector('[data-dsh-whale-bubble]');
     return !d.moodPose && (!b || b.hidden || !(b.textContent || '').trim());
   })()`, "quiet before keyword", 20000).catch(() => {});
-  const injectThanks = `(() => { const n=document.createElement('div'); n.setAttribute('data-slot','conversation.chat.node'); n.setAttribute('data-dsh-qa-fake','true'); n.style.cssText='position:fixed;left:320px;top:160px;width:600px;height:40px;z-index:99999;pointer-events:none;'; n.textContent='谢谢你！'; document.body.appendChild(n); return true; })()`;
-  const keywordReplyOk = `(() => { const t=document.querySelector('[data-dsh-whale-bubble-text]'); return t && (t.textContent.includes('鸡腿') || t.textContent.includes('谢谢') || t.textContent.includes('不客气') || t.textContent.includes('不用谢') || t.textContent.includes('谢什么') || t.textContent.includes('感谢') || t.textContent.includes('燃料')); })()`;
+  const injectThanks = `(() => { const n=document.createElement('div'); n.setAttribute('data-slot','conversation.chat.node'); n.setAttribute('data-dsh-qa-fake','true'); n.style.cssText='position:fixed;left:320px;top:160px;width:600px;height:40px;z-index:99999;pointer-events:none;'; n.textContent='Thank you!'; document.body.appendChild(n); return true; })()`;
+  const keywordReplyOk = `(() => { const t=document.querySelector('[data-dsh-whale-bubble-text]'); return t && (t.textContent.includes('drumstick') || t.textContent.includes('thank') || t.textContent.includes("You're welcome") || t.textContent.includes('accepts') || t.textContent.includes("Don't mention") || t.textContent.includes('gratitude') || t.textContent.includes('fuel')); })()`;
   for (let attempt = 0; attempt < 2; attempt += 1) {
     await evaluate(call, injectThanks);
     try {
@@ -222,13 +222,13 @@ async function main() {
   check("fx: >= 12 effect kinds defined", fxKinds >= 12, fxKinds);
 
   // Phase 2: settings stays clean, theme entry is gone, mascot panel exists
-  await evaluate(call, `(() => { const b=[...document.querySelectorAll('button')].find((n)=>(n.textContent||'').trim()==='设置'&&n.offsetParent!==null); b?.click(); return !!b; })()`);
+  await evaluate(call, `(() => { const b=[...document.querySelectorAll('button')].find((n)=>{const t=(n.textContent||'').trim().toLowerCase(); return (t==='settings'||t==='\u8bbe\u7f6e')&&n.offsetParent!==null;}); b?.click(); return !!b; })()`);
   await waitFor(call, `!!document.querySelector('[role="dialog"]')`, "settings dialog", 6000).catch(() => {});
-  await evaluate(call, `(() => { const nav=[...document.querySelectorAll('[role="dialog"] button')].find((n)=>(n.textContent||'').trim()==='主题'); nav?.click(); return !!nav; })()`);
+  await evaluate(call, `(() => { const nav=[...document.querySelectorAll('[role="dialog"] button')].find((n)=>{const t=(n.textContent||'').trim().toLowerCase(); return t==='theme'||t==='\u4e3b\u9898';}); nav?.click(); return !!nav; })()`);
   await delay(500);
   const themeGone = await evaluate(call, `[...document.querySelectorAll('option')].some((o) => o.value === 'whale-moe')`);
   check("settings: theme entry removed", themeGone === false, themeGone);
-  await evaluate(call, `(() => { const nav=[...document.querySelectorAll('[role="dialog"] button')].find((n)=>(n.textContent||'').trim()==='看板娘'); nav?.click(); return !!nav; })()`);
+  await evaluate(call, `(() => { const nav=[...document.querySelectorAll('[role="dialog"] button')].find((n)=>{const t=(n.textContent||'').trim().toLowerCase(); return t==='mascot'||t==='\u770b\u677f\u5a18';}); nav?.click(); return !!nav; })()`);
   await delay(500);
   // expand all accordion groups so collapsed content is mounted for assertions
   await evaluate(call, `(() => {
@@ -244,7 +244,7 @@ async function main() {
     const switches = [...document.querySelectorAll('[role="dialog"] button[role="switch"]')].map((b) => ({ pressed: b.getAttribute('aria-checked'), capsule: getComputedStyle(b).borderRadius }));
     const dialog = document.querySelector('[role="dialog"]');
     const text = dialog ? dialog.textContent : '';
-    return { rootDisplay: root ? getComputedStyle(root).display : 'missing', switches, hasGrowth: text.includes('心情') && text.includes('好感度') && text.includes('重置养成'), hasKeyword: text.includes('关键词感知'), hasTitle: text.includes('如何称呼我'), hasStats: text.includes('陪伴') && text.includes('成就墙') && text.includes('工具百连') && !text.includes('—'), hasV12: text.includes('今日任务') && text.includes('本周签到') && text.includes('天气特效') && text.includes('小游戏') && text.includes('称号'), wardrobeGone: !text.includes('装饰衣柜') && !text.includes('小皇冠'), modeGone: !text.includes('形态') && !text.includes('悬浮（可拖拽）') };
+    return { rootDisplay: root ? getComputedStyle(root).display : 'missing', switches, hasGrowth: text.includes('Mood') && text.includes('Affection') && text.includes('Reset progression'), hasKeyword: text.includes('Keyword awareness'), hasTitle: text.includes('What should I call you'), hasStats: text.includes('Company') && text.includes('Achievement wall') && text.includes('Hundred Tools') && !text.includes('—'), hasV12: text.includes("Today's quests") && text.includes("This week's check-ins") && text.includes('Weather effects') && text.includes('Mini games') && text.includes('Title'), wardrobeGone: !text.includes('Decoration wardrobe') && !text.includes('little crown'), modeGone: !text.includes('Mode') && !text.includes('Floating (draggable)') };
   })()`);
   check("settings: mascot stays out", settings.rootDisplay === "none", settings.rootDisplay);
   check("settings: mascot panel has 8 capsule switches", settings.switches.length === 8 && settings.switches.every((s) => s.pressed === "true" && String(s.capsule).includes("999")), settings.switches);
@@ -258,9 +258,9 @@ async function main() {
   // Weather block: three controls + zero network while city is empty
   const weatherUI = await evaluate(call, `(() => {
     const inputs = [...document.querySelectorAll('[role="dialog"] input')];
-    const city = inputs.find((n) => n.placeholder && n.placeholder.includes('留空不联网'));
-    const key = inputs.find((n) => n.placeholder && n.placeholder.includes('免费无需 Key'));
-    const testBtn = [...document.querySelectorAll('[role="dialog"] button')].find((b) => (b.textContent || '').includes('测试连接'));
+    const city = inputs.find((n) => n.placeholder && n.placeholder.includes('stay offline'));
+    const key = inputs.find((n) => n.placeholder && n.placeholder.includes('no key needed'));
+    const testBtn = [...document.querySelectorAll('[role="dialog"] button')].find((b) => (b.textContent || '').includes('Test connection'));
     const weather = window.__dshWhaleMoeWeather;
     return { hasCity: !!city, hasKey: !!key, hasTest: !!testBtn, idleChat: !!window.__dshWhaleMoeIdleChat, fetchedAt: weather ? weather.fetchedAt : 0 };
   })()`);
@@ -294,7 +294,7 @@ async function main() {
   const idleDiag = await evaluate(call, `({ state: window.__dshWhaleMoeDebug.state, src: document.querySelector('[data-dsh-whale-layer].dsh-whale-active')?.getAttribute('src'), moodOverlays: document.querySelectorAll('[data-dsh-whale-mood]').length })`);
   check("state: workbench idle pose distinct from busy", idleDiag.state !== "waiting" && idleDiag.src.includes("workbench-peek"), idleDiag);
   check("mood: no vector expression overlay", idleDiag.moodOverlays === 0, idleDiag.moodOverlays);
-  await evaluate(call, `(() => { const chat = document.querySelector('[data-slot="conversation.chat.node"]'); const n = document.createElement('div'); n.setAttribute('data-dsh-qa-fake','true'); n.setAttribute('data-state','running'); n.textContent='运行中·历史步骤'; chat.appendChild(n); return true; })()`);
+  await evaluate(call, `(() => { const chat = document.querySelector('[data-slot="conversation.chat.node"]'); const n = document.createElement('div'); n.setAttribute('data-dsh-qa-fake','true'); n.setAttribute('data-state','running'); n.textContent='running · historical step'; chat.appendChild(n); return true; })()`);
   await delay(500);
   const staleRunning = await evaluate(call, `({ state: window.__dshWhaleMoeDebug.state, matches: document.querySelectorAll('[data-state="running"]').length })`);
   check("state: historical data-state=running card is not live work", staleRunning.state !== "tool" && staleRunning.state !== "thinking", staleRunning);
@@ -342,7 +342,7 @@ async function main() {
   await evaluate(call, dropFakes);
   await waitFor(call, `window.__dshWhaleMoeDebug && !['failure','tool','thinking'].includes(window.__dshWhaleMoeDebug.state)`, "recover state");
   check("state: recovery", true);
-  await evaluate(call, addFake(`node.className='dshLogCluster_root'; node.setAttribute('data-state','error'); node.textContent='过程 · 44 步 · 57 个工具';`));
+  await evaluate(call, addFake(`node.className='dshLogCluster_root'; node.setAttribute('data-state','error'); node.textContent='process · 44 steps · 57 tools';`));
   await delay(500);
   const logClusterDiag = await evaluate(call, `({ state: window.__dshWhaleMoeDebug.state, errorMatches: window.__dshWhaleMoeDebug.errorMatches || [] })`);
   check("error: historical log cluster is not a live failure", logClusterDiag.state !== "failure" && logClusterDiag.errorMatches.length === 0, logClusterDiag);
@@ -365,14 +365,14 @@ async function main() {
   const patParticles = await evaluate(call, `document.querySelectorAll('[data-dsh-whale-particle]').length`);
   check("pet: pat particles <= 30", patParticles > 0 && patParticles <= 30, patParticles);
   await evaluate(call, `document.querySelector('[data-dsh-whale-mascot]').click(); document.querySelector('[data-dsh-whale-mascot]').click();`);
-  await waitFor(call, `document.querySelector('[data-dsh-whale-bubble-text]') && document.querySelector('[data-dsh-whale-bubble-text]').textContent.includes('主人')`, "celebration");
+  await waitFor(call, `document.querySelector('[data-dsh-whale-bubble-text]') && document.querySelector('[data-dsh-whale-bubble-text]').textContent.includes('Master')`, "celebration");
   check("pet: 3 quick pats celebration", true);
   await waitFor(call, `!document.querySelector('[data-dsh-whale-caret]')`, "celebration typing finished");
   const celebTextA = await evaluate(call, `document.querySelector('[data-dsh-whale-bubble-text]')?.textContent`);
   await delay(500);
   const celebTextB = await evaluate(call, `document.querySelector('[data-dsh-whale-bubble-text]')?.textContent`);
   const moodOverlayCount = await evaluate(call, `document.querySelectorAll('[data-dsh-whale-mood]').length`);
-  check("pet: celebration bubble types once and stays stable", celebTextA === celebTextB && (celebTextA || "").includes("诶嘿"), { celebTextA, celebTextB });
+  check("pet: celebration bubble types once and stays stable", celebTextA === celebTextB && (celebTextA || "").includes("Ehehe"), { celebTextA, celebTextB });
   check("mood: no vector overlay after celebration", moodOverlayCount === 0, moodOverlayCount);
   await screenshot(call, "05-celebration.png");
   await evaluate(call, `document.querySelector('[data-dsh-whale-gear-mini]').click()`);
@@ -417,8 +417,8 @@ async function main() {
   const stillThere = await evaluate(call, `localStorage.getItem('whale-moe:floatX') !== null && localStorage.getItem('whale-moe:floatY') !== null`);
   check("float: double-click no longer resets", stillThere === true, stillThere);
   await evaluate(call, `document.querySelector('[data-dsh-whale-mascot]').dispatchEvent(new MouseEvent('contextmenu', { clientX: 400, clientY: 400, bubbles: true }))`);
-  await waitFor(call, `[...document.querySelectorAll('[data-dsh-whale-context] button')].some((b) => (b.textContent || '').trim() === '回到原位')`, "context reset item");
-  await evaluate(call, `[...document.querySelectorAll('[data-dsh-whale-context] button')].find((b) => (b.textContent || '').trim() === '回到原位').click()`);
+  await waitFor(call, `[...document.querySelectorAll('[data-dsh-whale-context] button')].some((b) => (b.textContent || '').trim() === 'Back to default spot')`, "context reset item");
+  await evaluate(call, `[...document.querySelectorAll('[data-dsh-whale-context] button')].find((b) => (b.textContent || '').trim() === 'Back to default spot').click()`);
   await delay(300);
   const contextReset = await evaluate(call, `localStorage.getItem('whale-moe:floatX') === null && localStorage.getItem('whale-moe:floatY') === null`);
   check("float: context menu returns to origin", contextReset === true, contextReset);
@@ -472,7 +472,7 @@ async function main() {
     const mascot = document.querySelector('[data-dsh-whale-mascot]');
     mascot && mascot.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, clientX: 600, clientY: 300 }));
     const menu = document.querySelector('[data-dsh-whale-context]');
-    const hasGameEntry = !!(menu && [...menu.querySelectorAll('button')].some((b) => (b.textContent || '').includes('小游戏')));
+    const hasGameEntry = !!(menu && [...menu.querySelectorAll('button')].some((b) => (b.textContent || '').includes('Mini game')));
     return { questOk, noFx, hasGameEntry };
   })()`);
   check("v1.2: daily quests seeded with 3 slots on boot", v12.questOk === true, v12);
@@ -480,7 +480,7 @@ async function main() {
   check("v1.2: context menu has mini-game entry", v12.hasGameEntry === true, v12);
   const gameOpened = await evaluate(call, `(() => {
     const menu = document.querySelector('[data-dsh-whale-context]');
-    const entry = menu && [...menu.querySelectorAll('button')].find((b) => (b.textContent || '').includes('小游戏'));
+    const entry = menu && [...menu.querySelectorAll('button')].find((b) => (b.textContent || '').includes('Mini game'));
     if (!entry) return false;
     entry.click();
     return true;
@@ -546,7 +546,7 @@ async function main() {
     const m = document.querySelector('[data-dsh-whale-mascot]');
     m.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, clientX: 600, clientY: 300 }));
     const menu = document.querySelector('[data-dsh-whale-context]');
-    const entry = menu && [...menu.querySelectorAll('button')].find((b) => (b.textContent || '').includes('接点心'));
+    const entry = menu && [...menu.querySelectorAll('button')].find((b) => (b.textContent || '').includes('Catch the Snacks'));
     if (!entry) return false;
     entry.click();
     return true;

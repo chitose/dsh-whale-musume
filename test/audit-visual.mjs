@@ -67,8 +67,8 @@ async function main() {
     const dismissed = await (async () => {
       const r = await call("Runtime.evaluate", { expression: `(() => {
         const dialogs=[...document.querySelectorAll('[role="dialog"]')].filter(n=>n.offsetParent!==null);
-        const labels=['稍后配置','继续','我知道了','关闭'];
-        for(const label of labels){const t=dialogs.find(n=>[...n.querySelectorAll('button')].some(b=>(b.textContent||'').trim()===label)); if(!t) continue; [...t.querySelectorAll('button')].find(b=>(b.textContent||'').trim()===label).click(); return true;}
+        const labels=['\u7a0d\u540e\u914d\u7f6e','\u7ee7\u7eed','\u6211\u77e5\u9053\u4e86','\u5173\u95ed','later','continue','got it','close'];
+        for(const label of labels){const t=dialogs.find(n=>[...n.querySelectorAll('button')].some(b=>(b.textContent||'').trim().toLowerCase()===label)); if(!t) continue; [...t.querySelectorAll('button')].find(b=>(b.textContent||'').trim().toLowerCase()===label).click(); return true;}
         return false;
       })()`, returnByValue: true });
       return r.result.value;

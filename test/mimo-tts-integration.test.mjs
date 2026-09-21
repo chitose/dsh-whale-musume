@@ -24,7 +24,7 @@ test("MiMo TTS bridge is optional and cleans up its event listener", () => {
 
 test("MiMo TTS setting is conditional and defaults to off", () => {
   assert.match(client, /function hasMimoTts\(ctx\)/);
-  assert.match(client, /mimoTtsAvailable \? \[\{ label: "台词播报 \(MiMoTTs\)", prefKey: "mimoTts" }\] : \[\]/);
+  assert.match(client, /mimoTtsAvailable \? \[\{ label: "Dialogue playback \(MiMoTTs\)", prefKey: "mimoTts" }\] : \[\]/);
   assert.match(client, /defaultOff = prefKey === "mimoTts"/);
 });
 
@@ -34,5 +34,5 @@ test("only approved interaction paths emit localized MiMo TTS lines", () => {
   assert.match(presenter, /function bellyReact[\s\S]*?showInteractionLine\(line\)/);
   assert.match(presenter, /function tailReact[\s\S]*?showInteractionLine\(line\)/);
   assert.match(presenter, /var patLine = say\("interact", "pat"\);[\s\S]*?showInteractionLine\(patLine\)/);
-  assert.match(presenter, /readPref\("chat"\)\) emitInteractionLine\(localizeLine\("诶嘿～最喜欢主人啦！"\)\)/);
+  assert.match(presenter, /readPref\("chat"\)\) emitInteractionLine\(localizeLine\("Ehehe~ I like Master best!"\)\)/);
 });

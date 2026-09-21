@@ -164,7 +164,7 @@ def compose(background: Image.Image) -> None:
     head = fit_pose(Image.open(ASSET_DIR / "dsh-whale-home-peek.webp"), 430, 350)
     paste_with_shadow(canvas, head, (74, 4), blur=10)
 
-    title = "陪你写代码，也陪你摸鱼。"
+    title = "Writes code with you, slacks off with you."
     title_font = fit_font(title, CHINESE_FONT, 92, 1300)
     draw.text((486, 66), title, font=title_font, fill=(30, 74, 155, 255), stroke_width=2, stroke_fill=(255, 255, 255, 255))
     title_box = draw.textbbox((486, 66), title, font=title_font)
@@ -172,9 +172,9 @@ def compose(background: Image.Image) -> None:
     draw.text((title_box[2] + 16, 78), "🐳", font=emoji_font, fill=(31, 98, 174, 255))
 
     product_font = load_font(BODY_FONT, 29)
-    draw.text((502, 174), "dsh-whale-musume  ·  DeepSeek Harness 桌面看板娘插件", font=product_font, fill=(83, 103, 143, 255))
+    draw.text((502, 174), "dsh-whale-musume  ·  DeepSeek Harness desktop mascot plugin", font=product_font, fill=(83, 103, 143, 255))
 
-    tags = ["状态联动", "触摸互动", "轻量养成", "多样形态"]
+    tags = ["State-linked", "Touch interaction", "Light progression", "Many forms"]
     tag_colors = [(232, 111, 150, 245), (101, 164, 220, 245), (255, 184, 77, 245), (111, 191, 158, 245)]
     tag_font = load_font(BODY_FONT, 22)
     tx = 502

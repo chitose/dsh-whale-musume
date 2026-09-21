@@ -134,29 +134,29 @@ test("weatherText maps WMO codes", () => {
 });
 
 test("classifyTask sorts text into topic buckets", () => {
-  assert.equal(core.classifyTask("帮我写一个 React 组件"), "code");
-  assert.equal(core.classifyTask("把这段文章润色成周报"), "write");
-  assert.equal(core.classifyTask("调研一下 Server-Sent Events 的原理"), "research");
-  assert.equal(core.classifyTask("这个报错怎么修复"), "bug");
-  assert.equal(core.classifyTask("把 CSV 清洗后做统计"), "data");
-  assert.equal(core.classifyTask("部署到服务器上线"), "deploy");
-  assert.equal(core.classifyTask("今天心情不错"), "general");
+  assert.equal(core.classifyTask("help me write a React component"), "code");
+  assert.equal(core.classifyTask("polish this article into a weekly report"), "write");
+  assert.equal(core.classifyTask("research how Server-Sent Events work"), "research");
+  assert.equal(core.classifyTask("how do I fix the error"), "bug");
+  assert.equal(core.classifyTask("clean the CSV and run stats"), "data");
+  assert.equal(core.classifyTask("deploy to the production server"), "deploy");
+  assert.equal(core.classifyTask("feeling good today"), "general");
 });
 
 test("pickDialogueAvoidRecent avoids recent lines", () => {
-  const recent = ["早啊主人，太阳都晒到尾巴了才来🌞", "主人早安！鲸鱼娘今天也是精神百倍😤"];
+  const recent = ["Morning, Master. The sun already reached my tail before you did🌞", "Good morning! Whale-chan is at full power today too😤"];
   const pick = core.pickDialogueAvoidRecent("daily", "morning", 0, () => 0.99, recent);
-  assert.equal(pick, "早～再不起来我就把你的咖啡喝光啦☕");
+  assert.equal(pick, "Morning~ Get up or I'll drink all your coffee☕");
 });
 
 test("meme keyword groups match and have lines", () => {
-  assert.equal(core.matchKeyword("我是打工人", true), "worker");
-  assert.equal(core.matchKeyword("今天一直在摸鱼", true), "slack");
-  assert.equal(core.matchKeyword("DDL 要到了", true), "ddl");
-  assert.equal(core.matchKeyword("老板又在画饼", true), "cake");
-  assert.equal(core.matchKeyword("已老实求放过", true), "crazy");
-  assert.equal(core.matchKeyword("我立个 flag", true), "flag");
-  assert.equal(core.matchKeyword("这个 bug 好玄学", true), "bugtalk");
+  assert.equal(core.matchKeyword("I'm a grinder", true), "worker");
+  assert.equal(core.matchKeyword("slacking off all day", true), "slack");
+  assert.equal(core.matchKeyword("the ddl is coming", true), "ddl");
+  assert.equal(core.matchKeyword("my boss is promising the world again", true), "cake");
+  assert.equal(core.matchKeyword("I give up, please spare me", true), "crazy");
+  assert.equal(core.matchKeyword("let's flag this one", true), "flag");
+  assert.equal(core.matchKeyword("this cursed bug again", true), "bugtalk");
   ["worker", "slack", "ddl", "cake", "crazy", "flag", "bugtalk"].forEach((id) => {
     assert.ok(core.DIALOGUE.keyword[id] && core.DIALOGUE.keyword[id].length >= 5, id);
   });
@@ -175,21 +175,22 @@ test("meme keyword groups match and have lines", () => {
 });
 
 test("applyNames swaps the user title and the mascot self-name", () => {
-  assert.equal(core.applyNames("主人好，鲸鱼娘来啦", "老板", "小鲸"), "老板好，小鲸来啦");
-  assert.equal(core.applyNames("鲸鱼娘在忙", "主人", ""), "鲸鱼娘在忙");
-  assert.equal(core.applyNames("鲸鱼娘在忙", null, null), "鲸鱼娘在忙");
-  assert.equal(core.applyNames("主人好", "", "小鲸"), "主人好");
-  assert.equal(core.applyNames("没有称呼的一句话", "老板", "小鲸"), "没有称呼的一句话");
-  assert.equal(core.applyNames("", "老板", "小鲸"), "");
-  assert.equal(core.applyNames(undefined, "老板", "小鲸"), "");
-  /* 同一句里多处自称都要替换（台词里常出现「鲸鱼娘」两次以上）。 */
-  assert.equal(core.applyNames("鲸鱼娘说鲸鱼娘来", "主人", "阿鲸"), "阿鲸说阿鲸来");
+  assert.equal(core.applyNames("Hi Master, Whale-chan is here", "Boss", "Lil Whale"), "Hi Boss, Lil Whale is here");
+  assert.equal(core.applyNames("Whale-chan is busy", "Master", ""), "Whale-chan is busy");
+  assert.equal(core.applyNames("Whale-chan is busy", null, null), "Whale-chan is busy");
+  assert.equal(core.applyNames("Hi Master", "", "Lil Whale"), "Hi Master");
+  assert.equal(core.applyNames("a sentence with no names", "Boss", "Lil Whale"), "a sentence with no names");
+  assert.equal(core.applyNames("", "Boss", "Lil Whale"), "");
+  assert.equal(core.applyNames(undefined, "Boss", "Lil Whale"), "");
+  /* Every self-reference in a line must be swapped (lines often say
+     "Whale-chan" more than once). */
+  assert.equal(core.applyNames("Whale-chan says Whale-chan is here", "Master", "Little Whale"), "Little Whale says Little Whale is here");
 });
 
 test("applyNames covers the default self-name carried by the line banks", () => {
   const allStates = Object.values(core.LINES).flat().join("|");
-  assert.ok(allStates.indexOf("鲸鱼娘") !== -1, "台词库应保留默认自称「鲸鱼娘」");
-  assert.equal(core.applyNames("鲸鱼娘", "主人", "小鲸"), "小鲸");
+  assert.ok(allStates.indexOf("Whale-chan") !== -1, "the line banks should keep the default self-name \"Whale-chan\"");
+  assert.equal(core.applyNames("Whale-chan", "Master", "Lil Whale"), "Lil Whale");
 });
 
 test("balanceTier maps amounts to the six tiers", () => {
@@ -204,7 +205,7 @@ test("balanceTier maps amounts to the six tiers", () => {
   assert.equal(core.balanceTier(7.83), "ok");
   assert.equal(core.balanceTier(20), "good");
   assert.equal(core.balanceTier(150), "rich");
-  /* 边界值归属：阈值是「小于」，等于时进更高一档 */
+  /* Boundary values: the thresholds compare with "less than", so an exact match moves up a tier */
   assert.equal(core.balanceTier(1), "low");
   assert.equal(core.balanceTier(5), "ok");
   assert.equal(core.balanceTier(100), "rich");
@@ -222,10 +223,10 @@ test("pickBalanceAccount prefers CNY and falls back to the first account", () =>
 test("formatBalance shows digits or only a tier label", () => {
   assert.equal(core.formatBalance(null, "CNY", true), "—");
   assert.equal(core.formatBalance(7.83, "CNY", true), "¥7.83");
-  assert.equal(core.formatBalance(7.83, "CNY", false), "正常");
-  assert.equal(core.formatBalance(150, "CNY", false), "很充裕");
-  assert.equal(core.formatBalance(0.5, "CNY", false), "告急");
-  /* 档位模式不应泄露具体金额 */
+  assert.equal(core.formatBalance(7.83, "CNY", false), "Normal");
+  assert.equal(core.formatBalance(150, "CNY", false), "Very comfortable");
+  assert.equal(core.formatBalance(0.5, "CNY", false), "Critical");
+  /* Tier mode must not leak the exact amount */
   assert.equal(core.formatBalance(7.83, "CNY", false).indexOf("7.83"), -1);
 });
 
@@ -242,7 +243,7 @@ test("balance and proactive line banks are populated for every tier", () => {
     assert.ok(Array.isArray(lines) && lines.length >= 4, "proactive." + kind);
     lines.forEach((line) => assert.equal(typeof line, "string"));
   });
-  /* 新增台词同样走 applyNames，自称可替换 */
+  /* New lines go through applyNames too, so the self-name is replaceable */
   const joined = Object.values(core.DIALOGUE.proactive).flat().join("|");
-  assert.ok(joined.indexOf("鲸鱼娘") !== -1, "主动关怀台词应带默认自称");
+  assert.ok(joined.indexOf("Whale-chan") !== -1, "proactive care lines should carry the default self-name");
 });

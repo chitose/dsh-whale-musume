@@ -2,195 +2,195 @@
 
 ## v2.1.0 (2026-09-14)
 
-- **可选 MiMo TTS 台词播报**（Issue #9 / PR #10，感谢 @ppy-web）：检测到 `dsh-xiaomi-tts` 服务时显示默认关闭的「台词播报」开关；开启后播报头部、肚皮、尾巴与三连击台词。未安装、未配置或播放失败均不影响原交互，并补充异步播放拒绝保护
-- **修复弹窗导致鲸鱼娘永久消失**（Issue #12 / PR #13，感谢 @icemaple77）：完全位于视口外的 off-canvas drawer 不再被视为可见弹窗；设置页与可见弹窗场景改为 120px 右下角 mini，不再整体隐藏
-- **修复设置面板注册时序**：按 DSH 客户端约定声明 `slots` inject，避免启动时拿不到服务而永久跳过「看板娘」设置栏目
-- **修复多币种余额误判**（Issue #14 / PR #15，感谢 @icemaple77）：DeepSeek 同时返回 USD/CNY 账户时优先选择 CNY；没有 CNY 时回落第一条记录
-- **持续集成**：新增 GitHub Actions，在 Node.js 18 与 22 上运行完整测试；单元测试 **102 → 108 全绿**
+- **Optional MiMo TTS dialogue playback** (Issue #9 / PR #10, thanks @ppy-web): when a `dsh-xiaomi-tts` service is detected, a "dialogue playback" toggle appears, off by default; once enabled it speaks the head, belly, tail, and triple-combo lines. A missing install, missing configuration, or playback failure never affects the original interaction, and async playback rejection protection was added
+- **Fix: a dialog could make Whale-chan disappear permanently** (Issue #12 / PR #13, thanks @icemaple77): off-canvas drawers lying entirely outside the viewport are no longer treated as visible dialogs; the settings page and visible-dialog scenarios now switch to a 120px mini in the bottom-right corner instead of hiding her entirely
+- **Fix: settings panel registration timing**: declare the `slots` inject per the DSH client convention, avoiding a startup where the service is unavailable and the "mascot" settings section is skipped forever
+- **Fix: multi-currency balance misjudgement** (Issue #14 / PR #15, thanks @icemaple77): when DeepSeek returns both USD and CNY accounts, prefer CNY; fall back to the first record when there is no CNY
+- **Continuous integration**: added GitHub Actions, running the full test suite on Node.js 18 and 22; unit tests **102 → 108, all green**
 
 ## v2.0.1 (2026-09-05)
 
-- **DSH STORE 兼容性声明**:在 `package.json` 的 `dsh.compatibility.dshReleases` 中逐版本声明兼容矩阵——`0.1.1-rc.2`(实际运行环境)与 `0.1.2-rc.1`(官方最新)标记为 `compatible`,`0.1.2-alpha.4` / `0.1.2-alpha.5` 标记为 `unknown`
-- 恢复与商城目录固定 Commit(`a61b09d`,v1.5.0)的历史血缘(此前 main 被整体 rebase,候选不再是目录 Commit 的有界直接后继),使新版本满足 DSH STORE 固定源更新审查
-- 说明:`0.1.2-rc.1` 的 compatible 为作者级来源声明(核心状态机 DOM-free,表现层信号检测对 0.1.2-rc.1 会话流改造有抗性,且已过滤历史卡片的陈旧状态标记),尚未在 0.1.2-rc.1 上跑完整运行时验收;升级到该版本后建议执行 `npm test` 与 `npm run qa`
+- **DSH STORE compatibility declaration**: the `dsh.compatibility.dshReleases` field in `package.json` now declares a compatibility matrix version by version — `0.1.1-rc.2` (the actual runtime environment) and `0.1.2-rc.1` (the latest official release) are marked `compatible`, while `0.1.2-alpha.4` / `0.1.2-alpha.5` are marked `unknown`
+- Restored the historical lineage to the commit pinned by the store catalog (`a61b09d`, v1.5.0) (main had previously been rebased as a whole, so the candidate was no longer a bounded direct successor of the catalog commit), making the new version satisfy the DSH STORE pinned-source update review
+- Note: the `compatible` marking for `0.1.2-rc.1` is an author-level source declaration (the core state machine is DOM-free, the presentation-layer signal detection is resistant to the 0.1.2-rc.1 session-stream rework, and stale state markers on historical cards are already filtered); full runtime acceptance has not yet been run on 0.1.2-rc.1. After upgrading to that version, running `npm test` and `npm run qa` is recommended
 
 ## v2.0.0 (2026-08-28)
 
-路线图里 v1.6.0–v1.9.0 四个版本的内容合并发布，按主题组织如下。
+The contents of the four roadmap versions v1.6.0–v1.9.0 are released together, organized by theme below.
 
-### 余额关心（原 v1.6.0）
+### Balance check-ins (formerly v1.6.0)
 
-- **新增·账户余额显示与播报**：新增「余额」分组，显示当前余额，并让她用一句话说明情况（分 充裕 / 正常 / 偏紧 / 告急 / 已见底 五档，共 29 条台词）
-- 数据源为本机余额代理 `127.0.0.1:3020`（`dsh-statusbar` 的 balance-proxy）。代理只监听 127.0.0.1、不回显密钥，上游请求在服务端完成，因此**浏览器侧依然只访问本机**，不违背「无外部请求」的承诺
-- 60 秒轮询一次（与代理缓存对齐）；**默认关闭**，代理未运行或取不到数据时静默失败，不弹错不刷日志
-- 沿用「忙碌时不露脸」：播报只发生在待机时；充裕档几乎不主动提（6 小时一次），偏紧档 30 分钟一次
-- 金额敏感，提供「余额显示数字」开关，关闭后只显示档位措辞，截图不泄露余额
-- 低余额判定改由真实金额得出，仍复用既有的 `balance-low` 立绘与「🪙 余额告急」成就
+- **New · account balance display and playback**: added a "balance" group that shows the current balance and has her explain the situation in one line (five tiers: comfortable / normal / tight / critical / bottomed out, 29 lines in total)
+- The data source is the local balance proxy at `127.0.0.1:3020` (the balance-proxy of `dsh-statusbar`). The proxy only listens on 127.0.0.1, never echoes the key, and completes upstream requests on the server side, so **the browser side still only talks to the local machine**, which does not break the "no external requests" promise
+- Polls once every 60 seconds (aligned with the proxy cache); **off by default**, and it fails silently when the proxy is not running or no data can be fetched — no error popups, no log spam
+- Follows "no showing her face while busy": playback only happens while idle; the comfortable tier is almost never mentioned proactively (once every 6 hours), the tight tier once every 30 minutes
+- Amounts are sensitive, so a "show balance digits" toggle is provided; when disabled only the tier wording is shown, so screenshots do not leak the balance
+- Low-balance detection is now derived from the real amount, while still reusing the existing `balance-low` pose art and the "🪙 balance critical" achievement
 
-### 素材加载（原 v1.6.0）
+### Asset loading (formerly v1.6.0)
 
-- **新增·立绘预加载**：90+ 张立绘此前无任何加载策略，冷启动后首次切到冷门姿势会迟滞。现在首屏只预载 5 张常用姿势，其余在空闲时段每 120ms 取一张，避免几十个请求同时抢带宽
-- 优先使用 `requestIdleCallback`，不支持时退化为延时 2.5 秒启动；预取失败完全静默，不影响正常显示路径
+- **New · pose art preloading**: 90+ pose art images previously had no loading strategy at all, so after a cold start the first switch to an unpopular pose would lag. Now only 5 common poses are preloaded on the first screen, and the rest are fetched one at a time every 120ms during idle periods, avoiding dozens of simultaneous requests competing for bandwidth
+- `requestIdleCallback` is preferred, degrading to a 2.5-second delayed start when unsupported; prefetch failures are completely silent and never affect the normal display path
 
-### 工具类型细分（原 v1.7.0）
+### Tool-type breakdown (formerly v1.7.0)
 
-- **新增·按工具类型切换工作姿态**：跑命令、改文件、搜索、测试、评审、部署、调试各有对应姿态，**全部复用仓库里已有的 work-* 立绘**，不新增素材
-- 识别方式是读取工具卡片文本做关键词匹配，**识别不了就回落到通用工作姿势**，绝不因为猜错而乱切
-- 新增「工具细分」开关（默认开启）
+- **New · switch work pose by tool type**: running commands, editing files, searching, testing, reviewing, deploying, and debugging each have a matching pose, and **all of them reuse the existing work-* pose art in the repository**, adding no new assets
+- Recognition reads the tool card text and does keyword matching, **falling back to the generic work pose when recognition fails**, never switching at random because of a wrong guess
+- Added a "tool breakdown" toggle (on by default)
 
-### 拖拽物理（原 v1.7.0）
+### Drag physics (formerly v1.7.0)
 
-- **新增·拖拽惯性**：松手后按瞬时速度滑行一小段并旋转回正；撞到屏幕边缘就停住（「抓住」边缘）不再继续转
-- 轻放（速度过小）只做一次轻微回弹，避免抖一下
-- 落盘时机调整到物理滑行结束之后，保存的是最终位置
-- 新增「拖拽惯性」开关（默认开启）
+- **New · drag inertia**: after release she glides a short distance at the instantaneous velocity and rotates back upright; hitting the screen edge stops her (she "grabs" the edge) and she stops rotating
+- A gentle release (velocity too low) only produces a single slight rebound, avoiding a jitter
+- The persist point moved to after the physics glide ends, so the final position is what gets saved
+- Added a "drag inertia" toggle (on by default)
 
-### 主动关怀（原 v1.8.0）
+### Proactive care (formerly v1.8.0)
 
-- **新增·四条主动关怀线**：久坐提醒（连续忙 25 分钟）、深夜劝休息（23 点后仍在忙）、卡住陪伴（同一状态停滞 8 分钟）、回来打招呼（离开超过 3 分钟）
-- 铁律是「陪着，不是指挥」——**工作态绝不插嘴**；关怀之间至少间隔 15 分钟，避免变成噪音
-- 台词基调是提醒而非催促，共 19 条
-- 新增「主动关怀」开关（默认开启）
+- **New · four proactive care tracks**: sedentary reminders (25 minutes of continuous busyness), late-night rest prompts (still busy after 11pm), stuck-company (the same state stalls for 8 minutes), and welcome-back greetings (away for more than 3 minutes)
+- The iron rule is "keep company, don't give orders" — **she never interrupts during work states**; care events are at least 15 minutes apart so they do not become noise
+- The lines are worded as reminders rather than nagging, 19 in total
+- Added a "proactive care" toggle (on by default)
 
-### 无障碍（原 v1.8.0）
+### Accessibility (formerly v1.8.0)
 
-- **新增·可选无障碍模式**：桌宠原本是 `aria-hidden` 的纯装饰，读屏用户完全感知不到。开启后可 Tab 聚焦、Enter/Space 摸头、方向键微调位置（Shift 加速），状态变化经 `aria-live` 播报
-- 使用 `role="button"` + 动态 aria-label（含自定义自称），焦点可见
-- **默认关闭**：既不给默认体验添负担，也给有需要的人留一条路
+- **New · optional accessibility mode**: the desktop pet was originally pure decoration with `aria-hidden`, completely imperceptible to screen-reader users. Once enabled, she can be focused with Tab, petted with Enter/Space, and nudged with the arrow keys (Shift to speed up), with state changes announced via `aria-live`
+- Uses `role="button"` plus a dynamic aria-label (including the custom self-name), with a visible focus ring
+- **Off by default**: it adds no burden to the default experience while leaving a path open for those who need it
 
-### 成长日记（原 v1.9.0）
+### Growth diary (formerly v1.9.0)
 
-- **新增·成长日记**：养成数据原本只能重置、不能回看。现在会按时间记录关键节点（羁绊升级、成就解锁），设置面板新增「成长日记」分组，倒序展示最近 12 条并标注相对时间
-- 同一天同类事件只记一条，避免刷屏；最多保留 80 条，全部留在 localStorage
+- **New · growth diary**: progression data could previously only be reset, never reviewed. Now key milestones (bond level-ups, achievement unlocks) are recorded by time, and the settings panel has a new "growth diary" group showing the 12 most recent entries in reverse order with relative timestamps
+- Only one entry is recorded per event type per day to avoid flooding; at most 80 entries are kept, all in localStorage
 
-### 主题适配（原 v1.9.0）
+### Theme adaptation (formerly v1.9.0)
 
-- **新增·跟随宿主明暗主题**：识别 DSH 的 `data-theme` / `dark` class，退化到系统 `prefers-color-scheme`，结果写入 `data-wm-theme`
-- 只影响气泡、菜单这类 UI 元素，**立绘不做滤镜**，避免把画风改坏
-- 仅在主题变化时写入，不做每帧探测
+- **New · follow the host's dark/light theme**: detects DSH's `data-theme` / `dark` class, falls back to the system `prefers-color-scheme`, and writes the result to `data-wm-theme`
+- Only affects UI elements such as bubbles and menus — **no filters are applied to the pose art**, to avoid ruining the art style
+- Written only when the theme changes, with no per-frame detection
 
-### 测试
+### Tests
 
-- 单元 99 → **102 全绿**（新增余额档位 1 项、金额格式化 1 项、新增台词库完整性 1 项）
+- Unit 99 → **102, all green** (1 new balance tier item, 1 amount formatting item, 1 new dialogue library completeness item)
 
 ## v1.5.0 (2026-08-28)
 
-- **新增·自定义看板娘自称**（issue #4，@Vulpexl）：设置面板总览卡新增「她的自称」输入框，与既有「如何称呼我」成对；留空或清空即回落到默认的「鲸鱼娘」。台词库里 363 处自称在出口处统一替换，不逐条改写
-- **新增·关闭后的找回入口**（issue #5，@VectorAC）：在设置里关掉看板娘后，左下角会出现一枚唤回按钮（🐋），点击即把她叫回来，按钮随即消失。因所在页面而自动隐藏的场景（设置页等）不会出现该按钮，避免打扰
-- 实现：称呼/自称替换提取为 core 的纯函数 `applyNames(line, title, selfName)`（core 仍不碰 localStorage，存储读取留在表现层），便于单测与复用
-- 测试：单元 97 → 99 全绿（新增自称替换 8 项断言 + 台词库默认自称覆盖 1 项）
+- **New · custom mascot self-name** (issue #4, @Vulpexl): the overview card in the settings panel gains a "her self-name" input paired with the existing "what should I call you"; leaving it blank or clearing it falls back to the default "Whale-chan". Every self-name occurrence in the dialogue library (363 at the time of the Chinese release, 385 after the English translation) is substituted uniformly at the output point rather than rewritten line by line
+- **New · recovery entry point after closing** (issue #5, @VectorAC): after turning the mascot off in settings, a recall button (🐋) appears in the bottom-left corner; clicking it calls her back and the button disappears immediately. Scenarios where she is auto-hidden because of the page (such as the settings page) do not show the button, to avoid intruding
+- Implementation: name/self-name substitution was extracted into the pure core function `applyNames(line, title, selfName)` (the core still never touches localStorage, with storage reads left in the presentation layer), for easier unit testing and reuse
+- Tests: unit 97 → 99, all green (8 new assertions for self-name substitution + 1 for dialogue library default self-name coverage)
 
 ## v1.4.2 (2026-08-28)
 
-- **修复出错后永久停留「翻车」立绘**（PR #7，wrzrmzx）：`errorVisible()` 原把启动后出现的任何错误节点当作永久「活错误」，而 DSH 会保留失败步骤的错误卡片，导致鲸鱼娘被永久钉在 failure 立绘。现按「出错后对话是否继续推进」判定翻篇（新增 `ERROR_MIN_MS = 3000` 最小反应时长）；并新增 `SETTLE_MS = 10000` 加载期结算窗口，避免刷新后异步挂载的历史错误卡片被误判为活错误
-- 修复「打开看板娘设置」无反应（PR #2，haitang1）：右键菜单原按文本「设置」查找按钮，新版 DSH 设置入口为纯图标按钮（`[data-slot="sidebar.settings"] button`），现按 结构 slot → `settings.trigger` 宿主按钮 → 文本兜底 三级查找
-- bundle 安装方式补齐「看板娘」设置面板（PR #2，haitang1）：`lib/client.js` 注册 `settings.section`（id=mascot，label=看板娘），内容与 `--mascot-settings` v27 同源（总览卡 / 陪伴表现开关 / 天气 / 日常与养成 / 成就墙 / 数据与重置），读 `whale-moe:*` localStorage 并与桌宠本体实时联动
-- **适配 DSH 0.1.1-rc.2**：设置面板改经 `settings.section` slot 注册，不再依赖改写 `@deepseek-ai/dsh-client-ui-theme` 的 dist 文件（该目录在 0.1.1-rc.2 已移除，旧补丁路径彻底失效）
-- 设置面板健壮性加固：`renderSlot` 缺失或抛错时回落到内置 `MascotPrefRows`，面板不会空白；`slots` 服务不可用或注册失败时跳过面板并保留桌宠本体
-- 兼容性声明更新：README 标注已实测 DSH 0.1.1-rc.2
-- 测试：单元 97 项全绿
+- **Fix: staying forever on the "crash" pose art after an error** (PR #7, wrzrmzx): `errorVisible()` used to treat any error node appearing after startup as a permanently "live error", while DSH keeps the error cards of failed steps, so Whale-chan was pinned to the failure pose art forever. It now decides the page has turned based on "does the conversation keep progressing after the error" (new `ERROR_MIN_MS = 3000` minimum reaction duration); a new `SETTLE_MS = 10000` load-period settlement window was also added, so historical error cards asynchronously mounted after a refresh are not misjudged as live errors
+- Fixed "open mascot settings" doing nothing (PR #2, haitang1): the context menu used to look up the button by the text "settings", while the new DSH settings entry is a pure icon button (`[data-slot="sidebar.settings"] button`); it now performs a three-level lookup: structural slot → `settings.trigger` host button → text fallback
+- The bundle install path now provides the "mascot" settings panel (PR #2, haitang1): `lib/client.js` registers `settings.section` (id=mascot, label=mascot), with contents from the same source as `--mascot-settings` v27 (overview card / companionship display toggles / weather / daily and progression / achievement wall / data and reset), reading `whale-moe:*` localStorage and staying in live sync with the desktop pet itself
+- **Adapted to DSH 0.1.1-rc.2**: the settings panel is now registered through the `settings.section` slot rather than relying on rewriting the dist file of `@deepseek-ai/dsh-client-ui-theme` (that directory was removed in 0.1.1-rc.2, so the old patch path is completely dead)
+- Settings panel robustness hardening: when `renderSlot` is missing or throws, it falls back to the built-in `MascotPrefRows` so the panel is never blank; when the `slots` service is unavailable or registration fails, the panel is skipped and the desktop pet itself is preserved
+- Compatibility statement updated: the README now notes that DSH 0.1.1-rc.2 has been tested in practice
+- Tests: all 97 unit tests green
 
 ## v1.4.1 (2026-08-18)
 
-- 设置面板 v27：顶部概览外卡宽度调整为 95% 居中，与下方折叠分组外卡视觉对齐（定稿）
+- Settings panel v27: the top overview outer card width was adjusted to 95% centered, visually aligning with the collapsible group outer cards below (finalized)
 
 ## v1.4.0 (2026-08-18)
 
-- 修复小游戏「玩不了」：暂停条件收敛为仅页面隐藏，工作状态与设置页打开时均不再误暂停；游戏面板 role 修正，不再被误判为设置视图
-- 立绘大扩充（新增 45 张，总计 90+）：思考 / 离开 / 工具三态、戳头 / 戳肚子 / 戳尾巴分区互动、成长四态（升级 / 成就 / 每日完成 / 甩尾）、游戏四态、天气三态、节日五套（圣诞 / 万圣 / 中秋 / 春节 / 情人节）、梗表情 13 种
-- 新互动·分区点击：头部 / 肚子 / 尾巴三区判定，各有专属立绘、特效与台词
-- 新互动·关键词表情：聊天命中 13 个梗关键词（kyun / OMG / doge / sike / 膜拜 / peace / 怀疑人生 / waku waku 等）自动变身表情包
-- 新功能·节日自动换装：圣诞 / 万圣 / 中秋 / 春节 / 情人节当天自动切换节日立绘
-- 设置面板 v24 重构：折叠分组（陪伴表现 / 天气 / 日常与养成 / 成就墙 / 数据与重置）、标签页收纳（今日任务 / 本周签到 / 称号）、总览卡与分组卡等宽对齐
-- 测试：单元 73 → 97 全绿（新增戳分区 / 节日 / 关键词词库 16 项断言）
+- Fixed the mini game being "unplayable": the pause condition was narrowed to page hidden only, so it is no longer wrongly paused during work states or while the settings page is open; the game panel role was corrected so it is no longer misjudged as a settings view
+- Major pose art expansion (45 new, 90+ total): thinking / away / tool tri-state, head / belly / tail zoned interactions, four growth states (level-up / achievement / daily complete / tail flick), four game states, three weather states, five holiday sets (Christmas / Halloween / Mid-Autumn / Spring Festival / Valentine's Day), and 13 meme expressions
+- New interaction · zoned clicking: three zones — head / belly / tail — each with its own pose art, effects, and dialogue lines
+- New interaction · keyword expressions: chat hits on 13 meme keywords (kyun / OMG / doge / sike / worship / peace / existential crisis / waku waku and others) automatically transform her into a reaction image
+- New feature · automatic holiday outfits: on Christmas / Halloween / Mid-Autumn / Spring Festival / Valentine's Day, the holiday pose art switches automatically
+- Settings panel v24 rework: collapsible groups (companionship display / weather / daily and progression / achievement wall / data and reset), tabbed sections (today's tasks / this week's check-in / titles), overview card and group cards aligned at equal width
+- Tests: unit 73 → 97, all green (16 new assertions for poke zones / holidays / keyword lexicon)
 
 ## v1.3.0 (2026-08-18)
 
-- 新功能·互动小游戏「戳泡泡·泡泡派对」：右键菜单进入，4×4 网格 + 键盘方向键可达；普通/星星/炸弹三种泡泡、连击奖励、30 秒一局三档结算；每日 3 局养成奖励上限防刷；新增 4 个成就
-- 新功能·养成玩法加深：每日任务（3 槽自动刷新，签到常驻）、周签到 7 天里程碑（1/3/7 天奖励）、羁绊等级解锁（Lv3 新待机动作 / Lv5 称号「鲸汐守护者」/ Lv7 彩蛋）；设置面板新增「今日任务」「本周签到」「称号」三卡；新增 5 个成就
-- 新功能·天气视觉特效：全屏 canvas 氛围特效 9 类 ×3 档（雨/雪/雷闪/风/雾/热浪/霜雾/阴/晴），基于温度/风速现推导 hot/cold/wind（修复三态词库从未触达的死代码）；天气卡新增「天气特效」开关（默认开）；工作态自动降档、雷闪禁播，页面隐藏暂停，性能预算 160 粒子上限
-- 心情分层台词：心情 <40 低频低落句、≥70 高扬句；新增羁绊词库（Lv3/Lv5/Lv7 各 5 条 + 高/低心情各 5 条）
-- teasing 死代码复活：非工作台视图待机低频毒舌（不进入状态机，工作态稳定规则不变）
-- 词库扩容至 530+ 条；成就墙 30 → 39
-- 设置面板 marker v12 → v13（旧版本自动升级，零迁移；新增小游戏/天气特效开关）
-- 测试：单元 42 → 73 全绿；CDP 全量 + 8 项新断言全绿；motion-qa / soak-work 回归保持绿色
+- New feature · interactive mini game "Poke Bubbles · Bubble Party": entered from the context menu, 4×4 grid reachable with the keyboard arrow keys; three bubble types (normal / star / bomb), combo bonuses, three settlement tiers in a 30-second round; a daily cap of 3 rounds of progression rewards to prevent farming; 4 new achievements
+- New feature · deeper progression gameplay: daily tasks (3 slots auto-refreshed, check-in always present), 7-day weekly check-in milestones (rewards at 1/3/7 days), bond level unlocks (Lv3 new idle animation / Lv5 title "Whale Tide Guardian" / Lv7 easter egg); three new cards in the settings panel: "today's tasks", "this week's check-in", "titles"; 5 new achievements
+- New feature · weather visual effects: full-screen canvas ambient effects in 9 categories × 3 tiers (rain / snow / lightning / wind / fog / heat wave / frost mist / overcast / clear), deriving hot/cold/wind from temperature and wind speed on the fly (fixing dead code the tri-state lexicon had never reached); the weather card gains a "weather effects" toggle (on by default); tiers automatically drop during work states, lightning is muted, effects pause while the page is hidden, and the performance budget caps at 160 particles
+- Layered mood lines: mood <40 low-spirited lines, ≥70 upbeat lines; new bond lexicon (5 lines each for Lv3/Lv5/Lv7 + 5 each for high/low mood)
+- Teasing dead code revived: low-frequency snark while idle in non-workbench views (does not enter the state machine, so the stable work-state rules are unchanged)
+- Lexicon expanded to 530+ lines; achievement wall 30 → 39
+- Settings panel marker v12 → v13 (older versions upgrade automatically with zero migration; new mini game / weather effects toggles)
+- Tests: unit 42 → 73, all green; full CDP plus 8 new assertions all green; motion-qa / soak-work regressions remain green
 
 ## v1.2.0 (2026-08-17)
 
-- 新增标准组合包形态：package.json 声明 dsh.bundle.patch + dsh.client.platform: web，可通过 dsh plugin --profile web add github:Sutera-Diffusus/dsh-whale-musume 或插件市场安装（通过 mydsh.dev 严格校验）
-- 新增宿主插件 lib/index.js：只读静态资源路由 /api/dsh-whale-musume/assets（含路径穿越防护、MIME 与缓存头），不改任何内置包文件
-- 新增浏览器插件 lib/client.js：注入样式 → 状态机 → 表现层，资源根改写为宿主路由，防重复引导
-- bundle 模式验证：真实 DSH 0.1.0-rc.6（3181 测试副本）安装 + 重启 + CDP 全量验收 38/38 通过，零控制台错误
-- README 新增「组合包安装」章节并修正设置面板说明（bundle 模式自带面板，实测确认）
+- Added the standard bundle package form: package.json declares dsh.bundle.patch + dsh.client.platform: web, installable via dsh plugin --profile web add github:Sutera-Diffusus/dsh-whale-musume or the plugin marketplace (with strict validation through mydsh.dev)
+- Added the host plugin lib/index.js: a read-only static asset route /api/dsh-whale-musume/assets (with path traversal protection, MIME, and cache headers) that modifies no built-in package files
+- Added the browser plugin lib/client.js: inject styles → state machine → presentation layer, with the asset root rewritten to the host route and duplicate-bootstrap protection
+- Bundle mode verification: a real DSH 0.1.0-rc.6 (3181 test copy) install + restart + full CDP acceptance passed 38/38, with zero console errors
+- README gained a "bundle installation" section and corrected the settings panel description (bundle mode ships its own panel, confirmed by testing)
 
 ## v1.1.5 (2026-08-16)
-- 修复全新安装体验：`apply` 不再注册「鲸鱼娘·海洋甜点工房」主题选项，全新安装即是纯桌宠模式
-- 保留 legacy `patchHost/patchClient/untheme` 帮助函数用于老版本清理
-- 新增「从 Release zip 到全新 DSH 副本启动」的端到端验收流程，CDP 全绿
+- Fixed the fresh-install experience: `apply` no longer registers the "Whale-chan · Ocean Dessert Workshop" theme option, so a fresh install is pure desktop pet mode
+- Kept the legacy `patchHost/patchClient/untheme` helper functions for cleaning up older versions
+- Added an end-to-end acceptance flow "from the Release zip to a fresh DSH copy booting up", with CDP all green
 
 ## v1.1.4 (2026-08-16)
 
-- 修复半屏窗口鲸鱼娘变小：移除 ≤980px 视口自动缩成 48px 的规则，任何窗口宽度保持正常尺寸
-- 修复后台/无头标签页中换图动画被浏览器暂停导致的姿势卡死：新增 1.6s 超时兜底，强制落地已加载的新姿势
-- 安装器备份目录创建改为 recursive，默认备份位置泛化到系统临时目录
-- CDP 窄屏断言改为「保持正常尺寸」，全量回归保持绿色
+- Fixed Whale-chan shrinking in half-screen windows: removed the rule that auto-shrank her to 48px below a ≤980px viewport, so she keeps her normal size at any window width
+- Fixed poses freezing because image-swap animations were paused by the browser in background/headless tabs: added a 1.6s timeout fallback that force-lands the loaded new pose
+- The installer's backup directory creation now uses recursive, and the default backup location was generalized to the system temp directory
+- The CDP narrow-screen assertion changed to "keeps normal size", and the full regression remains green
 
 ## v1.1.3 (2026-08-15)
 
-- 修复「出现代码块后鲸鱼娘变小」：关闭代码密集自动迷你化
-  - 悬浮形态任何代码量都保持 200px，不再缩到 56px
-  - 侧边/底部形态也不再因代码块缩小，只保留窄屏（≤980px）适配
-  - 手动迷你形态不受影响（若历史设置里存了 mini）
-- CDP 新增断言：3 个代码块出现时尺寸保持正常、无 dense 属性
-- 全量回归保持绿色
+- Fixed "Whale-chan shrinks after code blocks appear": disabled automatic miniaturization for code-heavy content
+  - The floating form stays at 200px regardless of code volume, no longer shrinking to 56px
+  - The side/bottom forms also no longer shrink because of code blocks, keeping only the narrow-screen (≤980px) adaptation
+  - The manual mini form is unaffected (if mini was stored in historical settings)
+- New CDP assertions: with 3 code blocks present the size stays normal and there is no dense attribute
+- Full regression remains green
 
 ## v1.1.2 (2026-08-15)
 
-- 待机动作过渡链路彻底排查：
-  - 余额不足等自动情绪也改为带动画进入（此前会瞬切）
-  - debug 暴露 `moodAnimate` 便于现场诊断
-- 新增 `mood-churn` 压测：24 轮动画/瞬切混合打断、117 帧采样，无空白帧、无叠影、无卡死，最终稳定回到 idle-cute；连续 5 轮通过
-- 全量回归（42 单元 + motion QA + soak + CDP）保持绿色
+- Thorough investigation of the idle animation transition chain:
+  - Automatic emotions such as insufficient balance now also enter with animation (previously they cut instantly)
+  - debug exposes `moodAnimate` for on-site diagnosis
+- Added the `mood-churn` stress test: 24 rounds of mixed animation/instant-switch interruptions, 117 sampled frames, no blank frames, no ghosting, no freezing, finally settling back to idle-cute; passed 5 rounds in a row
+- Full regression (42 unit tests + motion QA + soak + CDP) remains green
 
 ## v1.1.1 (2026-08-15)
 
-- 自称统一为「鲸鱼娘」，清除 DS娘 / 鲸汐 混用
-- 待机日常动作（端咖啡等）进入时恢复「下压 → 换图 → 弹起」过渡，不再瞬间切换
-- 设置面板与主题名同步为鲸鱼娘
-- motion QA 新增「待机动作必须带动画进入」回归断言
+- Unified the self-name to "Whale-chan", removing the mixed use of DS-chan / Whale-chan
+- Idle daily actions (such as bringing coffee) regained the "press down → swap image → spring up" transition on entry, no longer switching instantly
+- The settings panel and theme name were synchronized to Whale-chan
+- motion QA gained a regression assertion that "idle actions must enter with animation"
 
 ## v1.1.0 (2026-08-15)
 
-- 台词总量扩至 494 条：状态/日常/工作/互动全场景扩容
-- 新增梗关键词：打工人、摸鱼、DDL、画饼、发疯文学、立 flag、bug 玄学
-- 新增任务话题台词（写代码/写作/调研/修 bug/数据/部署）与天气台词、分时问候
-- 5–8 分钟主动闲聊：问候/天气变化 > 任务贴题 > 通用梗，工作态不插嘴
-- 天气陪伴：设置面板新增城市、选填 API Key、测试连接；Open-Meteo 免费无需 Key，城市留空零联网
-- 深夜 23:00–5:59 不主动问候；工作态稳定规则保持不变
+- Total lines expanded to 494: state/daily/work/interaction coverage across all scenarios
+- New meme keywords: wage slave, slacking off, DDL, empty promises, unhinged lit, flag-raising, bug mysticism
+- New task-topic lines (writing code/writing/research/fixing bugs/data/deployment) plus weather lines and time-based greetings
+- 5–8 minute proactive small talk: greeting/weather changes > on-topic task remarks > general memes, never interrupting during work states
+- Weather companionship: the settings panel gains city, optional API Key, and test connection; Open-Meteo is free and needs no key, and an empty city means zero networking
+- No proactive greetings late at night from 23:00–5:59; the stable work-state rules are unchanged
 
 ## v1.0.2 (2026-08-15)
 
-- 布局层同样拦截情绪姿势：忙时 `statePose()` 不再让任何 mood 覆盖 running（v1.0.1 只拦了渲染层，仍有漏网路径）
-- 移除随机 `teasing` 状态闪烁：待机在任何随机数下都稳定保持 `idle-cute`
-- 工作释放路径固定为 running → success → idle，不发生回弹或中间空帧
-- 新增 `soak-work` 60s 压测：6s 信号空洞 ×5、24 轮快速闪烁、忙时强塞情绪、释放与待机稳定性，全程帧采样
-- motion QA 增加「mood 必须真正完成换层」与「开始前必须回到 calm」的前置断言
-- 调试面板新增 `toolWasActive / lastSuccessAt / toolGoneAt / toolSeenAt` 字段
+- The layout layer now intercepts mood poses too: when busy, `statePose()` no longer lets any mood override running (v1.0.1 only intercepted the render layer, leaving paths that still slipped through)
+- Removed the random `teasing` state flicker: idle stably stays at `idle-cute` under any random number
+- The work-release path is fixed to running → success → idle, with no bouncing back or intermediate blank frames
+- Added the `soak-work` 60s stress test: 6s signal gaps ×5, 24 rounds of rapid flickering, forcing moods in while busy, release and idle stability, all with frame sampling throughout
+- motion QA gained prerequisite assertions that "mood must truly complete the layer swap" and "must return to calm before starting"
+- The debug panel gained `toolWasActive / lastSuccessAt / toolGoneAt / toolSeenAt` fields
 
 ## v1.0.1 (2026-08-15)
 
-- 修复工作态反复「抽搐」：换图动画被打断时不再误清新动画的防重入标记
-- 工作信号短暂消失又出现时，工作姿势持续钉住（工作台 8s / 其他页面 4s）
-- 工作中不再随机切「工作小剧场」，情绪姿势让位给 running（点击互动除外）
-- 低余额提示在忙碌时不再切姿势，只在待机时露脸
-- motion QA 新增「信号短暂断开不得翻姿势」回归检查
+- Fixed repeated "twitching" in work states: an interrupted image-swap animation no longer wrongly clears the new animation's re-entrancy marker
+- When the work signal briefly disappears and reappears, the work pose stays pinned (8s in the workbench / 4s on other pages)
+- Work no longer randomly switches to "work skits", and mood poses give way to running (except for click interactions)
+- The low-balance prompt no longer switches poses while busy, showing her face only when idle
+- motion QA gained a regression check that "a brief signal disconnection must not flip the pose"
 
 ## v1.0.0 (2026-08-15)
 
-- 首发公开版：鲸鱼娘看板娘插件
-- 悬浮拖拽（拖拽姿态 + 光标跟随摇摆）
-- 待机 / 工作双状态与 320ms 动势遮断过渡
-- 摸头养成、签到、陪伴时长、30 个成就、成就墙
-- 47 张立绘（含工作中、表情包、日常）
-- 点击 emoji/星星特效、三连击庆祝
-- 设置面板卡片化（基础 / 智能 / 养成 / 成就 / 位置与数据）
+- First public release: the Whale-chan mascot plugin
+- Floating drag (drag pose + cursor-following sway)
+- Idle / work dual states with a 320ms momentum-blocking transition
+- Head-pat progression, check-in, companionship time, 30 achievements, achievement wall
+- 47 pose art images (including working, reaction images, daily)
+- Click emoji/star effects, triple-combo celebration
+- Settings panel card layout (basics / smart / progression / achievements / position and data)

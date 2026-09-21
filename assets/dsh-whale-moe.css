@@ -1,4 +1,4 @@
-/* DSH whale-moe v3 "鲸鱼娘看板娘" — mascot-only overlay.
+/* DSH whale-moe v3 "Whale-chan mascot" — mascot-only overlay.
    No DSH skin changes: zero business selectors, zero token overrides.
    The mascot layer adapts to DSH's own light/dark palette via --dsw-*
    variables with safe fallbacks. */
@@ -22,7 +22,7 @@
   transform: translateY(-2px);
   filter: drop-shadow(0 8px 10px rgb(0 0 0 / 26%));
 }
-/* 工作中：淡蓝光晕让“在跑”一眼可辨 */
+/* Working: a pale blue glow makes "running" obvious at a glance */
 [data-dsh-whale-root][data-dsh-whale-busy="true"] [data-dsh-whale-frame] {
   filter: drop-shadow(0 6px 8px rgb(0 0 0 / 22%)) drop-shadow(0 0 9px rgb(70 180 255 / 70%));
 }
@@ -30,7 +30,7 @@
   filter: drop-shadow(0 8px 10px rgb(0 0 0 / 26%)) drop-shadow(0 0 11px rgb(70 180 255 / 80%));
 }
 
-/* 呼吸感：悬浮态与侧栏探头 */
+/* Breathing feel: floating state and sidebar peek */
 [data-dsh-whale-root][data-dsh-whale-mode="float"] [data-dsh-whale-frame],
 [data-dsh-whale-root][data-dsh-whale-mode="side"] [data-dsh-whale-frame] {
   animation: wm-breathe 3.4s ease-in-out infinite;
@@ -49,7 +49,7 @@
   50% { transform: translateY(-3px); }
 }
 
-/* 气泡：跟随 DSH 自身明暗 */
+/* Bubble: follows DSH's own light/dark mode */
 [data-dsh-whale-bubble] {
   position: absolute;
   bottom: calc(100% + 10px);
@@ -95,7 +95,7 @@
   to { opacity: 1; transform: translateX(-50%) scale(1); }
 }
 
-/* 气泡内齿轮 */
+/* Gear inside the bubble */
 [data-dsh-whale-bubble] button {
   margin-left: 6px;
   padding: 0 6px;
@@ -106,7 +106,7 @@
   font-size: 12px;
 }
 
-/* 悬停齿轮：气泡静默时也能打开偏好 */
+/* Hover gear: preferences can be opened even while the bubble is silent */
 [data-dsh-whale-gear-mini] {
   position: absolute;
   top: 0;
@@ -203,7 +203,7 @@
   75% { transform: translateX(2px); }
 }
 
-/* 代码密集时迷你化（仅手动 mini 形态使用 dense 标记） */
+/* Shrink for code-dense layouts (the dense marker is only used by the manual mini form) */
 [data-dsh-whale-root][data-dsh-whale-dense] [data-dsh-whale-frame] {
   width: 64px !important;
   height: 64px !important;
@@ -266,12 +266,12 @@
   25% { transform: rotate(1.2deg) translateX(1px); }
   75% { transform: rotate(-1.2deg) translateX(-1px); }
 }
-/* 注视跟随：由 JS 更新 --wm-gaze-x / --wm-gaze-y */
+/* Gaze tracking: --wm-gaze-x / --wm-gaze-y are updated by JS */
 [data-dsh-whale-root][data-dsh-whale-mode=float] [data-dsh-whale-layer].dsh-whale-active,
 [data-dsh-whale-root][data-dsh-whale-mode=side] [data-dsh-whale-layer].dsh-whale-active {
   transform: translate(var(--wm-gaze-x, 0px), var(--wm-gaze-y, 0px)) rotate(var(--wm-gaze-r, 0deg));
 }
-/* 待机微动作：幅度放大，糯叽叽的挤压回弹 */
+/* Idle micro-motion: enlarged amplitude, soft squishy bounce back */
 [data-dsh-whale-root].dsh-whale-squint [data-dsh-whale-motion] {
   animation: wm-breathe 3.4s ease-in-out infinite, wm-squint 560ms ease-in-out 1;
 }
@@ -287,7 +287,7 @@
   45% { transform: translateY(-14px) scale(1.04, 0.96) rotate(-3deg); }
   100% { transform: translateY(0) scale(1) rotate(0deg); }
 }
-/* 注意力爆点 */
+/* Attention pop */
 [data-dsh-whale-burst] {
   position: absolute;
   bottom: calc(100% - 8px);
@@ -304,7 +304,7 @@
   70% { opacity: 1; transform: translate(-50%, -4px) scale(1); }
   100% { opacity: 0; transform: translate(-50%, -12px) scale(0.9); }
 }
-/* 点击飞出的 emoji/星星 */
+/* Emoji/stars flying out on click */
 [data-dsh-whale-burst].dsh-emoji-fly {
   left: 50%;
   top: 34%;
@@ -320,10 +320,10 @@
   18% { opacity: 1; transform: translate(calc(-50% + var(--wm-dx, 0px)), -18px) scale(1.25) rotate(var(--wm-rot, 8deg)); }
   100% { opacity: 0; transform: translate(calc(-50% + var(--wm-dx, 0px) * 1.9), var(--wm-dy, -40px)) scale(0.9) rotate(calc(var(--wm-rot, 8deg) * 1.5)); }
 }
-/* 打字机光标 */
+/* Typewriter cursor */
 [data-dsh-whale-caret] { opacity: 1; animation: wm-caret 800ms steps(1) infinite; }@keyframes wm-caret { 50% { opacity: 0; } }
 
-/* 状态签：让状态过渡可读 */
+/* State chip: makes state transitions readable */
 [data-dsh-whale-chip] {
   position: absolute;
   top: -14px;
@@ -347,7 +347,7 @@
   100% { opacity: 0; transform: translate(-50%, -6px); }
 }
 
-/* ===== 克制 ADV 动作（不形变、只位移） ===== */
+/* ===== Restrained ADV motions (no deformation, translation only) ===== */
 [data-dsh-whale-frame] { animation: wm-breathe-soft 3.4s ease-in-out infinite; }
 @keyframes wm-breathe-soft {
   0%, 100% { transform: translateY(0); }
@@ -398,14 +398,14 @@
 [data-dsh-whale-root].dsh-whale-dragging [data-dsh-whale-frame] {
   cursor: grabbing;
 }
-/* 被拎起来：以顶部为支点，摇摆角度跟随光标水平速度 */
+/* Picked up: pivots at the top, sway angle follows the cursor's horizontal speed */
 [data-dsh-whale-root].dsh-whale-dragging [data-dsh-whale-motion] {
   transform-origin: 50% 14%;
   transform: translateY(3px) rotate(var(--wm-drag-angle, 0deg));
   transition: transform 120ms ease-out;
 }
 
-/* ===== 12 种特效 ===== */
+/* ===== 12 kinds of effects ===== */
 [data-dsh-whale-fx] { position: fixed; z-index: 61; pointer-events: none; }
 [data-dsh-whale-fx].fx-ripple { border: 2px solid rgb(232 111 150 / 70%); border-radius: 50%; transform: translate(-50%, -50%); animation: wm-fx-ripple 0.7s ease-out forwards; }
 @keyframes wm-fx-ripple { from { width: 8px; height: 8px; opacity: 0.9; transform: translate(-50%, -50%) scale(0.4); } to { width: 90px; height: 90px; opacity: 0; transform: translate(-50%, -50%) scale(1); } }
@@ -431,7 +431,7 @@
 [data-dsh-whale-fx].fx-smoke { width: 10px; height: 10px; border-radius: 50%; background: rgb(80 80 100 / 55%); animation: wm-fx-smoke 0.9s ease-out forwards; }
 @keyframes wm-fx-smoke { from { transform: scale(0.4); opacity: 0.8; } to { transform: scale(1.4) translateY(-10px); opacity: 0; } }
 
-/* 深夜模式 */
+/* Late-night mode */
 body[data-dsh-whale-night] [data-dsh-whale-root] { filter: brightness(0.82); }
 body[data-dsh-whale-night]::after {
   position: fixed;
@@ -443,7 +443,7 @@ body[data-dsh-whale-night]::after {
   background-size: 34px 34px;
 }
 
-/* 右键菜单 */
+/* Right-click menu */
 [data-dsh-whale-context] {
   position: fixed;
   z-index: 70;

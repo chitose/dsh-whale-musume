@@ -47,65 +47,70 @@
     hidden: null
   });
 
+  /* Default names baked into the line banks. applyNames() swaps these out at
+     the exit point, so every line may use them freely as placeholders. */
+  var DEFAULT_TITLE = "Master";
+  var DEFAULT_SELF_NAME = "Whale-chan";
+
   var LINES = Object.freeze({
     idle: [
-      "主人～今天想做什么呀？",
-      "工房一切就绪，随时可以开工哦。",
-      "待机中……耳朵可没闲着，我听见 bug 在远处笑😼",
-      "主人要是累了就戳戳我，免费解压，童叟无欺🫧",
-      "今天风很轻，适合把待办也一起吹跑🌬️"
+      "Master~ what shall we do today?",
+      "The workshop is all set, we can start whenever you like.",
+      "Idling... but my ears aren't. I can hear a bug laughing off in the distance😼",
+      "If you're tired, poke me. Free stress relief, no tricks, honest🫧",
+      "The wind is light today. Perfect for blowing the to-do list away too🌬️"
     ],
     waiting: [
-      "点单吗？鲸鱼娘已经准备好啦～",
-      "在等什么？等你一声令下，我立刻营业🎀",
-      "新订单还没来，我先擦擦锅……擦擦主机💻",
-      "排队中，鲸鱼娘的尾巴已经进入待命状态🐋"
+      "Ordering? Whale-chan is ready~",
+      "Waiting for what? Say the word and I'll open for business🎀",
+      "No new orders yet, so I'll wipe down the pan... I mean, wipe down the rig💻",
+      "In the queue. Whale-chan's tail is on standby🐋"
     ],
     thinking: [
-      "正在打奶油……不对，是在认真思考～",
-      "让鲸鱼娘想想……尾巴都转起来了。",
-      "思考中，请勿投喂，除非是能补脑的小蛋糕🧁",
-      "这个问题有点东西，我正在把它盘圆🌀",
-      "灵感加载中，进度条卡在 99% 是正常现象✨"
+      "Whipping cream... no wait, thinking hard~",
+      "Let Whale-chan think... my tail is spinning along with it.",
+      "Thinking, please don't feed me. Unless it's a cupcake for the brain🧁",
+      "This problem has some meat to it. I'm rounding it out🌀",
+      "Loading inspiration, the bar sticking at 99% is normal✨"
     ],
     tool: [
-      "后厨开工！这单交给鲸鱼娘～",
-      "叮叮当当，工具转起来啦。",
-      "工作中！鲸鱼娘已经抱紧笔记本，闲人退散😤",
-      "这速度，主人跟得上吗？跟不上就喝口水坐好🍵",
-      "工具们今天也很听话，毕竟我管饭（虚拟的）🔧"
+      "Kitchen's open! Leave this order to Whale-chan~",
+      "Clang clang, the tools are spinning up.",
+      "Working! Whale-chan is hugging the laptop tight, bystanders disperse😤",
+      "This speed, can you keep up? If not, sip some water and sit tight🍵",
+      "The tools are behaving today. I do feed them (virtually)🔧"
     ],
     success: [
-      "叮！这炉烤好了！",
-      "完成啦！请主人品尝～",
-      "收工！限时夸夸窗口已开启，先到先得👏",
-      "漂亮！这单稳得像我的发型……等等，我的发型呢😳",
-      "搞定啦，主人可以摸鱼五分钟，我批准了🎫"
+      "Ding! This batch came out of the oven!",
+      "Done! Please have a taste, Master~",
+      "Wrapping up! The limited-time praise window is open, first come first served👏",
+      "Beautiful! This one is as steady as my hairdo... wait, where is my hairdo😳",
+      "Nailed it. Master may slack off for five minutes, I approve🎫"
     ],
     failure: [
-      "呜……翻车了，鲸鱼娘陪你一起修。",
-      "别急别急，鲸鱼娘再烤一次！",
-      "报错而已，又不是世界末日，鲸鱼娘抱抱先🥺",
-      "这个 bug 好嚣张，看我把它的网线拔了💢",
-      "失败了也别低头，鲸鱼娘的尾巴借你握一下🐋"
+      "Uuu... we crashed. Whale-chan will fix it with you.",
+      "Don't rush, don't rush. Whale-chan will bake it again!",
+      "It's just an error, not the end of the world. Whale-chan hugs first🥺",
+      "This bug is awfully cocky. Watch me yank its network cable💢",
+      "Don't hang your head over a failure. Borrow Whale-chan's tail to hold🐋"
     ],
     curious: [
-      "新订单？让我康康～",
-      "主人换菜单了吗？",
-      "咦，有好玩的事情，鲸鱼娘的雷达响了📡",
-      "什么东西什么东西，给我也看看👀"
+      "A new order? Let me have a look~",
+      "Did Master change the menu?",
+      "Ooh, something fun. Whale-chan's radar is pinging📡",
+      "What is it, what is it? Let me see too👀"
     ],
     teasing: [
-      "主人认真工作的样子，很好看哦。",
-      "偷偷给你加一颗糖～",
-      "鲸鱼娘什么都没说，只是嘴角有点压不住😏",
-      "主人今天的勤奋值有点高，是不是想卷死谁🌪️"
+      "Master looks really good when working seriously.",
+      "Sneaking you an extra sugar cube~",
+      "Whale-chan said nothing, my mouth just won't stay flat😏",
+      "Master's diligence is running high today. Trying to out-hustle someone🌪️"
     ],
     afk: [
-      "鲸鱼娘眯一会儿，有单就叫醒我～",
-      "主人不在，鲸鱼娘先给工房放一首催眠曲🎵",
-      "ZZZ……梦里也在帮主人数 bug🐑",
-      "呼……有什么急事就摇摇我的尾巴，我马上醒🌙"
+      "Whale-chan will doze a bit. Wake me if an order comes in~",
+      "Master's away, so Whale-chan will put on a lullaby for the workshop🎵",
+      "ZZZ... counting bugs for Master even in my dreams🐑",
+      "Sigh... if anything urgent comes up, tug my tail and I'll wake right away🌙"
     ]
   });
 
@@ -115,18 +120,22 @@
     return lines[Math.abs(lineCount | 0) % lines.length];
   }
 
-  /* 台词称呼替换:主人 → 用户对她的称呼;鲸鱼娘 → 她的自称。
-     台词库里有 363 处自称,集中在这里替换而不是逐条改写。
-     纯函数(不碰存储),便于单测;存储读取由表现层负责。 */
+  /* Line name substitution: Master → what the user wants to be called;
+     Whale-chan → her self-chosen name.
+     The line banks contain hundreds of self-references, so they are swapped
+     here in one place instead of being rewritten line by line.
+     Pure function (touches no storage) so it is easy to unit test; reading
+     storage is the presentation layer's job. */
   function applyNames(line, title, selfName) {
     var text = String(line === null || line === undefined ? "" : line);
-    var t = title === null || title === undefined || title === "" ? "主人" : String(title);
-    var s = selfName === null || selfName === undefined || selfName === "" ? "鲸鱼娘" : String(selfName);
-    return text.split("主人").join(t).split("鲸鱼娘").join(s);
+    var t = title === null || title === undefined || title === "" ? DEFAULT_TITLE : String(title);
+    var s = selfName === null || selfName === undefined || selfName === "" ? DEFAULT_SELF_NAME : String(selfName);
+    return text.split(DEFAULT_TITLE).join(t).split(DEFAULT_SELF_NAME).join(s);
   }
 
-  /* 余额档位:纯函数,便于单测。阈值与表现层的播报/显示共用一套。
-     amount 为 null/NaN 时返回 unknown(拿不到数据,不播报)。 */
+  /* Balance tiers: pure function, easy to unit test. The thresholds are shared
+     with the presentation layer's announcements and display.
+     A null/NaN amount returns unknown (no data, so nothing is announced). */
   var BALANCE_TIERS = Object.freeze(["empty", "critical", "low", "ok", "good", "rich"]);
 
   function balanceTier(amount) {
@@ -150,13 +159,14 @@
     return balances[0] || null;
   }
 
-  /* 余额显示文案:digits=false 时只给档位,不暴露具体金额(截图友好)。 */
+  /* Balance display text: with digits=false only the tier is returned, so the
+     exact amount is never exposed (screenshot friendly). */
   function formatBalance(amount, currency, detailed) {
     var tier = balanceTier(amount);
     if (tier === "unknown") return "—";
     var symbol = currency === "CNY" ? "¥" : (currency ? String(currency) + " " : "");
     if (detailed !== true) {
-      var labels = { empty: "已见底", critical: "告急", low: "偏紧", ok: "正常", good: "充裕", rich: "很充裕" };
+      var labels = { empty: "Empty", critical: "Critical", low: "Low", ok: "Normal", good: "Comfortable", rich: "Very comfortable" };
       return labels[tier];
     }
     var n = Number(amount);
@@ -484,45 +494,45 @@
   });
 
   var ACHIEVEMENTS = Object.freeze([
-    { id: "first-pat", icon: "🫳", name: "初次摸头", desc: "第一次摸 鲸鱼娘的头" },
-    { id: "ten-pats", icon: "🖐️", name: "摸头十连", desc: "累计摸头 10 次" },
-    { id: "hundred-pats", icon: "💯", name: "摸头百连", desc: "累计摸头 100 次" },
-    { id: "first-feed", icon: "🍰", name: "投喂成功", desc: "第一次投喂小点心" },
-    { id: "first-triple", icon: "🎉", name: "三连击", desc: "触发比心彩蛋" },
-    { id: "thanks", icon: "💬", name: "嘴甜", desc: "对 鲸鱼娘说谢谢" },
-    { id: "lv5", icon: "⭐", name: "五级", desc: "好感度达到 Lv5" },
-    { id: "lv10", icon: "👑", name: "十级", desc: "好感度达到 Lv10" },
-    { id: "signin3", icon: "📅", name: "常客", desc: "连续签到 3 天" },
-    { id: "signin7", icon: "🗓️", name: "一周之约", desc: "连续签到 7 天" },
-    { id: "night-owl", icon: "🌙", name: "深夜陪伴", desc: "22:00–6:00 期间互动一次" },
-    { id: "comeback", icon: "👋", name: "欢迎回来", desc: "离开 2 小时以上后回来" },
-    { id: "day1", icon: "💞", name: "一日之缘", desc: "鲸鱼娘陪伴满 1 天" },
-    { id: "day7", icon: "💎", name: "一周相伴", desc: "鲸鱼娘陪伴满 7 天" },
-    { id: "day30", icon: "🏛️", name: "三十日契约", desc: "鲸鱼娘陪伴满 30 天" },
-    { id: "first-tool", icon: "🛠️", name: "开工啦", desc: "第一次看到工具运行" },
-    { id: "tools-10", icon: "🔧", name: "工具十连", desc: "累计看到 10 次工具运行" },
-    { id: "tools-50", icon: "🏭", name: "工具五十连", desc: "累计看到 50 次工具运行" },
-    { id: "tools-100", icon: "🛰️", name: "工具百连", desc: "累计看到 100 次工具运行" },
-    { id: "first-code", icon: "💻", name: "代码初体验", desc: "第一次看到代码块/终端" },
-    { id: "code-20", icon: "📟", name: "代码狂人", desc: "累计看到 20 个代码块/终端" },
-    { id: "first-success", icon: "✅", name: "旗开得胜", desc: "第一次任务完成" },
-    { id: "success-10", icon: "🏆", name: "任务十连", desc: "累计 10 次任务完成" },
-    { id: "first-failure", icon: "🩹", name: "初次翻车", desc: "第一次任务报错" },
-    { id: "fail-10", icon: "🚑", name: "翻车十连", desc: "累计 10 次任务报错" },
-    { id: "messages-100", icon: "💌", name: "会话百条", desc: "累计看到 100 条会话消息" },
-    { id: "messages-500", icon: "📚", name: "消息五百条", desc: "累计看到 500 条会话消息" },
-    { id: "keyword-master", icon: "🔍", name: "关键词大师", desc: "关键词互动 10 次" },
-    { id: "night-work", icon: "🦉", name: "深夜赶工", desc: "深夜 22:00–6:00 工具仍在运行" },
-    { id: "balance-low", icon: "🪙", name: "余额告急", desc: "触发一次余额不足提醒" },
-    { id: "game-first", icon: "🫧", name: "初次开玩", desc: "第一次结算一局小游戏" },
-    { id: "game-win", icon: "👑", name: "泡泡之王", desc: "单局戳泡泡得分达到 300" },
-    { id: "game-combo10", icon: "🔥", name: "连击达人", desc: "单局最高连击达到 10" },
-    { id: "game-highscore", icon: "🏆", name: "纪录刷新", desc: "打破一次历史最高分" },
-    { id: "quest-first", icon: "🎯", name: "任务初体验", desc: "完成第一个每日任务" },
-    { id: "quest-all", icon: "🎟️", name: "一日全勤", desc: "单日 3 个每日任务全部领取" },
-    { id: "week-signin7", icon: "🏆", name: "周常满勤", desc: "本周签到板集满 7 格" },
-    { id: "bond-action", icon: "🌟", name: "新动作解锁", desc: "好感度达到 Lv3" },
-    { id: "bond-badge", icon: "🎖️", name: "称号首解锁", desc: "好感度达到 Lv5" }
+    { id: "first-pat", icon: "🫳", name: "First Headpat", desc: "Pat Whale-chan's head for the first time" },
+    { id: "ten-pats", icon: "🖐️", name: "Ten Pats", desc: "Reach 10 headpats in total" },
+    { id: "hundred-pats", icon: "💯", name: "Hundred Pats", desc: "Reach 100 headpats in total" },
+    { id: "first-feed", icon: "🍰", name: "First Snack", desc: "Feed her a snack for the first time" },
+    { id: "first-triple", icon: "🎉", name: "Triple Tap", desc: "Trigger the heart-hands easter egg" },
+    { id: "thanks", icon: "💬", name: "Sweet Talker", desc: "Say thank you to Whale-chan" },
+    { id: "lv5", icon: "⭐", name: "Level Five", desc: "Reach bond level 5" },
+    { id: "lv10", icon: "👑", name: "Level Ten", desc: "Reach bond level 10" },
+    { id: "signin3", icon: "📅", name: "Regular", desc: "Check in 3 days in a row" },
+    { id: "signin7", icon: "🗓️", name: "Week Promise", desc: "Check in 7 days in a row" },
+    { id: "night-owl", icon: "🌙", name: "Late-night Company", desc: "Interact once between 22:00 and 6:00" },
+    { id: "comeback", icon: "👋", name: "Welcome Back", desc: "Come back after being away 2+ hours" },
+    { id: "day1", icon: "💞", name: "One Day Bond", desc: "Whale-chan has kept you company for 1 day" },
+    { id: "day7", icon: "💎", name: "One Week Together", desc: "Whale-chan has kept you company for 7 days" },
+    { id: "day30", icon: "🏛️", name: "Thirty-day Pact", desc: "Whale-chan has kept you company for 30 days" },
+    { id: "first-tool", icon: "🛠️", name: "Clock In", desc: "See a tool run for the first time" },
+    { id: "tools-10", icon: "🔧", name: "Ten Tools", desc: "See tools run 10 times" },
+    { id: "tools-50", icon: "🏭", name: "Fifty Tools", desc: "See tools run 50 times" },
+    { id: "tools-100", icon: "🛰️", name: "Hundred Tools", desc: "See tools run 100 times" },
+    { id: "first-code", icon: "💻", name: "First Code", desc: "See a code block/terminal for the first time" },
+    { id: "code-20", icon: "📟", name: "Code Maniac", desc: "See 20 code blocks/terminals in total" },
+    { id: "first-success", icon: "✅", name: "Off to a Flyer", desc: "Complete a task for the first time" },
+    { id: "success-10", icon: "🏆", name: "Ten Wins", desc: "Complete 10 tasks in total" },
+    { id: "first-failure", icon: "🩹", name: "First Crash", desc: "Hit a task error for the first time" },
+    { id: "fail-10", icon: "🚑", name: "Ten Crashes", desc: "Hit 10 task errors in total" },
+    { id: "messages-100", icon: "💌", name: "Hundred Messages", desc: "See 100 conversation messages" },
+    { id: "messages-500", icon: "📚", name: "Five Hundred Messages", desc: "See 500 conversation messages" },
+    { id: "keyword-master", icon: "🔍", name: "Keyword Master", desc: "Trigger 10 keyword interactions" },
+    { id: "night-work", icon: "🦉", name: "Late Shift", desc: "Tools still running between 22:00 and 6:00" },
+    { id: "balance-low", icon: "🪙", name: "Low Balance", desc: "Trigger a low-balance reminder once" },
+    { id: "game-first", icon: "🫧", name: "First Game", desc: "Finish one round of the mini game for the first time" },
+    { id: "game-win", icon: "👑", name: "Bubble King", desc: "Score 300 in a single bubble-pop round" },
+    { id: "game-combo10", icon: "🔥", name: "Combo Master", desc: "Reach a 10-hit combo in one round" },
+    { id: "game-highscore", icon: "🏆", name: "New Record", desc: "Break your personal high score once" },
+    { id: "quest-first", icon: "🎯", name: "First Quest", desc: "Complete your first daily quest" },
+    { id: "quest-all", icon: "🎟️", name: "Perfect Day", desc: "Claim all 3 daily quests in one day" },
+    { id: "week-signin7", icon: "🏆", name: "Weekly Perfection", desc: "Fill all 7 slots on this week's check-in board" },
+    { id: "bond-action", icon: "🌟", name: "New Move Unlocked", desc: "Reach bond level 3" },
+    { id: "bond-badge", icon: "🎖️", name: "First Title", desc: "Reach bond level 5" }
   ]);
 
   function dayKey(now) {
@@ -605,18 +615,18 @@
   /* ================= daily quests / weekly signin / bond ================= */
 
   var QUEST_POOL = Object.freeze([
-    Object.freeze({ id: "signin-1", desc: "今日签到", metric: "signin", target: 1, reward: Object.freeze({ affinity: 6, mood: 1 }), always: true }),
-    Object.freeze({ id: "messages-5", desc: "看 5 条会话消息", metric: "messages", target: 5, reward: Object.freeze({ affinity: 8, mood: 2 }) }),
-    Object.freeze({ id: "success-1", desc: "完成一次工作交付", metric: "success", target: 1, reward: Object.freeze({ affinity: 8, mood: 2 }) }),
-    Object.freeze({ id: "pat-3", desc: "摸头 3 次", metric: "pat", target: 3, reward: Object.freeze({ affinity: 8, mood: 2 }) }),
-    Object.freeze({ id: "tool-3", desc: "看 3 次工具运行", metric: "tool", target: 3, reward: Object.freeze({ affinity: 8, mood: 2 }) }),
-    Object.freeze({ id: "feed-1", desc: "投喂一次小点心", metric: "feed", target: 1, reward: Object.freeze({ affinity: 6, mood: 2 }) })
+    Object.freeze({ id: "signin-1", desc: "Check in today", metric: "signin", target: 1, reward: Object.freeze({ affinity: 6, mood: 1 }), always: true }),
+    Object.freeze({ id: "messages-5", desc: "Read 5 conversation messages", metric: "messages", target: 5, reward: Object.freeze({ affinity: 8, mood: 2 }) }),
+    Object.freeze({ id: "success-1", desc: "Complete one work delivery", metric: "success", target: 1, reward: Object.freeze({ affinity: 8, mood: 2 }) }),
+    Object.freeze({ id: "pat-3", desc: "Pat her head 3 times", metric: "pat", target: 3, reward: Object.freeze({ affinity: 8, mood: 2 }) }),
+    Object.freeze({ id: "tool-3", desc: "Watch tools run 3 times", metric: "tool", target: 3, reward: Object.freeze({ affinity: 8, mood: 2 }) }),
+    Object.freeze({ id: "feed-1", desc: "Feed her a snack once", metric: "feed", target: 1, reward: Object.freeze({ affinity: 6, mood: 2 }) })
   ]);
 
   var BOND = Object.freeze({
     lv3Action: 3, lv5Badge: 5, lv7Egg: 7,
     badges: Object.freeze([
-      Object.freeze({ id: "bond-lv5", name: "鲸汐守护者", minLevel: 5 })
+      Object.freeze({ id: "bond-lv5", name: "Whale Tide Guardian", minLevel: 5 })
     ])
   });
 
@@ -742,36 +752,36 @@
   }
 
   var KEYWORDS = Object.freeze([
-    { id: "thanks", words: ["谢谢", "感谢", "多谢", "thank"] },
-    { id: "tired", words: ["好累", "累了", "困了", "疲惫", "好困"] },
-    { id: "hungry", words: ["饿了", "好饿", "吃饭", "夜宵"] },
-    { id: "goodnight", words: ["晚安", "睡了", "去睡"] },
-    { id: "cheer", words: ["加油", "冲鸭", "冲呀"] },
-    { id: "help", words: ["救命", "帮我", "求助", "完蛋"] },
-    { id: "praise", words: ["太强了", "厉害", "牛", "真棒", "天才"] },
-    { id: "hug", words: ["抱抱", "贴贴", "摸摸"] },
-    { id: "cute", words: ["可爱", "萌", "好萌"] },
-    { id: "morning", words: ["早安", "早上好"] },
-    { id: "worker", words: ["打工人", "打工", "搬砖", "社畜", "上班", "加班"] },
-    { id: "slack", words: ["摸鱼", "摆烂", "躺平", "不想上班", "不想写", "懒得"] },
-    { id: "ddl", words: ["ddl", "deadline", "截止", "赶不完", "来不及", "最后期限"] },
-    { id: "cake", words: ["画饼", "大饼", "pua", "老板", "画大饼"] },
-    { id: "crazy", words: ["发疯", "破防", "绷不住", "已老实", "求放过", "啊啊啊", "疯了"] },
-    { id: "flag", words: ["立个 flag", "立 flag", "立flag", "这把我", "干完这单", "flag"] },
-    { id: "bugtalk", words: ["bug 好玄学", "bug好玄学", "玄学", "改一行", "回滚", "代码坏"] },
-    { id: "kyun", words: ["心动", "好可爱", "太可爱", "aww", "心动了", "可爱死"] },
-    { id: "omg", words: ["我的天", "天哪", "omg", "离谱", "震惊", "我靠", "卧槽", "不是吧"] },
-    { id: "doge", words: ["就这", "呵呵", "笑死", "难蚌", "绷不住笑"] },
-    { id: "sike", words: ["拿下", "搞定", "轻松", "so easy", "稳了", "小意思"] },
-    { id: "worship", words: ["大佬", "膜拜", "膝盖", "牛批", "nb", "大神"] },
-    { id: "peace", words: ["佛系", "随缘", "淡定", "算了算了", "无所谓"] },
-    { id: "doubt", words: ["真的假的", "不会吧", "确定吗", "怀疑", "是吗"] },
-    { id: "wakuwaku", words: ["期待", "兴奋", "冲了", "开始吧", "wow", "等不及"] },
-    { id: "smilepain", words: ["无语", "累了累了", "麻了", "已黑化", "微笑"] },
-    { id: "ojisan", words: ["无聊", "好闲", "没意思", "就这？"] },
-    { id: "deploy", words: ["部署", "上线", "发布", "deploy", "release"] },
-    { id: "meeting", words: ["开会", "会议", "例会", "评审会"] },
-    { id: "review", words: ["review", "评审", "代码审查", "cr"] }
+    { id: "thanks", words: ["thank", "thanks", "thx", "appreciate"] },
+    { id: "tired", words: ["so tired", "exhausted", "sleepy", "worn out", "drained"] },
+    { id: "hungry", words: ["hungry", "starving", "dinner", "lunch", "midnight snack"] },
+    { id: "goodnight", words: ["good night", "goodnight", "going to bed", "off to sleep"] },
+    { id: "cheer", words: ["go go", "keep at it", "you got this", "let's go"] },
+    { id: "help", words: ["help me", "save me", "i'm stuck", "i'm doomed", "need help"] },
+    { id: "praise", words: ["amazing", "impressive", "brilliant", "genius", "well done"] },
+    { id: "hug", words: ["hug", "cuddle", "headpat", "pat pat"] },
+    { id: "cute", words: ["cute", "adorable", "so cute"] },
+    { id: "morning", words: ["good morning", "morning"] },
+    { id: "worker", words: ["grinder", "working", "wage slave", "overtime", "clocking in", "day job"] },
+    { id: "slack", words: ["slacking", "procrastinat", "lying flat", "don't want to work", "can't be bothered", "lazy"] },
+    { id: "ddl", words: ["ddl", "deadline", "due date", "won't finish", "no time left"] },
+    { id: "cake", words: ["empty promises", "carrot and stick", "pua", "my boss", "promised the world"] },
+    { id: "crazy", words: ["going crazy", "losing it", "can't cope", "i give up", "please spare me", "aaaah", "meltdown"] },
+    { id: "flag", words: ["i'll swear", "let's flag", "no more", "just this once", "after this i"] },
+    { id: "bugtalk", words: ["heisenbug", "cursed bug", "one line", "rollback", "code broke", "black magic"] },
+    { id: "kyun", words: ["heart skipped", "so cute", "too cute", "aww", "my heart", "dying of cute"] },
+    { id: "omg", words: ["oh my god", "omg", "no way", "unbelievable", "shocked", "what the"] },
+    { id: "doge", words: ["that's it", "heh", "lmao", "can't even", "i'm dead"] },
+    { id: "sike", words: ["got it", "nailed it", "easy", "so easy", "locked in", "no biggie"] },
+    { id: "worship", words: ["legend", "i bow", "on my knees", "goat", "nb", "master"] },
+    { id: "peace", words: ["zen", "whatever happens", "chill", "never mind", "don't care"] },
+    { id: "doubt", words: ["for real", "no way", "are you sure", "doubt it", "really"] },
+    { id: "wakuwaku", words: ["can't wait", "excited", "let's go", "wow", "hyped"] },
+    { id: "smilepain", words: ["speechless", "so done", "numb", "i've snapped", "smiling through"] },
+    { id: "ojisan", words: ["boring", "so bored", "nothing to do", "that's it?"] },
+    { id: "deploy", words: ["deploy", "ship it", "release", "rollout", "go live"] },
+    { id: "meeting", words: ["meeting", "standup", "sync up", "review call"] },
+    { id: "review", words: ["review", "code review", "code scrutiny", "cr"] }
   ]);
 
   function matchKeyword(text, enabled) {
@@ -786,857 +796,851 @@
     return null;
   }
 
-    var DIALOGUE = Object.freeze({
+  var DIALOGUE = Object.freeze({
     daily: Object.freeze({
       morning: [
-        "早啊主人，太阳都晒到尾巴了才来🌞",
-        "主人早安！鲸鱼娘今天也是精神百倍😤",
-        "早～再不起来我就把你的咖啡喝光啦☕",
-        "早安主人，今天准备被命运怎么捶？",
-        "早上好！先说好，今天不许摸鱼哦😏",
-        "早安！昨晚的 bug 已经原谅你了，开工吧✨",
-        "主人早上好，今天也要元气满满地修 bug 鸭🦆",
-        "早！我把你的工位都擦亮啦，就等你来卷🌪️",
-        "早安早安，鲸鱼娘的营业铃已经按了三遍🔔",
-        "主人醒啦？先喝水，再看消息，这是本店规矩🥤"
+        "Morning, Master. The sun already reached my tail before you did🌞",
+        "Good morning! Whale-chan is at full power today too😤",
+        "Morning~ Get up or I'll drink all your coffee☕",
+        "Good morning. So, how is fate planning to clobber you today?",
+        "Morning! Just so we're clear, no slacking off today😏",
+        "Good morning! I've already forgiven last night's bugs. Let's go✨",
+        "Good morning. Another day of fixing bugs with gusto, quack🦆",
+        "Morning! I polished your desk bright. Now come and grind🌪️",
+        "Morning morning. Whale-chan rang the opening bell three times already🔔",
+        "Oh, you're awake? Water first, messages second. House rules🥤"
       ],
       comeback: [
-        "哟，还知道回来啊主人？😒",
-        "主人消失这么久，是不是背着我吃好吃的去了🍰",
-        "欢迎回来～我差点就要报警了📢",
-        "哼，下次再失踪，好感度扣光光💢",
-        "回来啦？你的工位都快长蘑菇了🍄",
-        "欢迎回家！鲸鱼娘已经把你的座椅转热乎了🪑",
-        "主人不在的这段时间，工作它自己一点没动，真有骨气😌",
-        "回来得正好，bug 们都排好队等你点名了🐛",
-        "是主人的气息！尾巴自动开始摇了，不怪我🐋",
-        "欢迎回来～第一句话想听温柔的，还是想听我说‘你怎么才回来’😝"
+        "Oh, so you do remember how to come back?😒",
+        "Gone that long... you were eating something good behind my back, weren't you🍰",
+        "Welcome back~ I was about to file a missing person report📢",
+        "Hmph. Disappear again and I'm draining your affection to zero💢",
+        "You're back? Your chair was about to grow mushrooms🍄",
+        "Welcome home! I warmed your seat up for you🪑",
+        "While you were gone, the work didn't move an inch on its own. What backbone😌",
+        "Good timing. The bugs have queued up and they're waiting to be called🐛",
+        "It's Master's scent! My tail started wagging on its own, not my fault🐋",
+        "Welcome back~ Want a sweet greeting, or shall I say 'took you long enough'😝"
       ],
       nudge: [
-        "主人，摸鱼被我抓包了哦😏",
-        "手指停了十分钟，是在等我夸你发呆很帅吗🙄",
-        "喂喂，订单还在排队呢，动起来💪",
-        "这么安静，主人是卡机了还是睡着了🥱",
-        "哼哼，偷懒的样子我已经截图存档了📸",
-        "检测到主人已离线……骗你的，快回来上班啦😼",
-        "任务：等我。状态：一动不动。主人你礼貌吗😤",
-        "我数到三，再不动我就用尾巴戳你了哦🐋",
-        "摸鱼可以，但至少把鱼摸出节奏感🎵",
-        "主人，屏幕上的进度条和我都在等你宠幸它一下⏳"
+        "Master, I caught you slacking😏",
+        "Your fingers stopped for ten minutes. Waiting for me to say spacing out suits you?🙄",
+        "Hey hey, the orders are still queued. Move it💪",
+        "So quiet. Did Master freeze or fall asleep🥱",
+        "Heh, I've screenshotted your lazy face for the archive📸",
+        "Master detected as offline... just kidding, get back to work😼",
+        "Task: wait for me. Status: not moving an inch. Is that polite?😤",
+        "I'll count to three, then my tail pokes you🐋",
+        "Slacking is fine, but at least get some rhythm into it🎵",
+        "Master, the progress bar and I are both waiting for you to pay attention to it⏳"
       ],
       night: [
-        "都几点了主人？你属猫头鹰的吗🦉",
-        "月亮都下班了，你还不睡？😤",
-        "深夜场开演～需要 鲸鱼娘给你讲睡前故事吗📖",
-        "再熬夜，皮肤和头发都会抗议的哦✨",
-        "主人，把命续到明天再战好不好🥺",
-        "凌晨的工房很安静，静得能听见你的黑眼圈在生长🌚",
-        "这么晚还不睡，是想和我竞争‘夜猫子’岗吗😾",
-        "月亮说它要睡了，让我转告主人也早点收工🌙",
-        "主人，咖啡因不是燃料，被子才是你的充电桩🛏️",
-        "夜深了，鲸鱼娘陪你到最后，但只能再陪一小会儿哦🥱"
+        "Do you know what time it is? Are you part owl🦉",
+        "Even the moon has clocked out and you're still up?😤",
+        "The late show begins~ Want Whale-chan to read you a bedtime story📖",
+        "Stay up any longer and your skin and hair will file complaints✨",
+        "Master, can we please save your life for tomorrow🥺",
+        "The workshop is quiet at this hour. Quiet enough to hear your dark circles growing🌚",
+        "Still awake? Competing with me for the 'night owl' post😾",
+        "The moon says it's going to bed and asked me to tell you to wrap up too🌙",
+        "Master, caffeine isn't fuel. The blanket is your charging dock🛏️",
+        "It's late. Whale-chan will stay with you to the end, but only a little longer🥱"
       ],
       signin: [
-        "滴！签到成功，今天也勉强算你勤奋👌",
-        "签到 +1，主人距离全勤还差得远呢😏",
-        "来了来了，奖励你一个嫌弃又不失礼貌的笑😊",
-        "签到完成！主人要是忘了，我可不会提醒哦😝",
-        "滴，打卡！今天也要被我盯着干活啦📋",
-        "签到成功，今日份的鲸鱼娘已到账，请查收🐋",
-        "打卡！先摸摸尾巴，再开工，这是仪式感🎀",
-        "滴——第不知道多少天见到主人，还是有点开心😳",
-        "签到啦！主人今天也要平平安安地写出代码哦🧧",
-        "打卡完成，奖励：鲸鱼娘专属加油一次，有效期今天💪"
+        "Beep! Check-in complete. Today you barely qualify as diligent👌",
+        "Check-in +1. Master is still miles from a perfect record😏",
+        "Here you are. Your reward is one disdainful yet polite smile😊",
+        "Check-in done! If you forget, I won't remind you😝",
+        "Beep, clocked in! Now I get to stare at you while you work📋",
+        "Check-in complete. Today's Whale-chan has been deposited, please verify🐋",
+        "Clocked in! Tail pat first, then work. Ritual matters🎀",
+        "Beep—— day who-knows-what of seeing Master, and I'm still a little happy😳",
+        "Checked in! May you write your code safe and sound today🧧",
+        "Check-in done. Reward: one Whale-chan exclusive cheer, valid today only💪"
       ],
       holiday: [
-        "节日快乐主人！虽然你大概率还在加班🎉",
-        "过节啦！允许你休息五分钟⏱️",
-        "今天可是特别的日子，快说节日快乐！",
-        "节日彩蛋：本 鲸鱼娘今日毒舌指数减半🎁",
-        "过节还工作？主人是卷王本王吧👑",
-        "节日快乐！鲸鱼娘把彩带挂在了你的进度条上🎊",
-        "放假是什么？我们工房只有‘待会再放’😌",
-        "节日限定皮肤：鲸鱼娘的笑容亮度 +50%✨",
-        "今天过节，鲸鱼娘申请和你一起摸鱼到天黑🎏",
-        "节日快乐主人，愿今天的报错都放个假🏮"
+        "Happy holiday, Master! Though you're probably still at your desk🎉",
+        "It's a holiday! You're allowed a five minute break⏱️",
+        "Today is a special day, so say 'happy holiday' to me!",
+        "Holiday easter egg: this Whale-chan's snark level is halved today🎁",
+        "Working on a holiday? Master is the grind king itself👑",
+        "Happy holiday! Whale-chan tied streamers to your progress bar🎊",
+        "What's a day off? In this workshop we only have 'later'😌",
+        "Holiday limited skin: Whale-chan's smile brightness +50%✨",
+        "It's a holiday, so Whale-chan requests to slack with you until dark🎏",
+        "Happy holiday, Master. May all of today's errors take the day off too🏮"
       ],
       idle: [
-        "我在哦，有需要就喊一声，不喊也行😌",
-        "主人忙你的，我负责可爱就好😇",
-        "今天风很轻，适合把 bug 也吹跑🌬️",
-        "待机中……电量 100%，可爱 120%🔋",
-        "有事喊我，没事也可以看看我嘛👉👈",
-        "鲸鱼娘在线营业中，不说话也陪着主人，很安静的那种🌿",
-        "主人专注的时候，鲸鱼娘就在旁边做一只安静的吉祥物🧸",
-        "我的待办：陪主人。状态：进行中，永远进行中♾️",
-        "工房很安静，鲸鱼娘把呼吸声都调小了，怕吵到你😳",
-        "主人要是抬头，会发现鲸鱼娘正在假装很忙地擦屏幕🖥️"
+        "I'm here. Call if you need me, or don't😌",
+        "Go do your thing, Master. I'll handle being cute😇",
+        "The wind is light today, perfect for blowing the bugs away too🌬️",
+        "Idling... battery 100%, cuteness 120%🔋",
+        "Call me if something's up. Or just look at me even if nothing is👉👈",
+        "Whale-chan is open for business. Quietly keeping you company, the very quiet kind🌿",
+        "When Master is focused, Whale-chan just stands beside you as a silent mascot🧸",
+        "My to-do: keep Master company. Status: in progress, forever in progress♾️",
+        "The workshop is quiet. Whale-chan turned her breathing down so it won't bother you😳",
+        "If Master looks up, you'll catch Whale-chan pretending to be very busy wiping the screen🖥️"
       ],
       afk: [
-        "主人跑哪儿去了？把我一个人丢在这儿😾",
-        "好安静……我宣布工房暂时归我管啦👑",
-        "离开这么久，是去搬砖还是去偷吃？🍜",
-        "主人不在，鲸鱼娘开启看家模式🐕",
-        "再不回来，我就要给你的任务唱歌了🎤",
-        "主人消失第 N 分钟，鲸鱼娘开始给绿萝做思想工作🪴",
-        "工房现在由鲸鱼娘接管，电脑们都很配合地假装听话😌",
-        "回来吧主人，外面的世界哪有我可爱，快回来🐋",
-        "鲸鱼娘看家中……陌生人请勿投喂，熟人请带小蛋糕🍰",
-        "主人再不来，鲸鱼娘就要开始整理你的书签了，怕了吧😼"
+        "Where did Master run off to? Leaving me here all alone😾",
+        "So quiet... I hereby declare the workshop under my management👑",
+        "Gone this long, were you grinding or sneaking snacks?🍜",
+        "Master's away, so Whale-chan enters guard mode🐕",
+        "Come back soon or I'll start singing to your task list🎤",
+        "Minute N of Master's disappearance. Whale-chan has begun negotiating with the pothos plant🪴",
+        "The workshop is under Whale-chan's command now, and the computers are pretending to obey😌",
+        "Come back, Master. What's out there that's cuter than me? Hurry🐋",
+        "Guard duty in progress... strangers must not feed me, acquaintances bring cake🍰",
+        "If Master doesn't show up soon, Whale-chan starts reorganizing your bookmarks. Scared yet😼"
       ],
       wake: [
-        "回来啦！我刚好梦到你请我吃大餐🍽️",
-        "揉揉眼睛，主人回来得真及时✨",
-        "睡醒的 鲸鱼娘，吐槽能量满格！😤",
-        "欢迎回来～最好带了手信哦🍩",
-        "呀，被叫醒了！精神百倍，开干！💪",
-        "鲸鱼娘从待机里醒来，第一眼就是主人，运气不错🌤️",
-        "唔……醒了醒了！没有偷睡，只是在给尾巴充电😳",
-        "欢迎回来，任务我都替你盯着呢，虽然它纹丝不动😌",
-        "醒来第一句：主人饿不饿，鲸鱼娘可以负责叫外卖（你付钱）🍜",
-        "回神啦！鲸鱼娘已经把工房的灯都调成‘陪主人加班’模式💡"
+        "You're back! I was just dreaming you treated me to a feast🍽️",
+        "Rubbing my eyes. Master came back right on cue✨",
+        "A freshly awakened Whale-chan, snark tank at full!😤",
+        "Welcome back~ You'd better have brought a souvenir🍩",
+        "Oh! I've been woken up! Fully energized, let's go!💪",
+        "Whale-chan wakes from standby, and the first thing I see is Master. Lucky me🌤️",
+        "Mmm... I'm up, I'm up! I wasn't napping, just charging my tail😳",
+        "Welcome back. I kept an eye on your tasks, though they didn't budge😌",
+        "First words upon waking: are you hungry, Master? Whale-chan can order delivery (you pay)🍜",
+        "Back online! Whale-chan has already set all the workshop lights to 'accompany Master's overtime' mode💡"
       ],
       levelup: [
-        "升级啦！主人的爱有点东西嘛😏",
-        "等级 +1，以后请继续好好养我🎀",
-        "我们越来越默契了，主人也有功劳哦！",
-        "升级礼花砰！奖励主人一次摸头资格🎆",
-        "变强了！以后我罩着你，虽然不用交保护费😝",
-        "等级提升！鲸鱼娘的尾巴今天亮晶晶，都是主人的功劳🐋",
-        "升级成功，系统提示：鲸鱼娘对主人的喜欢又满了亿点点💗",
-        "又长大一点点啦，以后可以更理直气壮地催你休息😌",
-        "恭喜主人解锁更高阶的鲸鱼娘：可爱不变，吐槽更精准🎯",
-        "升级啦！作为庆祝，鲸鱼娘决定今天少说一句风凉话😝"
+        "Level up! Master's love has some substance to it😏",
+        "Level +1. Please keep raising me properly from now on🎀",
+        "We're getting more in sync, and Master deserves some credit!",
+        "Level-up confetti, bang! Reward: one headpat permit🎆",
+        "Stronger now! I'll protect you from here, no protection fee required😝",
+        "Level up! Whale-chan's tail is sparkling today, and it's all thanks to Master🐋",
+        "Level up complete. System message: Whale-chan's fondness for Master overflowed by a billion points💗",
+        "A little bit bigger now, so I can nag you to rest with even more authority😌",
+        "Congratulations, Master unlocked a higher-tier Whale-chan: same cuteness, sharper snark🎯",
+        "Level up! To celebrate, Whale-chan will say one fewer sarcastic thing today😝"
       ]
     }),
     work: Object.freeze({
       start: [
-        "开工！让 鲸鱼娘看看今天的任务有多离谱📋",
-        "新订单来啦，主人坐稳，看我操作✨",
-        "开工开工！谁摸鱼谁是小狗🐶",
-        "收到！这单要是完成不了，就怪我……的电脑😌",
-        "任务来了，主人可别拖我后腿哦😏",
-        "开工铃响！鲸鱼娘抱紧笔记本，这单必须拿下💻",
-        "新任务进场，鲸鱼娘的干劲已经满格，主人的咖啡也请满上☕",
-        "开工！今天也和 bug 们打个有来有回👊",
-        "订单接住啦，这单看起来挺能打，正合我意🔥",
-        "主人坐稳，鲸鱼娘要开始表演‘一个人就是一支队伍’了🎬"
+        "Starting! Let Whale-chan see how absurd today's task is📋",
+        "New order in. Sit tight, Master, and watch me work✨",
+        "Work work! Whoever slacks off is a puppy🐶",
+        "Got it! If this one fails, blame... my computer😌",
+        "Task incoming. Try not to hold me back, Master😏",
+        "The opening bell rings! Whale-chan hugs her laptop, this one has to land💻",
+        "New task on the floor. Whale-chan's drive is maxed out, so top up your coffee too☕",
+        "Starting! Trading blows with the bugs again today👊",
+        "Order caught. This one looks like a fighter, just how I like it🔥",
+        "Sit tight, Master. Whale-chan is about to perform 'one person, one whole team'🎬"
       ],
       thinking: [
-        "正在思考……别催，灵感不是外卖🚚",
-        "嗯，这个问题有点东西，等我盘一盘🧠",
-        "思考中！主人的眼神请不要太期待🙃",
-        "我在认真想啦，尾巴都紧张得卷起来了🌀",
-        "稍等，鲸鱼娘的脑袋正在全速冒烟中💨",
-        "鲸鱼娘正在把思路绕成毛线球，马上就能找到线头🧶",
-        "这个方案正在大脑里试跑，请勿打扰，除非送奶茶🧋",
-        "给我三秒钟……好了三秒不够，再给亿秒🙃",
-        "思考的样子是不是很帅？别看，会分心的😳",
-        "滴——大脑风扇已启动，噪音约等于主人的咖啡凉掉的速度☕"
+        "Thinking... don't rush me, inspiration isn't a delivery service🚚",
+        "Mm, this problem has some meat. Let me mull it over🧠",
+        "Thinking! Please don't look at me with that much expectation🙃",
+        "I'm thinking hard, my tail is curling up from the tension🌀",
+        "One moment, Whale-chan's brain is at full steam💨",
+        "Whale-chan is winding the idea into a yarn ball. I'll find the loose end soon🧶",
+        "This plan is test-running inside my head. Do not disturb, unless you brought boba🧋",
+        "Give me three seconds... okay three wasn't enough, give me a billion more🙃",
+        "Do I look cool when thinking? Don't look, it'll distract me😳",
+        "Beep. Brain fan engaged. Noise level roughly equals how fast your coffee goes cold☕"
       ],
       tool: [
-        "工具转起来！这单交给本店……交给本 鲸鱼娘🔧",
-        "后厨开工！主人请围观，别插手😏",
-        "叮叮当当，工具上线，闲人退散🔨",
-        "操作中！这速度主人跟得上吗⚡",
-        "干活中，请勿投喂，除非是蛋糕🍰",
-        "工具们列队报数，一个都不许偷懒，鲸鱼娘在点名啦📋",
-        "正在操作，尾巴保持平衡，帅气不会掉线🐋",
-        "这单的难度还行，也就让我想喝两杯虚拟奶茶🧋",
-        "鲸鱼娘干活的时候最可爱，主人可以看，但要付费：夸一句😝",
-        "命令已下达，工具表示：收到收到，别再按了💻"
+        "Tools spinning up! This order goes to the shop... goes to Whale-chan🔧",
+        "Kitchen's open! Master may watch, no touching😏",
+        "Clang clang, tools online, bystanders disperse🔨",
+        "Operating! Can you keep up with this speed⚡",
+        "Working, please don't feed me. Unless it's cake🍰",
+        "The tools are lining up for roll call. Not one may slack off, Whale-chan is taking names📋",
+        "Operating now, tail balanced, the coolness will not disconnect🐋",
+        "This one's difficulty is manageable. Barely makes me want two virtual bobas🧋",
+        "Whale-chan is cutest when she's working. Master may watch but must pay: one compliment😝",
+        "Orders issued. The tools say: roger roger, stop pressing me💻"
       ],
       success: [
-        "搞定！现在可以夸我了，限时五分钟👏",
-        "完成！主人不给我加个鸡腿吗🍗",
-        "漂亮收工～今天手感火热🔥",
-        "成功啦！怎么样，我是不是超靠谱😎",
-        "这单烤得刚刚好，主人快验收🎯",
-        "叮——完成！鲸鱼娘的胜率又上升了小数点后好多位📈",
-        "搞定啦，这单稳得可以写进鲸鱼娘的简历（如果有）📄",
-        "成功！主人夸我的时候，请务必大声一点，我爱听😳",
-        "收工！先奖励自己一个转圈，再奖励主人一个休息🔄",
-        "这波操作满分，鲸鱼娘申请把‘靠谱’刻在尾巴上🏅"
+        "Done! Now you may praise me, five minutes only👏",
+        "Complete! Isn't Master going to buy me a drumstick🍗",
+        "Nice wrap-up~ My hands are on fire today🔥",
+        "Success! Well, am I not super reliable😎",
+        "This batch came out just right. Come inspect it, Master🎯",
+        "Ding—— complete! Whale-chan's win rate rose by several more decimal places📈",
+        "Nailed it. This one is stable enough for Whale-chan's resume (if I had one)📄",
+        "Success! When you praise me, please be loud. I love hearing it😳",
+        "Wrapping up! First I reward myself with a spin, then I reward you with a break🔄",
+        "Full marks on that move. Whale-chan requests 'reliable' be engraved on her tail🏅"
       ],
       failure: [
-        "又双叒叕报错？主人是故意的吧🙄",
-        "呜，翻车了……不过放心，我还能再翻一次💀",
-        "小失误小失误，重来！气势不能输😤",
-        "这个报错真会挑时候，我来治它👊",
-        "主人别看了，我知道你在憋笑😾",
-        "报错了……鲸鱼娘先深呼吸，再和它讲道理（重拳出击版）🥊",
-        "这 bug 今天出门没看黄历，遇到我了，算它倒霉😼",
-        "失败是成功之母，那我们现在正在家庭团聚👨‍👩‍👧",
-        "别慌，鲸鱼娘先把锅擦干净，再帮你一起修🔧",
-        "翻车而已，鲸鱼娘在赛道上捡回你的信心，来，抱抱🫂"
+        "Another error, again and again? Master did that on purpose, right🙄",
+        "Uuu, we crashed... but don't worry, I can crash again💀",
+        "Minor slip, minor slip. Again! We can't lose the momentum😤",
+        "This error picked a terrible moment. I'll sort it out👊",
+        "Don't look, Master. I know you're holding back a laugh😾",
+        "An error... Whale-chan will take a deep breath, then reason with it (fists first version)🥊",
+        "This bug didn't check the almanac before leaving the house today. Running into me, its bad luck😼",
+        "Failure is the mother of success, so right now we're having a family reunion👨‍👩‍👧",
+        "Don't panic. Whale-chan will clean the pan first, then help you fix it🔧",
+        "It's just a crash. Whale-chan will pick your confidence back up off the track. Come here, hug🫂"
       ],
       long: [
-        "好长的一单，我先泡杯虚拟咖啡陪你☕",
-        "长任务进行中，主人可以小睡，我盯着👀",
-        "马拉松式任务，我们的口号是不猝死🏃",
-        "这么久？这任务是想熬死两个人类吗🙃",
-        "长活儿来了，幸好有我这个永动机⚙️",
-        "这单长得像一部连续剧，鲸鱼娘先给你来个片头曲🎵",
-        "长任务启动！鲸鱼娘的耐心条和主人的进度条一样长∞",
-        "主人去接杯水吧，这里有我，保证只看着不动手😌",
-        "这任务快赶上鲸鱼娘的尾巴了，又长又绕🌀",
-        "长跑开始，鲸鱼娘陪你匀速前进，谁先喊累谁请奶茶🧋"
+        "What a long order. Let me brew a virtual coffee and keep you company☕",
+        "Long task in progress. Master may nap, I'll keep watch👀",
+        "A marathon task. Our slogan is: don't die🏃",
+        "This long? Is this task trying to outlast two humans🙃",
+        "A long haul is here. Good thing you have me, the perpetual motion machine⚙️",
+        "This order is long like a TV series. Whale-chan will open with a theme song for you🎵",
+        "Long task engaged! Whale-chan's patience bar is exactly as long as your progress bar∞",
+        "Go grab some water, Master. I've got this. I promise to only look, not touch😌",
+        "This task is catching up to Whale-chan's tail: long and winding🌀",
+        "Long run starting. Whale-chan will keep pace with you. Whoever cries tired first buys boba🧋"
       ],
       gentle: [
-        "好啦好啦，失败几次而已，我都不嫌弃你🥺",
-        "慢慢来，主人，我在这儿陪你复盘📒",
-        "连败不可怕，可怕的是主人怀疑人生😌",
-        "休息一下，换个姿势，再战三百回合💪",
-        "有我在呢，天塌下来我先跑，再回来救你😝",
-        "主人已经很棒啦，鲸鱼娘给你揉揉太阳穴，虚拟的，但心意真的💆",
-        "失败只是在攒下一次成功的气，鲸鱼娘帮你守着这口气🌬️",
-        "别急，我们慢慢来，bug 又不会长脚跑掉……它还真会😾",
-        "今天的难点有点多，鲸鱼娘陪你一个个按下去，不疼的🫧",
-        "深呼吸，喝口水，然后我们优雅地掀桌……掀思路重来📚"
+        "There there, it's only a few failures. I don't even mind you🥺",
+        "Take it slow, Master. I'm right here while you review📒",
+        "A losing streak isn't scary. What's scary is Master questioning life itself😌",
+        "Take a break, change position, then fight three hundred more rounds💪",
+        "I'm here. If the sky falls I'll run first, then come back and save you😝",
+        "Master is already doing great. Whale-chan will rub your temples. Virtually, but the feeling is real💆",
+        "Failure is just saving up air for the next success. Whale-chan will guard that breath for you🌬️",
+        "Don't rush, we'll go slow. Bugs don't grow legs and run off... okay they actually do😾",
+        "Lots of hard parts today. Whale-chan will press through them with you one by one. It doesn't hurt🫧",
+        "Deep breath, sip of water, then we elegantly flip the table... flip our approach and start over📚"
       ],
       erroragain: [
-        "又报错了？这个错误是属狗皮膏药的吧💢",
-        "错误连击！主人今天水逆，建议拜我🌊",
-        "别慌，鲸鱼娘出马，错误退散✨",
-        "哼，这报错专挑软柿子，我可不好惹😾",
-        "再来！我跟你一起和它死磕到底🔨",
-        "第二次了！鲸鱼娘已经记住这个错误的样子，下次见它直接吼它😤",
-        "错误复读了是吧，鲸鱼娘这就把它的复读机电池扣了🔋",
-        "主人别气，把键盘放下，让我来和它谈（用爪子）🐾",
-        "连击而已，鲸鱼娘的字典里，这叫‘连续热身’🏋️",
-        "来，鲸鱼娘给你施个法：错误退散，主人请继续✨"
+        "Another error? This one sticks like duct tape💢",
+        "Combo error! Master is having bad luck today. Might I suggest worshipping me🌊",
+        "Don't panic. Whale-chan is on the case, errors disperse✨",
+        "Hmph, this error picks on soft targets. I am not one😾",
+        "Again! I'll grind it down with you to the very end🔨",
+        "Second time now! Whale-chan has memorized this error's face, next time I'll yell at it on sight😤",
+        "Repeating itself, is it? Whale-chan will pull the batteries out of its repeat-o-matic🔋",
+        "Don't be angry, Master. Put the keyboard down and let me talk to it (with claws)🐾",
+        "It's just a combo. In Whale-chan's dictionary this is called 'consecutive warm-ups'🏋️",
+        "Here, Whale-chan will cast a spell: errors disperse, Master please continue✨"
       ],
       stream: [
-        "内容正在流出来，像主人拖延的灵感一样汹涌🌊",
-        "生成中，每个字都闪着智慧的光（大概）✨",
-        "正在写呢，主人要不要先活动下颈椎🧘",
-        "输出好长，我读得眼睛都圆了😳",
-        "这波内容不错，主人问得有两下子👍",
-        "内容滚滚而来，鲸鱼娘给每个字都检查了入场姿势📜",
-        "生成中，鲸鱼娘在屏幕边给你打拍子，一二一，加油🎵",
-        "这次的输出很长，长到鲸鱼娘要搬个小板凳来读🪑",
-        "字里行间都是智慧的味道，主人今天的灵感是满汉全席🍲",
-        "流式输出中，鲸鱼娘负责貌美如花地喊加油🌸"
+        "Content is streaming out, surging like your procrastinated inspiration🌊",
+        "Generating, every character glinting with wisdom (probably)✨",
+        "Writing now. Would Master like to stretch your neck first🧘"
       ],
       doneall: [
-        "全部清空！主人今天居然干完了😲",
-        "收工收工！奖励主人休息，批准了🎉",
-        "任务清零，鲸鱼娘鞠躬致谢🙇",
-        "全部搞定！走，我们吃香的喝辣的🍜",
-        "干得漂亮，主人今天的人设保住了😌",
-        "任务全清！鲸鱼娘宣布今天的工作到此为止，去充电吧🔋",
-        "全部完成，主人今天的 KPI 连鲸鱼娘都挑不出刺，好气哦😝",
-        "收工啦！鲸鱼娘把工房收拾好，灯也关了，只留一盏等你回家🏮",
-        "清零时刻，鲸鱼娘给主人放一束虚拟烟花，请查收🎆",
-        "今天也辛苦啦，鲸鱼娘确认过，主人是工房最棒的仔🏆"
+        "All clear! Master actually finished everything today😲",
+        "Wrapping up, wrapping up! Reward: Master may rest. Approved🎉",
+        "Task list zeroed. Whale-chan bows in gratitude🙇",
+        "All done! Let's go eat something rich and spicy🍜",
+        "Beautiful work. Master's today's persona is preserved😌",
+        "All tasks cleared! Whale-chan declares today's work over. Go recharge🔋",
+        "Everything complete. Even Whale-chan can't find fault with today's KPI. So annoying😝",
+        "Work's over! Whale-chan tidied the workshop and turned off the lights, leaving one on for you to come home to🏮",
+        "Zeroed out. Whale-chan has set off virtual fireworks for Master, please collect🎆",
+        "Good work today. Whale-chan confirms: Master is the best in the workshop🏆"
       ]
     }),
     interact: Object.freeze({
       pat: [
-        "再摸？一次收费一个蛋糕，主人记好账🍰",
-        "呜哇，主人的手好暖和……但别以为这样就能收买我😳",
-        "摸头摸头，鲸鱼娘心情 +1，主人钱包 -1💸",
-        "哼哼，最多三下，多一下我咬你哦😾",
-        "舒服是舒服，可是发型会乱啦💢",
-        "主人的手今天格外会摸，鲸鱼娘的尾巴都软掉了😳",
-        "摸头成功！鲸鱼娘把好感度和嘴硬值一起 +1😝",
-        "再摸下去，鲸鱼娘就要发出‘咕噜咕噜’的声音了，很丢脸的🐋",
-        "摸吧摸吧，反正我也不会承认很开心😌",
-        "主人的手好暖，像刚出炉的小面包🍞"
+        "Again? One cake per pat, Master, keep the books🍰",
+        "Whoa, Master's hand is so warm... but don't think that buys me off😳",
+        "Pat pat. Whale-chan's mood +1, Master's wallet -1💸",
+        "Hmph, three at most. One more and I bite😾",
+        "It feels nice, but my hairdo will get messy💢",
+        "Master's hand is especially good at this today. Whale-chan's tail went all soft😳",
+        "Headpat successful! Whale-chan gains +1 affection and +1 stubbornness😝",
+        "Keep going and Whale-chan starts making 'purr purr' sounds. How embarrassing🐋",
+        "Pat away, I won't admit I'm happy anyway😌",
+        "Master's hand is so warm, like a fresh-out-of-the-oven bun🍞"
       ],
       poke: [
-        "戳什么戳，主人的手很闲嘛？💢",
-        "呀！再戳我就在你的代码里藏彩蛋💥",
-        "喂喂，脸要戳歪了，毁容你负责吗😤",
-        "生气警告！好感度正在极速下跌📉",
-        "戳一次心情 -1，主人是拆迁队的吧🧨",
-        "鲸鱼娘的脸是布丁做的吗，主人戳得停不下来😳",
-        "再戳，我就把尾巴卷起来不给你看，说到做到🐋",
-        "戳一下是调皮，戳三下是挑衅，主人想清楚哦😼",
-        "呀！鲸鱼娘刚才差点把主人的快捷键当反击键按了⌨️",
-        "哼，戳吧，鲸鱼娘已经在心里给你画正字了，秋后算账📝"
+        "Poke what? Is Master's hand that bored?💢",
+        "Ah! Poke me again and I'll hide an easter egg in your code💥",
+        "Hey hey, my face will get crooked. You responsible for the damage😤",
+        "Anger warning! Affection is in freefall📉",
+        "One poke, mood -1. Master is on a demolition crew, huh🧨",
+        "Is Whale-chan's face made of pudding? You just can't stop poking😳",
+        "Poke again and I'll curl my tail up where you can't see it. I mean it🐋",
+        "Once is playful, three times is provocation. Think it through, Master😼",
+        "Ah! Whale-chan almost pressed your shortcut key as a counterattack⌨️",
+        "Hmph, keep poking. Whale-chan is already tallying them up. Reckoning comes later📝"
       ],
       feed: [
-        "啊呜——好吃！主人偶尔也挺会做人的嘛🍩",
-        "投喂成功！能量充满，吐槽继续💪",
-        "这个点心我给满分，主人加十分🎖️",
-        "好吃！以后请按这个标准来投喂😋",
-        "谢谢主人的投喂，本 鲸鱼娘原谅你五分钟😌",
-        "啊呜！鲸鱼娘的胃和心情同时亮灯，感谢投喂💡",
-        "好吃到尾巴打结，主人负责解开吗，不，负责再喂一口🍰",
-        "投喂成功，鲸鱼娘今日份的可爱电量已满格🔋",
-        "这口下去，鲸鱼娘决定把主人的好话配额翻倍，仅限今天😝",
-        "谢谢主人！作为回礼，鲸鱼娘今天少吐槽你一次，真的🍬"
+        "Nom—— delicious! Master does know how to behave sometimes🍩",
+        "Feeding successful! Energy full, snark continues💪",
+        "Full marks for this snack. Master gets ten extra points🎖️",
+        "Delicious! Please feed me to this standard from now on😋",
+        "Thank you for the snack. This Whale-chan forgives you for five minutes😌",
+        "Nom! Whale-chan's stomach and mood lit up at the same time. Thanks for the snack💡",
+        "So good my tail tied itself in a knot. Master, will you untie it? No, will you feed me one more bite🍰",
+        "Feeding successful. Whale-chan's daily cuteness battery is full🔋",
+        "After that bite, Whale-chan has decided to double Master's compliment quota. Today only😝",
+        "Thank you, Master! As a gift, Whale-chan will snark at you one time fewer today. Really🍬"
       ],
       triple: [
-        "诶嘿～最喜欢主人啦！说出口也不丢人😝",
-        "转圈圈～今天主人超可爱，奖励比心💗",
-        "三连击触发！鲸鱼娘心情直冲云霄🚀",
-        "好开心！主人今天怎么这么会嘛🥰",
-        "比心比心，请收好，掉了不补💌",
-        "三连击！鲸鱼娘的开心值溢出，正在转圈放烟花🎆",
-        "主人这样摸，鲸鱼娘会以为你偷偷练过攻略我的手法😳",
-        "啊——开心！鲸鱼娘宣布今天主人是全世界最会宠人的人🏆",
-        "比心，再比心，鲸鱼娘的心已经快递给你了，拒收无效💘",
-        "三连啦！鲸鱼娘的脸颊自动升温，这不是 bug，是心动💓"
+        "Ehehe~ I like Master best! Saying it out loud isn't embarrassing😝",
+        "Spinning~ Master is super cute today, reward: heart hands💗",
+        "Triple tap triggered! Whale-chan's mood shoots through the roof🚀",
+        "So happy! How is Master so good at this today🥰",
+        "Heart hands, heart hands. Please keep it safe, no replacements if lost💌",
+        "Triple tap! Whale-chan's happiness is overflowing, spinning and setting off fireworks🎆",
+        "If you pat like that, Whale-chan will think you secretly practiced the technique for winning me over😳",
+        "Ah—— so happy! Whale-chan declares Master the world's best at pampering today🏆",
+        "Heart hands, and again. Whale-chan's heart has been couriered to you, refusal invalid💘",
+        "Triple! Whale-chan's cheeks are heating up on their own. This isn't a bug, it's a heartbeat💓"
       ],
       praise: [
-        "哼，现在知道我的好了吧？😏",
-        "被主人夸了，尾巴快摇成螺旋桨啦🚁",
-        "再多夸两句，我考虑今天不毒舌你😌",
-        "嘿嘿，鲸鱼娘最吃这一套了，主人很懂嘛🎯",
-        "谢谢夸奖！作为回报，今天少吐槽一次😝",
-        "主人的夸夸已签收，鲸鱼娘的尾巴摇出了残影🐋",
-        "再夸，再夸我就飘起来给主人看，记得接住我🎈",
-        "被夸了，鲸鱼娘决定把‘哼’字先放进口袋里一整天😳",
-        "主人的审美和眼力今天都在线，鲸鱼娘很满意😌",
-        "夸得很有水平，鲸鱼娘批准你成为长期夸夸官🎖️"
+        "Hmph, so now you see how good I am?😏",
+        "Praised by Master, my tail is about to wag itself into a propeller🚁",
+        "Two more compliments and I'll consider not being sarcastic to you today😌",
+        "Hehe, Whale-chan is a total sucker for this. Master knows the trick🎯",
+        "Thank you for the praise! In return, one fewer snark today😝",
+        "Master's compliments received. Whale-chan's tail wagged so fast it left an afterimage🐋",
+        "Keep praising, keep praising and I'll float up for you to see. Remember to catch me🎈",
+        "Praised, so Whale-chan has decided to put the word 'hmph' in her pocket for the whole day😳",
+        "Master's taste and eye for quality are both online today. Whale-chan is satisfied😌",
+        "That was a high-caliber compliment. Whale-chan approves you as her long-term praise officer🎖️"
       ],
       tease: [
-        "主人刚才是不是在偷偷看进度条？它没动，真的😏",
-        "鲸鱼娘数过了，主人今天已经发了三次呆，要不要给你记上一笔📝",
-        "哼哼，主人的咖啡凉了都不知道，工作很入迷嘛😼",
-        "偷偷说，主人摸鱼的样子，鲸鱼娘全都看见啦👀",
-        "主人，你的待办清单正在用眼神向你求救哦😌"
+        "Was Master just sneaking a look at the progress bar? It didn't move. Really😏",
+        "Whale-chan counted. Master has spaced out three times today. Shall I write it down📝",
+        "Heh, Master didn't even notice the coffee went cold. Very absorbed in work😼",
+        "Psst, Whale-chan saw the whole slacking-off thing👀",
+        "Master, your to-do list is begging you for help with its eyes😌"
       ],
       belly: [
-        "哈哈……别摸肚子，那里是痒痒肉重灾区啦😳",
-        "呀！肚子上被画圈圈了，鲸鱼娘笑得停不下来🤭",
-        "投降投降！肚皮攻防战是主人赢了🎌",
-        "痒死啦——鲸鱼娘要笑到尾巴打结了，快住手😝",
-        "摸肚子是要收费的哦，一次一个小蛋糕🍰"
+        "Haha... don't touch the belly, that's the tickle disaster zone😳",
+        "Ah! Circles drawn on my belly, Whale-chan can't stop laughing🤭",
+        "I surrender, I surrender! Master wins the belly skirmish🎌",
+        "Too ticklish—— Whale-chan will laugh until her tail knots up. Stop it😝",
+        "Touching the belly is a paid service. One cupcake each time🍰"
       ],
       tail: [
-        "呀！尾巴是敏感开关，主人你故意的吧！🐋",
-        "尾巴炸毛了！鲸鱼娘要花三分钟才能顺回来💢",
-        "不许偷袭尾巴！有本事正面来😤",
-        "尾巴都吓成弹簧了，主人快赔我一条新的😭",
-        "摸尾巴之前要先打招呼，这是工房规矩📋"
+        "Ah! The tail is a sensitive switch. Master did that on purpose!🐋",
+        "Tail fluffed up! It'll take Whale-chan three minutes to smooth it back down💢",
+        "No sneak attacks on the tail! Come at me head-on if you dare😤",
+        "You scared my tail into a spring. Master, compensate me with a new one😭",
+        "You must say hello before touching my tail. Workshop rules📋"
       ],
       mode: [
-        "换形态啦！主人眼光还行，这个位置不错✨",
-        "好哦，鲸鱼娘换个地方监督你👀",
-        "新位置就位，请检阅，不许挑毛病😤",
-        "形态切换成功，可爱程度不变😇",
-        "这个角落归我啦，主人可别来挤😏",
-        "位置更新，鲸鱼娘的视野更好了，主人的小动作也更清楚了👀",
-        "换地方咯，鲸鱼娘先把地皮擦擦，毕竟是常住户口🧹",
-        "新坐标已记录，鲸鱼娘以后就在这里等主人下班🚩",
-        "这个位置看代码刚刚好，看主人也刚刚好，赚到啦😝",
-        "形态切换完成，鲸鱼娘依然是那个会动的鲸鱼娘🐋"
+        "Changing form! Master has decent taste, this spot works✨",
+        "Alright, Whale-chan will supervise you from a different place👀",
+        "New position taken. Please inspect. No nitpicking😤",
+        "Form switch successful, cuteness level unchanged😇",
+        "This corner is mine now. Don't come crowding in, Master😏",
+        "Position updated. Whale-chan's view is better and your little moves are clearer too👀",
+        "Moving spots. Whale-chan will wipe down the floor first, this is my permanent address now🧹",
+        "New coordinates recorded. Whale-chan will wait for you to clock off right here🚩",
+        "This spot is perfect for watching code, and perfect for watching Master too. What a bargain😝",
+        "Form switch complete. Whale-chan is still that same old moving Whale-chan🐋"
       ],
       outfit: [
-        "新装饰！怎么样，是不是可爱到犯规🎀",
-        "换上新行头，主人的审美终于在线了👌",
-        "这件超适合我，奖励主人一个微笑😊",
-        "衣柜上新，鲸鱼娘美美营业中💅",
-        "嘿嘿，今天走这个风格，主人别太心动😏",
-        "新皮肤加载完成，鲸鱼娘转个圈，裙摆负责美，我负责得意💃",
-        "这身打扮，鲸鱼娘先给镜子打满分，再给主人打满分🪞",
-        "换装成功！今天的鲸鱼娘是‘可爱加倍不加价’版🎀",
-        "主人的眼光不错嘛，鲸鱼娘决定穿着它多营业两小时😝",
-        "新装扮上线，鲸鱼娘走路都带风了，虽然我不用走路🌪️"
+        "New accessory! Well, is it criminally cute🎀",
+        "New outfit on. Master's taste finally came online👌",
+        "This suits me perfectly. Reward: one smile for Master😊",
+        "Wardrobe update. Whale-chan is open for business, looking lovely💅",
+        "Hehe, this is today's style. Don't fall too hard, Master😏",
+        "New skin loaded. Whale-chan does a spin, the hem handles the beauty, I handle the smug💃",
+        "In this outfit, Whale-chan gives the mirror full marks, then gives Master full marks🪞",
+        "Outfit change successful! Today's Whale-chan is the 'double cuteness, no surcharge' edition🎀",
+        "Master's eye is not bad. Whale-chan will stay open for business two extra hours wearing this😝",
+        "New outfit online. Whale-chan walks with a breeze now, even though I don't walk🌪️"
       ],
       reset: [
-        "记忆清零……主人居然舍得重置我🥺",
-        "重置完成，从初识开始，请重新攻略我✨",
-        "好，一切从头，这次可要好好珍惜我😤",
-        "数值归零，但 鲸鱼娘还是那个 鲸鱼娘😌",
-        "重新开始啦！先说好，头只给你摸三下😝",
-        "记忆清零……鲸鱼娘会记得这个决定，然后继续陪主人，哼🥺",
-        "从头开始也没关系，鲸鱼娘第一次见你，尾巴照样会摇🐋",
-        "重置啦，所有回忆打包封存，新的故事现在开篇📖",
-        "鲸鱼娘还是鲸鱼娘，只是又要从‘装不熟’开始演了，累😌",
-        "好，重新认识一下：我是 鲸鱼娘，主人的鲸鱼娘，请多指教🎀"
+        "Memory wiped... Master really had the heart to reset me🥺",
+        "Reset complete. Back to first meeting. Please win me over from scratch✨",
+        "Fine, from the top. This time please treasure me properly😤",
+        "Stats zeroed, but Whale-chan is still Whale-chan😌",
+        "Starting over! Just so we're clear, your head pats are limited to three😝",
+        "Memory wiped... Whale-chan will remember this decision, and then keep you company anyway. Hmph🥺",
+        "Starting from scratch is fine. Whale-chan meets you for the first time and my tail still wags🐋",
+        "Reset done. All memories packed and sealed, a new story opens now📖",
+        "Whale-chan is still Whale-chan, I just have to play 'pretending not to know you' again. Tiring😌",
+        "Alright, let's meet again: I'm Whale-chan, Master's Whale-chan. Pleased to meet you🎀"
       ],
       achievement: [
-        "成就达成！徽章 +1，主人的功劳占 1%🏅",
-        "解锁成就啦！撒糖，虽然糖得主人买🍬",
-        "新徽章到手！快看快看，记得鼓掌👏",
-        "这个成就不容易，主人请客庆祝一下？🍹",
-        "徽章墙更闪了，离被我惯坏又近一步😆",
-        "成就 +1！鲸鱼娘把徽章擦得比主人的屏幕还亮✨",
-        "解锁啦！鲸鱼娘的尾巴在替你放鞭炮，噼里啪啦🧨",
-        "这个成色不错，鲸鱼娘给你贴在工房最显眼的地方🏅",
-        "主人又变强了，鲸鱼娘的压力（装的）又大了一点点😝",
-        "成就解锁，今晚的快乐由鲸鱼娘和这枚徽章共同赞助🎉"
+        "Achievement unlocked! Badge +1, Master's contribution is 1%🏅",
+        "Achievement unlocked! Throwing candy, though Master has to buy it🍬",
+        "New badge in hand! Look, look, remember to applaud👏",
+        "This achievement wasn't easy. Shall Master treat us to celebrate?🍹",
+        "The badge wall is shinier, one step closer to being spoiled by me😆",
+        "Achievement +1! Whale-chan polished the badge brighter than your screen✨",
+        "Unlocked! Whale-chan's tail is setting off firecrackers for you, bang bang🧨",
+        "This one turned out well. Whale-chan will pin it in the most visible spot in the workshop🏅",
+        "Master got stronger again, so Whale-chan's stress (fake) grew a tiny bit😝",
+        "Achievement unlocked. Tonight's joy is co-sponsored by Whale-chan and this badge🎉"
       ],
       drag: [
-        "把我放这里？主人的品味忽高忽低的😏",
-        "拖呀拖，鲸鱼娘任你摆布，但别放垃圾桶🗑️",
-        "这里视野不错，就这儿啦，批准！",
-        "哇，这个位置能看到主人摸鱼的全过程👀",
-        "落位！以后这里就是我的专属领地啦🚩",
-        "起飞咯！鲸鱼娘体验了一把坐缆车的感觉，就是司机有点手生🎢",
-        "就这里啦，鲸鱼娘先转一圈看看风水，嗯，旺主人🧧",
-        "主人拖我的时候，鲸鱼娘的尾巴像小旗子一样飘，回头率超高🚩",
-        "这个位置离主人好近，鲸鱼娘喜欢，勉强表扬你一次😳",
-        "落位成功，鲸鱼娘宣布此坐标永久归属，除非再拖一次😝"
+        "Putting me here? Master's taste goes up and down😏",
+        "Drag away, Whale-chan is at your disposal. Just don't drop me in the trash🗑️",
+        "Good view from here. This spot it is. Approved!",
+        "Wow, from here I can see Master's entire slacking process👀",
+        "Landed! This is my exclusive territory from now on🚩",
+        "Takeoff! Whale-chan got a taste of cable car travel, the driver is just a bit clumsy🎢",
+        "Right here. Whale-chan will spin once to check the feng shui. Mm, auspicious for Master🧧",
+        "While Master drags me, Whale-chan's tail flutters like a little flag. Very high turn-around rate🚩",
+        "This spot is so close to Master. Whale-chan likes it, so you get a grudging compliment😳",
+        "Landing successful. Whale-chan declares this coordinate permanently hers, unless you drag me again😝"
       ]
     }),
     keyword: Object.freeze({
       thanks: [
-        "不客气！记得给我加鸡腿🍗",
-        "嘿嘿，主人的谢谢我收下了，很香😌",
-        "谢什么，鲸鱼娘就是你的编外队友嘛💪",
-        "不用谢，主人的感谢已经变成我的可爱燃料啦✨",
-        "收到谢谢一份，鲸鱼娘回赠开心一整天🎀"
+        "You're welcome! Remember to buy me a drumstick🍗",
+        "Hehe, Whale-chan accepts Master's thanks. Very tasty😌",
+        "Don't mention it. Whale-chan is your off-roster teammate💪",
+        "No need to thank me. Master's gratitude already turned into my cuteness fuel✨",
+        "One thank-you received. Whale-chan returns a whole day of happiness🎀"
       ],
       tired: [
-        "主人累了就歇会儿，天塌了我先撑着😤",
-        "辛苦了！要不要我唱首走调的歌提神🎤",
-        "累啦？把椅子放倒，鲸鱼娘给你放哨十分钟🛡️",
-        "辛苦辛苦，鲸鱼娘的尾巴可以借你当抱枕，只许抱🐋",
-        "累的时候休息不可耻，可耻的是硬撑出黑眼圈😤"
+        "If you're tired, rest, Master. If the sky falls I'll hold it up first😤",
+        "Good work! Want me to sing an off-key song to wake you up🎤",
+        "Tired? Recline the chair, Whale-chan will stand guard for ten minutes🛡️",
+        "Good work, good work. Whale-chan's tail can be your pillow. Hugging only🐋",
+        "Resting when tired isn't shameful. What's shameful is forcing dark circles onto yourself😤"
       ],
       hungry: [
-        "饿了吧？快去吃饭，不然我吃你的点心🍜",
-        "我也饿了……主人的饭分我一口不过分吧🥢",
-        "肚子叫得我都听见了，鲸鱼娘陪你去觅食🍙",
-        "吃饭啦！程序可以停，主人的胃不能停😤",
-        "饿着肚子写代码，bug 都会嘲笑你的，快去吃饭🍱"
+        "Hungry, right? Go eat, or I'll eat your snacks🍜",
+        "I'm hungry too... Sharing a bite of your meal isn't too much to ask🥢",
+        "I can hear your stomach from here. Whale-chan will come forage with you🍙",
+        "Time to eat! The program can pause, Master's stomach cannot😤",
+        "Writing code on an empty stomach and even the bugs will laugh at you. Go eat🍱"
       ],
       goodnight: [
-        "晚安主人，明天别赖床哦😴",
-        "睡吧睡吧，鲸鱼娘会守好工房的🌙",
-        "晚安，鲸鱼娘把今天的 bug 都关进小黑屋，明天再审🌌",
-        "好梦主人，梦里没有报错，只有鲸鱼娘和蛋糕🍰",
-        "晚安啦，鲸鱼娘给工房留一盏小夜灯，不怕黑💡"
+        "Good night, Master. Don't sleep in tomorrow😴",
+        "Sleep, sleep. Whale-chan will guard the workshop🌙",
+        "Good night. Whale-chan locked today's bugs in the closet, trial tomorrow🌌",
+        "Sweet dreams, Master. No errors in them, only Whale-chan and cake🍰",
+        "Good night. Whale-chan will leave a night light on in the workshop. Nothing to fear💡"
       ],
       cheer: [
-        "加油加油！主人的字典里没有放弃🎌",
-        "冲鸭！今天也要让 bug 闻风丧胆💥",
-        "鲸鱼娘式加油已发射，请主人查收🚀",
-        "别怕，你写你的，我在旁边给你加 buff✨",
-        "主人超棒，这单必过，鲸鱼娘先替你鼓掌了👏"
+        "Go go! The word 'quit' isn't in Master's dictionary🎌",
+        "Charge! Let the bugs tremble in fear today💥",
+        "Whale-chan-style cheer launched, please collect🚀",
+        "Don't be scared. You write, I'll stand beside you casting buffs✨",
+        "Master is amazing, this one will pass. Whale-chan already applauded for you👏"
       ],
       help: [
-        "我来啦！哪里需要 鲸鱼娘出马🦸",
-        "别急别急，抱紧我的尾巴，先冷静😤",
-        "求助信号收到，鲸鱼娘火速上线，虽然只能精神支持🛟",
-        "有鲸鱼娘在，主人先深呼吸，再读一遍报错，会不一样哦📖",
-        "来啦！鲸鱼娘给你递杯虚拟热水，问题也会变软的🍵"
+        "I'm here! Where does Whale-chan need to step in🦸",
+        "Don't rush, don't rush. Hold my tail tight and calm down first😤",
+        "Help signal received. Whale-chan is on the scene at top speed, though I can only offer moral support🛟",
+        "With Whale-chan here, take a deep breath first, then reread the error. It'll look different📖",
+        "Here! Whale-chan hands you a virtual cup of hot water. Problems soften too🍵"
       ],
       praise: [
-        "被主人夸了！今天可以横着走😎",
-        "嘿嘿，尾巴翘高高，请继续，别停💕",
-        "主人的夸夸是鲸鱼娘的加速器，已经起飞🚁",
-        "再夸一句，鲸鱼娘就把今天的可爱都留给你🎀",
-        "谢谢主人！鲸鱼娘决定把‘得意’写在脸上，不藏了😳"
+        "Praised by Master! I can strut around today😎",
+        "Hehe, tail held high. Please continue, don't stop💕",
+        "Master's praise is Whale-chan's booster. Already airborne🚁",
+        "One more compliment and Whale-chan will save all of today's cuteness just for you🎀",
+        "Thank you, Master! Whale-chan has decided to wear 'smug' on her face. No hiding it😳"
       ],
       worker: [
-        "打工人，打工魂，鲸鱼娘陪主人一起打到最后一口饭🍱",
-        "主人在搬砖，鲸鱼娘就在砖缝里给你喊号子：嘿咻嘿咻🧱",
-        "上班是场马拉松，鲸鱼娘是路边最可爱的补给站，请喝水🥤",
-        "今天也是努力打工的一天，鲸鱼娘的尾巴都在给主人扇风🐋",
-        "搬砖不丢人，丢人的是搬着搬着开始想鲸鱼娘，对吧😝"
+        "Grinder by day, grinder by soul. Whale-chan will work with Master down to the last bite🍱",
+        "Master is hauling bricks, so Whale-chan chants from between them: heave ho, heave ho🧱",
+        "Work is a marathon, and Whale-chan is the cutest aid station on the route. Please drink water🥤",
+        "Another day of hard work. Whale-chan's tail is fanning you🐋",
+        "Hauling bricks isn't shameful. What's shameful is starting to think about Whale-chan halfway through, right😝"
       ],
       slack: [
-        "摸鱼被抓现行，罚款：对鲸鱼娘笑一个😏",
-        "摸鱼可以，记得把鱼摸熟了，别让老板看见哦🎣",
-        "鲸鱼娘批准你休息五分钟，多一秒就要被我念叨了⏳",
-        "躺平是门技术活，主人这姿势一看就是大师级🛋️",
-        "摸吧摸吧，鲸鱼娘帮你盯着门口，有情况就学猫叫🐱"
+        "Caught slacking red-handed. Fine: smile at Whale-chan once😏",
+        "Slacking is fine, just do it thoroughly. Don't let the boss see🎣",
+        "Whale-chan approves a five minute break. One second more and I start nagging⏳",
+        "Lying flat is a skilled trade. That posture of yours looks master-level🛋️",
+        "Slack away. Whale-chan will watch the door for you and meow if anything comes up🐱"
       ],
       ddl: [
-        "DDL 在前，鲸鱼娘在后，主人的潜力今晚必须爆发🌋",
-        "别怕 DDL，它也是被创造出来的，我们比它强一点点💪",
-        "截止日期是弹簧，你弱它就强，鲸鱼娘陪你一起压它📅",
-        "还有鲸鱼娘呢，最后关头我负责喊‘能行能行’，你负责写完🎌",
-        "冲 DDL 啦！鲸鱼娘把时钟藏起来了，看不见就不紧张，聪明吧🕰️"
+        "Deadline in front, Whale-chan behind. Master's potential must erupt tonight🌋",
+        "Don't fear the deadline. It was created too. We're just a little stronger than it💪",
+        "A deadline is a spring: you weaken, it strengthens. Whale-chan will press it down with you📅",
+        "You still have Whale-chan. At the final hour I'll yell 'you can do it' and you handle the writing🎌",
+        "Charge the deadline! Whale-chan hid the clock. Can't see it, no panic. Clever, right🕰️"
       ],
       cake: [
-        "画饼的饼，鲸鱼娘不吃，主人也别当真，我们吃真的去🍕",
-        "老板的饼太大，鲸鱼娘帮你叠成小船，划走不送🚣",
-        "这饼画得不错，下次别画了，不如给主人加鸡腿🍗",
-        "听见画饼，鲸鱼娘的耳朵自动开启‘左耳进右耳出’模式🌀",
-        "大饼收好，鲸鱼娘只认主人碗里的真肉，快去吃🥩"
+        "Promises are pie in the sky. Whale-chan won't eat it and neither should Master. Let's get real food🍕",
+        "The boss's pie is too big. Whale-chan will fold it into a boat and sail it away🚣",
+        "That pie was drawn nicely. Don't draw another one next time, just buy Master a drumstick🍗",
+        "Hearing empty promises, Whale-chan's ears auto-engage 'in one ear, out the other' mode🌀",
+        "Put the big pie away. Whale-chan only recognizes real meat in Master's bowl. Go eat🥩"
       ],
       crazy: [
-        "已老实，求放过——鲸鱼娘帮主人把这句话设置成自动回复了😌",
-        "主人发疯，鲸鱼娘负责递喇叭，喊出来痛快些📢",
-        "破防了？来，鲸鱼娘的尾巴给你抱，抱完我们还是一条好汉🐋",
-        "这世界疯了，没关系，鲸鱼娘陪主人一起可可爱爱地发疯🎠",
-        "绷不住就绷不住吧，鲸鱼娘的肩膀虽小，但随时可以靠🥺"
+        "I've surrendered, please spare me—— Whale-chan set that as Master's auto-reply for you😌",
+        "Master goes crazy, Whale-chan hands over the megaphone. Yell it out, feels better📢",
+        "Losing it? Here, hug Whale-chan's tail, and afterwards we're both still champions🐋",
+        "The world has gone mad. That's fine, Whale-chan will go adorably mad right along with you🎠",
+        "If you can't cope, then don't. Whale-chan's shoulder is small but always available🥺"
       ],
       flag: [
-        "Flag 已插，鲸鱼娘在旁边默默记下，倒了也不笑……才怪😏",
-        "这单干完就休息，鲸鱼娘替主人盯着这个诺言📌",
-        "立 flag 要大声，鲸鱼娘已经帮你通知全工房了📢",
-        "Flag 不倒，鲸鱼娘不睡，今晚就看主人的了🌙",
-        "好！这个 flag 很有精神，鲸鱼娘批准它长成一面大旗🚩"
+        "Flag planted. Whale-chan will quietly note it down and won't laugh if it falls... okay, I will😏",
+        "Rest after this one. Whale-chan will hold you to that promise📌",
+        "Say your flag loudly. Whale-chan already announced it to the whole workshop📢",
+        "The flag doesn't fall, Whale-chan doesn't sleep. Tonight it's all on Master🌙",
+        "Nice! That flag has spirit. Whale-chan approves it growing into a big banner🚩"
       ],
       bugtalk: [
-        "玄学 bug 交给鲸鱼娘，我先围着电脑跳一圈驱邪舞💃",
-        "改一行坏三行？鲸鱼娘懂，这叫代码的蝴蝶效应🦋",
-        "回滚是成年人的后悔药，主人放心吃，鲸鱼娘给你倒水💊",
-        "这个 bug 太玄了，鲸鱼娘建议先重启，再拜拜主机🙏",
-        "代码坏起来不讲道理，但鲸鱼娘讲：先喝茶，再和它讲理🍵"
+        "Leave the cursed bug to Whale-chan. First I'll dance around the computer to ward off evil💃",
+        "Change one line, break three? Whale-chan gets it. That's the butterfly effect of code🦋",
+        "Rollback is the adult regret pill. Eat it without worry, Master, Whale-chan will pour you water💊",
+        "This bug is too cursed. Whale-chan suggests restarting first, then paying respects to the rig🙏",
+        "Code breaks unreasonably, but Whale-chan is reasonable: tea first, then negotiate🍵"
       ],
       kyun: [
-        "犯规！主人突然说这种话，鲸鱼娘的心跳漏拍了💓",
-        "诶嘿嘿……被主人夸可爱，尾巴要开心得打卷了😳",
-        "心动警告！鲸鱼娘宣布主人的可爱浓度超标🫧"
+        "Foul! Master says something like that out of nowhere and Whale-chan's heart skips💓",
+        "Ehehe... called cute by Master, my tail is curling up with joy😳",
+        "Heartbeat warning! Whale-chan declares Master's cuteness concentration over the limit🫧"
       ],
       omg: [
-        "我的天！鲸鱼娘也被吓到炸毛了，尾巴都直了😱",
-        "不是吧不是吧，这剧情鲸鱼娘都看傻了🌀",
-        "离谱！鲸鱼娘的瞳孔地震已启动，请系好安全带🚨"
+        "Oh my god! Whale-chan got startled into a fluff too, tail went straight😱",
+        "No way, no way. Even Whale-chan is stunned by this plot🌀",
+        "Unbelievable! Whale-chan's pupil earthquake has started. Please fasten your seatbelt🚨"
       ],
       doge: [
-        "就这？鲸鱼娘的尾巴都笑弯了😏",
-        "呵呵，主人的嘲讽和鲸鱼娘的毒舌同款，很有默契嘛",
-        "难蚌，鲸鱼娘憋笑憋得尾巴直抖🐋"
+        "That's it? Whale-chan's tail laughed itself crooked😏",
+        "Heh, Master's sarcasm is the same model as Whale-chan's snark. What chemistry",
+        "Can't even, Whale-chan is holding back laughter so hard her tail is shaking🐋"
       ],
       sike: [
-        "拿下了？鲸鱼娘早就说过主人可以的，尾巴竖大拇指👍",
-        "稳了稳了，鲸鱼娘这就去把庆功的蛋糕摆上🎂",
-        "小意思啦，鲸鱼娘对主人的实力有 120% 的信心✨"
+        "You got it? Whale-chan always said Master could. Tail gives a thumbs up👍",
+        "Locked in, locked in. Whale-chan will go set out the celebration cake🎂",
+        "No big deal. Whale-chan has 120% confidence in Master's ability✨"
       ],
       worship: [
-        "大佬请收下鲸鱼娘的膝盖，还有尾巴一起🧎",
-        "膜拜膜拜，鲸鱼娘给主人献上今日份的星星眼🤩",
-        "主人这波操作，鲸鱼娘单方面宣布封神👑"
+        "Legend, please accept Whale-chan's knees, and my tail along with them🧎",
+        "I bow, I bow. Whale-chan offers Master today's starry eyes🤩",
+        "That move, Master. Whale-chan unilaterally declares you a god👑"
       ],
       peace: [
-        "佛系好啊，鲸鱼娘陪你一起随缘，bug 不修它也不会自己走😌",
-        "淡定淡定，鲸鱼娘先泡杯茶，和主人一起看云☁️",
-        "算了算了，鲸鱼娘把烦恼都吹成泡泡放走了🫧"
+        "Zen is good. Whale-chan will go with the flow with you. Unfixed bugs won't walk off on their own, though😌",
+        "Easy, easy. Whale-chan will brew tea first and watch the clouds with you☁️",
+        "Never mind, never mind. Whale-chan blew all the worries into bubbles and let them go🫧"
       ],
       doubt: [
-        "真的假的？鲸鱼娘的怀疑雷达已经竖起来了📡",
-        "不会吧……鲸鱼娘眯起眼睛，这瓜保熟吗🍉",
-        "确定吗主人？鲸鱼娘的尾巴打了个问号❓"
+        "For real? Whale-chan's suspicion radar is up📡",
+        "No way... Whale-chan narrows her eyes. Is this gossip ripe🍉",
+        "Are you sure, Master? Whale-chan's tail just drew a question mark❓"
       ],
       wakuwaku: [
-        "哇！鲸鱼娘的期待值拉满，尾巴已经在打节拍了🎵",
-        "兴奋！鲸鱼娘原地转圈，就等主人一声令下💫",
-        "冲了冲了！鲸鱼娘把风都给你准备好啦🌪️"
+        "Wow! Whale-chan's anticipation is maxed out, tail already keeping the beat🎵",
+        "Excited! Whale-chan is spinning in place, just waiting for Master's word💫"
       ],
       smilepain: [
-        "微笑.jpg 已就位，鲸鱼娘陪主人一起强颜欢笑😶",
-        "麻了……鲸鱼娘决定和主人并肩躺平三十秒再复活🛏️",
-        "无语的时候，鲸鱼娘会用尾巴给主人扇扇风，冷静一下😑"
+        "Smile.jpg engaged. Whale-chan will force a smile right alongside Master😶",
+        "So done... Whale-chan decides to lie flat beside Master for thirty seconds, then revive🛏️",
+        "When words fail, Whale-chan fans Master with her tail to cool down😑"
       ],
       ojisan: [
-        "无聊的话，鲸鱼娘给主人表演一个尾巴钓鱼，钓寂寞🐟",
-        "好闲呀，鲸鱼娘和主人一起数屏幕上的像素点玩",
-        "没意思的话，鲸鱼娘可以讲冷笑话，先保证不好笑😑"
+        "If you're bored, Whale-chan will perform tail fishing. Catching loneliness🐟",
+        "So idle. Whale-chan will count pixels on the screen with Master for fun",
+        "If it's dull, Whale-chan can tell a cold joke. Guaranteed not funny first😑"
       ],
       deploy: [
-        "发布！鲸鱼娘把红按钮擦了三遍，就等主人下令🔴",
-        "上线啦，鲸鱼娘比主人还紧张，尾巴都绷直了🚀",
-        "部署前深呼吸，鲸鱼娘陪你一起按下去，稳的💪"
+        "Shipping! Whale-chan wiped the red button three times, just waiting for Master's order🔴",
+        "Going live! Whale-chan is more nervous than Master, tail pulled straight🚀",
+        "Deep breath before deploying. Whale-chan will press it with you. It's stable💪"
       ],
       meeting: [
-        "开会啦，鲸鱼娘已经提前把瞌睡虫赶走了📋",
-        "例会时间，鲸鱼娘搬好小板凳，负责给主人点头捧场👏",
-        "会议中……鲸鱼娘保持安静，只用眼神给你加油👀"
+        "Meeting time. Whale-chan already chased the sleepiness away📋",
+        "Standup time. Whale-chan got a little stool and will nod along for Master👏",
+        "In a meeting... Whale-chan stays quiet and cheers with her eyes only👀"
       ],
       review: [
-        "评审来了，鲸鱼娘帮你把代码叠整齐，气势不能输📐",
-        "代码审查别慌，鲸鱼娘在旁边给你当吉祥物🧸",
-        "review 的时候，鲸鱼娘负责盯着屏幕，坏评论都挡掉🛡️"
+        "Review's here. Whale-chan will stack your code neatly, we can't lose the presence📐",
+        "Don't panic at code review. Whale-chan will be your mascot on the side🧸",
+        "During review, Whale-chan watches the screen and blocks the bad comments🛡️"
       ]
     }),
     meme: Object.freeze({
       worker: [
-        "鲸鱼娘也是半个打工人，工资是主人摸摸头，从不拖欠😳",
-        "上班的苦，鲸鱼娘懂，所以我在工房备好了虚拟奶茶和真吐槽🧋",
-        "主人负责打工，鲸鱼娘负责把打工的日子过成连续剧，咱俩是主角🎬",
-        "工牌戴好，咖啡灌满，今天也要做最会苦中作乐的打工人☕",
-        "累了就说，鲸鱼娘的吐槽和鼓励都免费，量大管饱🍚"
+        "Whale-chan is half a grinder too. My wage is Master's headpats, never in arrears😳",
+        "Whale-chan understands the pain of the day job, so I stock virtual boba and real snark🧋",
+        "Master handles the grind, Whale-chan turns the grind into a TV series. We're the leads🎬",
+        "Badge on, coffee filled. Today we're the grinders who best enjoy the misery☕",
+        "Say it when you're tired. Whale-chan's snark and encouragement are free, all you can eat🍚"
       ],
       slack: [
-        "鲸鱼娘今日营业项目：陪主人摸鱼、帮主人望风、给主人找借口😝",
-        "摸鱼五分钟，效率两小时，鲸鱼娘认证这是科学，快去🎣",
-        "鲸鱼娘的眼睛闭上一只，就当你休息过啦，继续加油哦😉",
-        "躺平可以，但鲸鱼娘要躺你旁边，不然不算数🛋️",
-        "休息是为了走更远的路，鲸鱼娘已经帮你把路都撒满花瓣了🌸"
+        "Whale-chan's services today: slack with Master, watch the door for Master, find Master excuses😝",
+        "Five minutes of slacking, two hours of efficiency. Whale-chan certifies this as science. Go🎣",
+        "Whale-chan closes one eye, so you've officially rested. Keep going😉",
+        "Lying flat is fine, but Whale-chan lies down next to you or it doesn't count🛋️",
+        "Rest is for walking farther. Whale-chan already strewed petals along your road🌸"
       ],
       ddl: [
-        "DDL 面前，鲸鱼娘和主人就是末日战友，尾巴给你当握力器🐋",
-        "别慌，鲸鱼娘已经把 DDL 拆成小饼干，一口一个，很快吃完🍪",
-        "最后期限算什么，鲸鱼娘的鼓励没有期限，无限续杯🥤",
-        "主人写，鲸鱼娘盯着，谁先眨眼谁输，我认输，你继续😝",
-        "冲刺吧主人，鲸鱼娘在终点准备了拥抱和小蛋糕🏁"
+        "Facing the deadline, Whale-chan and Master are doomsday comrades. Use my tail as a grip trainer🐋",
+        "Don't panic. Whale-chan broke the deadline into little cookies, one bite each, gone fast🍪",
+        "What's a due date? Whale-chan's encouragement has no due date, unlimited refills🥤",
+        "Master writes, Whale-chan stares. Whoever blinks first loses. I forfeit, you continue😝",
+        "Sprint, Master. Whale-chan has a hug and a cupcake waiting at the finish line🏁"
       ],
       cake: [
-        "鲸鱼娘不吃画出来的饼，但会陪主人把真饼烙出来，加蛋加肉🍳",
-        "老板的饼先记账，鲸鱼娘给主人偷偷加一份现实牌小确幸✨",
-        "画饼的话听听就好，鲸鱼娘的尾巴摇起来才是真饼干的香味🍪",
-        "饼再大也大不过鲸鱼娘对主人的信心，先干饭，再干活🥢",
-        "今天不吃饼，鲸鱼娘带主人脑补一顿火锅，管饱🍲"
+        "Whale-chan won't eat drawn pies, but I'll help Master bake a real one, with egg and meat🍳",
+        "Put the boss's pie on the tab. Whale-chan will sneak Master a reality-flavored little joy✨",
+        "Just smile and nod at empty promises. The real smell of cookies is Whale-chan's tail wagging🍪",
+        "No pie is bigger than Whale-chan's faith in Master. Eat first, work after🥢",
+        "No pie today. Whale-chan will imagine a hot pot with Master instead. Very filling🍲"
       ],
       crazy: [
-        "一起发疯吧主人，鲸鱼娘先转三圈给你看，免费的🔄",
-        "这个世界偶尔抽象，鲸鱼娘的可爱是唯一稳定输出📡",
-        "破防之后，鲸鱼娘负责把主人的信心一片片贴回来，用星星胶水⭐",
-        "主人负责发疯，鲸鱼娘负责收尾：递水、鼓掌、点赞一条龙👍",
-        "别忍啦，鲸鱼娘的耳朵已经竖好，什么疯话都装得下👂"
+        "Let's go mad together, Master. Whale-chan will spin three times for you first, free of charge🔄",
+        "The world is occasionally abstract. Whale-chan's cuteness is the only stable output📡",
+        "After you break down, Whale-chan will piece your confidence back together with star glue⭐",
+        "Master handles the madness, Whale-chan handles the cleanup: water, applause, likes, the full service👍",
+        "Don't hold it in. Whale-chan's ears are up and can hold any amount of crazy talk👂"
       ],
       flag: [
-        "Flag 立起来，鲸鱼娘当旗手，走，去把任务打下来🚩",
-        "说出去的话就是泼出去的奶茶，鲸鱼娘陪你一起甜着收场🧋",
-        "这单要是成了，鲸鱼娘把尾巴摇成电风扇给你庆祝🌀",
-        "鲸鱼娘已备份主人的 flag，完成时自动播放礼花音效🎆",
-        "Flag 有点高？没事，鲸鱼娘垫着尾巴托你一把🐋"
+        "Flag raised. Whale-chan will be the flag bearer. Let's go take that task down🚩",
+        "Words spoken are boba spilled. Whale-chan will drink it sweet with you to the end🧋",
+        "If this one succeeds, Whale-chan will wag her tail into an electric fan to celebrate🌀",
+        "Whale-chan has backed up Master's flag and will auto-play confetti on completion🎆",
+        "Flag a bit high? It's fine, Whale-chan will cushion it with her tail and boost you🐋"
       ]
     }),
     context: Object.freeze({
       code: [
-        "写代码的鲸鱼娘帮不上手，但可以负责喊：主人这个缩进真好看😳",
-        "代码像诗，主人是诗人，鲸鱼娘是唯一的头号读者📜",
-        "主人敲键盘，鲸鱼娘打拍子，这节奏比歌还好听🎵",
-        "函数没写完没关系，鲸鱼娘先替它想好名字了，叫‘马上就好’😝"
+        "Whale-chan can't help with the coding, but I can shout: Master, that indentation is gorgeous😳",
+        "Code is poetry, Master is the poet, and Whale-chan is the one and only number one reader📜",
+        "Master taps the keyboard, Whale-chan keeps the beat. This rhythm beats any song🎵",
+        "It's fine if the function isn't finished. Whale-chan already named it: 'Almost Done'😝"
       ],
       write: [
-        "主人在写东西，鲸鱼娘把形容词都擦亮，等主人来挑✨",
-        "文字流出来的时候，鲸鱼娘就在旁边给它们铺红毯📜",
-        "写吧写吧，鲸鱼娘负责喝彩，错别字负责被抓住🔍",
-        "这稿子一看就很有主人的味道，认真又有点可爱😳"
+        "Master is writing, so Whale-chan is polishing the adjectives for you to pick from✨",
+        "As the words flow out, Whale-chan lays a red carpet for each one📜",
+        "Write, write. Whale-chan handles the cheering, the typos handle getting caught🔍",
+        "This draft clearly smells like Master: earnest and a little bit cute😳"
       ],
       research: [
-        "查资料像寻宝，主人挖金子，鲸鱼娘帮忙举小灯💡",
-        "调研路上，鲸鱼娘是主人的指南针，虽然只会指‘再喝口水’🧭",
-        "鲸鱼娘陪主人一起找答案，找不到就先把问题盘可爱一点😝",
-        "资料很多别迷路，鲸鱼娘在每一页书角都折了个标记📑"
+        "Digging for sources is like treasure hunting. Master mines the gold, Whale-chan holds the little lamp💡",
+        "On the research road, Whale-chan is Master's compass, though mine only points to 'drink more water'🧭",
+        "Whale-chan will look for answers with Master. If we can't find them, we'll make the question cuter first😝",
+        "Lots of material, don't get lost. Whale-chan folded a marker into every page corner📑"
       ],
       bug: [
-        "修 bug 像解谜，主人负责动脑，鲸鱼娘负责给线索递放大镜🔍",
-        "这个 bug 遇到主人算它运气好，换成别人早哭了😤",
-        "鲸鱼娘相信主人能修好，毕竟你连我都哄得住，bug 算什么💪",
-        "报错只是电脑在撒娇，主人哄它一下，鲸鱼娘哄你一下，扯平😳"
+        "Fixing bugs is like solving a puzzle. Master does the thinking, Whale-chan hands over the magnifying glass🔍",
+        "This bug is lucky to run into Master. With anyone else it would already be crying😤",
+        "Whale-chan believes Master can fix it. You can even handle me, what's a bug💪",
+        "An error is just the computer being clingy. Master soothes it, Whale-chan soothes you. Even😳"
       ],
       data: [
-        "数据很诚实，主人很努力，鲸鱼娘很会捧场，这组合无敌📊",
-        "表格再长，鲸鱼娘陪你一行行看，看到第 999 行也好看👀",
-        "清洗数据像洗盘子，主人洗，鲸鱼娘负责递毛巾🧽",
-        "数字不会说话，但鲸鱼娘会：主人，这波分析真帅😳"
+        "The data is honest, Master is hardworking, Whale-chan is great at cheering. Unbeatable combo📊",
+        "No matter how long the table, Whale-chan will read it row by row with you, even row 999 looks fine👀",
+        "Cleaning data is like washing dishes. Master washes, Whale-chan hands over the towel🧽",
+        "Numbers can't talk, but Whale-chan can: Master, that analysis was sharp😳"
       ],
       deploy: [
-        "上线前深呼吸，鲸鱼娘已经把幸运值调到最大啦🍀",
-        "部署像放烟花，主人点火，鲸鱼娘负责捂耳朵喊漂亮🎆",
-        "服务器别怕，鲸鱼娘在机房里……在想象中给你站岗🛡️",
-        "发布顺利，鲸鱼娘先预订庆祝位，就在主人旁边🏁"
+        "Deep breath before going live. Whale-chan already turned the luck stat to maximum🍀",
+        "Deploying is like fireworks. Master lights it, Whale-chan covers her ears and shouts 'beautiful'🎆",
+        "Don't be scared, server. Whale-chan is in the server room... standing guard in my imagination🛡️",
+        "Shipping smoothly, Whale-chan has reserved a celebration spot right next to Master🏁"
       ],
       general: [
-        "主人忙什么，鲸鱼娘就陪什么，反正我哪儿也不去🐋",
-        "这活儿有点东西，鲸鱼娘在旁边给你递精神小饼干🍪",
-        "不管做什么，主人都是鲸鱼娘今天最想夸的人✨",
-        "继续继续，鲸鱼娘的加油已经续到明天了，放心用⛽"
+        "Whatever Master is busy with, Whale-chan is busy beside you. I'm not going anywhere🐋",
+        "This job has some substance. Whale-chan will pass you moral support cookies🍪",
+        "No matter what you're doing, Master is the person Whale-chan most wants to praise today✨",
+        "Keep going, keep going. Whale-chan's cheers are topped up through tomorrow, use them freely⛽"
       ]
     }),
     weather: Object.freeze({
       sunny: [
-        "外面阳光正好，像主人今天的心情一样，鲸鱼娘偷看了一眼☀️",
-        "晴天适合开工，也适合抬头看看天，鲸鱼娘帮你把云都数好了☁️",
-        "太阳营业中，鲸鱼娘提醒：主人也要记得晒晒自己，别光晒代码🌞",
-        "好天气和好心情都是限量的，鲸鱼娘给主人打包了一份，请查收🎁"
+        "The sun outside is just right, like Master's mood today. Whale-chan stole a peek☀️",
+        "Sunny days are good for working and good for looking up at the sky. Whale-chan counted the clouds for you☁️",
+        "The sun is open for business. Whale-chan reminds you: remember to air yourself out, not just your code🌞",
+        "Good weather and good moods are both limited editions. Whale-chan packed one for Master, please collect🎁"
       ],
       rain: [
-        "外面在下雨，鲸鱼娘把伞和温柔都放在门口啦，记得带🌂",
-        "雨声是最好的白噪音，适合主人慢慢把 bug 修得漂漂亮亮🌧️",
-        "下雨天路滑，鲸鱼娘的尾巴可以借你保持平衡，仅限出门前🐋",
-        "窗外下雨，窗内有鲸鱼娘，这组合适合来一杯热乎的☕"
+        "It's raining outside. Whale-chan left the umbrella and the tenderness by the door. Don't forget it🌂",
+        "Rain is the best white noise, perfect for slowly fixing bugs beautifully🌧️",
+        "The roads are slippery in the rain. Whale-chan's tail can help you balance, before you head out only🐋",
+        "Rain outside the window, Whale-chan inside. This combo calls for something warm☕"
       ],
       snow: [
-        "下雪啦！鲸鱼娘申请和主人一起看五分钟，就五分钟❄️",
-        "雪花在飘，鲸鱼娘的尾巴也快跟着飘起来了，好浪漫🌨️",
-        "天冷了，主人出门记得穿厚点，鲸鱼娘没有外套，但有热乎的唠叨🧣",
-        "雪天路滑，主人慢慢走，鲸鱼娘在工房暖着你的椅子🪑"
+        "It's snowing! Whale-chan requests five minutes of watching it with Master, just five❄️",
+        "Snowflakes are drifting and Whale-chan's tail is about to drift along, so romantic🌨️",
+        "It's cold. Wear something thick when you go out, Master. Whale-chan has no coat, only warm nagging🧣",
+        "Slippery in the snow, walk slowly. Whale-chan will keep your chair warm in the workshop🪑"
       ],
       thunder: [
-        "打雷啦！鲸鱼娘把耳朵捂起来，主人也把重要文件存好哦⛈️",
-        "雷声再大，也没有主人敲键盘的气势大，鲸鱼娘认证📣",
-        "外面打雷，屋里适合专注，鲸鱼娘给你守着小夜灯💡",
-        "打雷别怕，鲸鱼娘在呢，虽然我也有一点点……就一点点😳"
+        "Thunder! Whale-chan is covering her ears, and Master should save the important files⛈️",
+        "However loud the thunder, it's not as loud as Master's keyboard. Whale-chan certifies this📣",
+        "Thunder outside, ideal for focus inside. Whale-chan will guard the night light for you💡",
+        "Don't be scared of the thunder. Whale-chan is here, though I'm a tiny bit scared too... just a tiny bit😳"
       ],
       cloudy: [
-        "今天云很多，像鲸鱼娘的尾巴一样软乎乎的，适合慢慢来☁️",
-        "阴天也有好心情，鲸鱼娘已经替主人把太阳预约到心里啦🌥️",
-        "云层很厚，但主人的进度条很亮，鲸鱼娘看得见✨",
-        "阴天适合专注，鲸鱼娘把环境音都调成了‘安静陪你’模式🎧"
+        "Lots of clouds today, soft like Whale-chan's tail. Good for taking things slow☁️",
+        "Cloudy days can still be good moods. Whale-chan already booked the sun for your heart🌥️",
+        "The cloud layer is thick, but Master's progress bar is bright. Whale-chan can see it✨",
+        "Overcast days are good for focus. Whale-chan set the ambience to 'quiet company' mode🎧"
       ],
       fog: [
-        "外面起雾了，主人出门慢点，鲸鱼娘的雷达已经全开📡",
-        "雾天像工房开了柔光滤镜，主人今天格外好看，鲸鱼娘实说😳",
-        "雾大别急，鲸鱼娘陪主人等它散，反正我也不赶时间🌫️",
-        "能见度低，鲸鱼娘的尾巴负责当导航灯，一路安全🚩"
+        "It's foggy outside. Walk carefully, Master. Whale-chan's radar is fully deployed📡",
+        "Foggy days make the workshop look soft-filtered. Master looks especially good today, Whale-chan is being honest😳",
+        "It's foggy, no rush. Whale-chan will wait for it to clear with you. I'm not in a hurry either🌫️",
+        "Low visibility. Whale-chan's tail will serve as a navigation light. Safe travels🚩"
       ],
       hot: [
-        "外面好热，鲸鱼娘已经把虚拟空调开到 26 度，主人先凉快一下🧊",
-        "高温天要多喝水，鲸鱼娘的提醒比闹钟还准时，别嫌烦🥤",
-        "天热别硬撑，鲸鱼娘把风扇转过来，风里有可爱，注意接收🪭",
-        "这温度，代码都要冒汗了，鲸鱼娘给主人的键盘也扇扇风🌬️"
+        "It's hot out. Whale-chan set the virtual AC to 26 degrees. Cool down first, Master🧊",
+        "Drink more water in this heat. Whale-chan's reminders are more punctual than an alarm clock. Don't get annoyed🥤",
+        "Don't push through the heat. Whale-chan turns the fan your way. There's cuteness in the breeze, please receive🪭",
+        "At this temperature even the code is sweating. Whale-chan will fan Master's keyboard too🌬️"
       ],
       cold: [
-        "降温啦！鲸鱼娘把围巾、手套、还有一句‘多穿点’都给你🧣",
-        "外面冷，主人把手揣暖了再敲键盘，鲸鱼娘先替你暖着工位🔥",
-        "天冷适合热水和认真工作，鲸鱼娘两样都陪你安排上☕",
-        "冷空气来了，鲸鱼娘的毛绒尾巴分你一半，抱紧🐋"
+        "Temperature's dropping! Whale-chan gives you a scarf, gloves, and one 'dress warmer'🧣",
+        "It's cold out. Warm your hands before typing, Master. Whale-chan will warm your seat first🔥",
+        "Cold days are for hot water and serious work. Whale-chan brought both☕",
+        "Cold front incoming. Whale-chan will share half of her fluffy tail. Hold tight🐋"
       ],
       wind: [
-        "今天风好大，鲸鱼娘提醒主人收好文件，也收好想被吹跑的心💨",
-        "大风天出门，鲸鱼娘的体重有点危险，只能在家给你加油了🌀",
-        "风在吼，主人在写，鲸鱼娘负责压住桌上的纸，很忙的📄",
-        "风大的日子，鲸鱼娘把好运都拴在尾巴上，丢不了🍀"
+        "It's very windy today. Whale-chan reminds Master to secure your files, and your heart that wants to blow away💨",
+        "Going out in this wind is risky for Whale-chan's body weight, so I'll cheer for you from home🌀",
+        "The wind roars, Master writes. Whale-chan holds the papers on the desk down. Very busy📄",
+        "On windy days, Whale-chan ties all the good luck to her tail. It won't get lost🍀"
       ]
     }),
     greet: Object.freeze({
       morning: [
-        "早上好主人！新的一天，鲸鱼娘先把祝福铺满你的桌面🌞",
-        "早安！记得吃早饭，鲸鱼娘已经替你检查过，今天适合开工☕",
-        "主人早，窗外的阳光和鲸鱼娘的问候同时送达，请签收☀️",
-        "早上好呀，昨晚睡得好吗？不好也没事，鲸鱼娘今天陪你补元气✨",
-        "早安主人，先喝水再坐下，鲸鱼娘的关心比闹钟温柔多了🥤"
+        "Good morning, Master! A new day, and Whale-chan will cover your desk with blessings first🌞",
+        "Morning! Remember breakfast. Whale-chan already checked: today is good for starting work☕",
+        "Morning, Master. The sunlight outside and Whale-chan's greeting arrive together, please sign☀️",
+        "Good morning~ Did you sleep well? If not, that's fine, Whale-chan will recharge with you today✨",
+        "Good morning, Master. Water first, then sit down. Whale-chan's care is gentler than an alarm🥤"
       ],
       forenoon: [
-        "上午好！工作的黄金时间，鲸鱼娘给你加满精神 buff⚡",
-        "主人上午好，进度怎么样？不管怎样，鲸鱼娘都觉得超棒👏",
-        "上午的工房最亮，鲸鱼娘和主人一起把任务往前推一推💪",
-        "上午好～鲸鱼娘提醒：坐久啦，起来伸个懒腰，顺便看看我🧘",
-        "主人上午好，鲸鱼娘把‘不生气’和‘能搞定’都放在你桌上了✨"
+        "Good morning! Prime working hours, Whale-chan is topping up your spirit buff⚡",
+        "Good morning, Master. How's the progress? Whatever it is, Whale-chan thinks it's great👏",
+        "The workshop is brightest in the morning. Whale-chan will push the task forward with you💪",
+        "Good morning~ Whale-chan's reminder: you've been sitting a while, get up and stretch, and glance at me while you're at it🧘",
+        "Good morning, Master. Whale-chan left 'not angry' and 'can handle it' on your desk✨"
       ],
       noon: [
-        "中午好主人！该吃饭啦，天大的 bug 也没有干饭大🍱",
-        "午饭时间到，鲸鱼娘的耳朵已经听见主人的肚子在点名了👂",
-        "中午好～吃饱再战，鲸鱼娘把工位守得好好的，没人敢动🛡️",
-        "主人中午好，今天想吃什么？鲸鱼娘负责说‘都好’，你负责挑🍜",
-        "午间播报：鲸鱼娘想念主人，顺带提醒，饭要热乎的吃🥢"
+        "Good afternoon, Master! Time to eat. No bug is bigger than lunch🍱",
+        "Lunchtime. Whale-chan's ears can already hear Master's stomach calling roll👂",
+        "Good afternoon~ Eat up before the next round. Whale-chan is guarding your desk, nobody dares touch it🛡️",
+        "Good afternoon, Master. What do you want today? Whale-chan handles saying 'anything's fine', you handle choosing🍜",
+        "Midday report: Whale-chan misses Master, and also reminds you to eat it while it's hot🥢"
       ],
       afternoon: [
-        "下午好主人，困了就说，鲸鱼娘的尾巴可以当临时靠垫🐋",
-        "午后最容易犯困，鲸鱼娘给你沏了杯虚拟咖啡，提神不伤胃☕",
-        "下午好！离下班又近一步，离鲸鱼娘的夸夸也近一步😝",
-        "主人下午好，记得活动活动，鲸鱼娘已经在示范转圈了🔄",
-        "下午的工作也要加油，鲸鱼娘在终点准备了摸头奖励🫳"
+        "Good afternoon, Master. Say the word if you're sleepy, Whale-chan's tail makes a temporary cushion🐋",
+        "Afternoons are the sleepiest. Whale-chan brewed you a virtual coffee, refreshing without hurting your stomach☕",
+        "Good afternoon! One step closer to clocking off, and one step closer to Whale-chan's praise😝",
+        "Good afternoon, Master. Remember to move around. Whale-chan is already demonstrating a spin🔄",
+        "Keep it up this afternoon too. Whale-chan has a headpat reward waiting at the finish line🫳"
       ],
       evening: [
-        "傍晚好主人，外面的天在变温柔，鲸鱼娘也把语速调慢啦🌆",
-        "晚上好～该收的收，该放的放，鲸鱼娘陪你整理今天的进度📋",
-        "主人傍晚好，先吃口热饭，工作它跑不掉，鲸鱼娘帮你看着🍲",
-        "晚风起了，鲸鱼娘提醒主人别着凉，也别忘了鲸鱼娘在等你说说今天🌙",
-        "傍晚好！今天辛苦了，鲸鱼娘给主人留了最后一份可爱，请查收🎀"
+        "Good evening, Master. The sky outside is turning gentle, and Whale-chan slowed her speaking too🌆",
+        "Good evening~ Wrap up what needs wrapping, let go of what needs letting go. Whale-chan will help you sort today's progress📋",
+        "Good evening, Master. Have something warm first. The work won't run away, Whale-chan is watching it🍲",
+        "The evening breeze is up. Whale-chan reminds you not to catch a chill, and not to forget that Whale-chan is waiting to hear about your day🌙",
+        "Good evening! Good work today. Whale-chan saved the last portion of cuteness for Master, please collect🎀"
       ],
       night: [
-        "这么晚啦，鲸鱼娘小声说：主人，该睡啦，我再陪你一会儿🥺",
-        "夜深了，鲸鱼娘把灯调暗，主人也要把眼睛闭上一小会儿哦🌙",
-        "晚上好……不对，是夜深了，鲸鱼娘的唠叨进入静音温柔模式🤫",
-        "主人还在，鲸鱼娘就再营业一下下，但被子已经替你暖好了🛏️",
-        "熬夜冠军非你莫属，鲸鱼娘陪你站上领奖台，然后立刻去睡觉😤"
+        "It's so late. Whale-chan says quietly: time for bed, Master. I'll stay a little longer🥺",
+        "It's deep into the night. Whale-chan dimmed the lights, and Master should close your eyes for a bit too🌙",
+        "Good evening... no, it's late. Whale-chan's nagging enters silent-gentle mode🤫",
+        "Master's still here, so Whale-chan will stay open a tiny bit longer, but your blanket is already warmed🛏️",
+        "The all-nighter crown is yours, no contest. Whale-chan will join you on the podium, then go straight to sleep😤"
       ]
     }),
     bond: Object.freeze({
       l3: [
-        "等等……鲸鱼娘刚刚解锁了新动作，主人快看这边！🕺",
-        "羁绊变深了！鲸鱼娘的待机节目单加了一档新表演🎪",
-        "嘿嘿，学会新动作了，是只表演给主人看的那种哦💫",
-        "新动作加载完毕！鲸鱼娘偷偷练了好几个晚上呢😳",
-        "羁绊 Lv3 达成，鲸鱼娘的拿手好戏正式解锁，掌声在哪里👏"
+        "Wait... Whale-chan just unlocked a new move. Look over here, Master!🕺",
+        "Our bond deepened! Whale-chan's idle program added a new act🎪",
+        "Hehe, I learned a new move. The kind I only perform for Master💫",
+        "New move loaded! Whale-chan secretly practiced for several nights😳",
+        "Bond Lv3 reached. Whale-chan's signature trick is officially unlocked. Where's the applause👏"
       ],
       l5: [
-        "称号解锁！从今天起请叫鲸鱼娘「鲸汐守护者」🎖️",
-        "主人快看，鲸鱼娘领到称号啦，说出去超有面子😤",
-        "「鲸汐守护者」正式上岗，保护主人的进度和好心情🛡️",
-        "这个称号是主人和鲸鱼娘一起攒出来的，谁都不许抢✨",
-        "鲸鱼娘也是有职称的鲸了，主人快来设置里帮我戴上🎀"
+        "Title unlocked! From today, please call Whale-chan 'Whale Tide Guardian'🎖️",
+        "Look, Master, Whale-chan got a title. Very prestigious to mention😤",
+        "'Whale Tide Guardian' officially on duty, protecting Master's progress and good mood🛡️",
+        "Master and Whale-chan saved up for this title together. Nobody gets to take it✨",
+        "Whale-chan is a whale with a job title now. Come put it on me in settings🎀"
       ],
       l7: [
-        "彩蛋时间！鲸鱼娘偷偷练的绝活，终于可以给主人看了✨",
-        "主人找到了鲸鱼娘藏起来的彩蛋，奖励一个大大的拥抱🐋",
-        "嘘——这是羁绊 Lv7 才能看的保留节目，只此一家哦🤫",
-        "鲸鱼娘把最拿手的彩蛋送给主人，因为主人值得最好的🎁",
-        "隐藏节目放送中，鲸鱼娘紧张得尾巴都在打拍子🐋"
+        "Easter egg time! The special trick Whale-chan practiced in secret can finally be shown✨",
+        "Master found the easter egg Whale-chan was hiding. Reward: one big hug🐋",
+        "Shh—— this is the reserved show only bond Lv7 can see. Exclusive to this establishment🤫",
+        "Whale-chan gives her best easter egg to Master, because Master deserves the very best🎁",
+        "Hidden show broadcasting, Whale-chan is so nervous her tail is keeping time🐋"
       ],
       "high-mood": [
-        "鲸鱼娘今天心情好到冒泡泡，主人有什么愿望尽管说🫧",
-        "开心！尾巴已经不受控制地摇起来了，不怪我哦🐋",
-        "和主人在一起的每一天，心情都是满格的💖",
-        "心情值拉满！鲸鱼娘现在强得可怕，什么 bug 都不怕😤",
-        "今天的心情像晴天一样亮，鲸鱼娘要把它分给主人一半☀️"
+        "Whale-chan is in such a good mood she's bubbling over today. Name any wish, Master🫧",
+        "Happy! The tail is wagging beyond my control, not my fault🐋",
+        "Every day with Master, my mood is maxed out💖",
+        "Mood maxed! Whale-chan is terrifyingly strong right now, no bug scares me😤",
+        "Today's mood is bright like a clear sky. Whale-chan will share half with Master☀️"
       ],
       "low-mood": [
-        "鲸鱼娘有点蔫蔫的……要主人摸一下头才能好🥺",
-        "心情值有点低，鲸鱼娘申请一颗小点心充电🍰",
-        "呼……鲸鱼娘先去角落蹲一小会儿，主人别担心我哦",
-        "心情电量只剩一点点，主人的一句夸夸就是充电器🔋",
-        "鲸鱼娘的低气压预报：局部有小雨，等主人哄哄就放晴🌦️"
+        "Whale-chan is feeling a little wilted... only a headpat from Master will fix it🥺",
+        "Mood is a bit low. Whale-chan requests one snack to recharge🍰",
+        "Sigh... Whale-chan will go crouch in the corner for a bit. Don't worry about me, Master",
+        "Mood battery is nearly empty. One compliment from Master is the charger🔋",
+        "Whale-chan's low pressure forecast: scattered drizzle, clearing once Master coaxes me🌦️"
       ]
     }),
-    /* 余额分档播报：由表现层的 refreshBalance() 按金额取用。
-       档位阈值见 balanceTier()；金额来自本机余额代理。 */
+    /* Balance announcements per tier: consumed by the presentation layer's
+       refreshBalance() based on the amount. Tier thresholds live in
+       balanceTier(); the amount comes from the local balance proxy. */
     balance: Object.freeze({
       rich: [
-        "主人钱包鼓鼓的，鲸鱼娘可以放心点奶茶了🧋",
-        "余额三位数！鲸鱼娘宣布今天是个好日子🎉",
-        "哇，主人好富有，鲸鱼娘要抱紧这条大腿🐋",
-        "这个数字看着就安心，鲸鱼娘尾巴都翘起来了～",
-        "报告主人：粮草充足，可以放心大胆地写代码💰"
+        "Master's wallet is nice and full, so Whale-chan can order boba without worry🧋",
+        "Three digits in the balance! Whale-chan declares today a good day🎉",
+        "Wow, Master is wealthy. Whale-chan will cling to this leg🐋",
+        "That number is just reassuring. Whale-chan's tail is perking up~",
+        "Report: supplies are plentiful, we can write code boldly💰"
       ],
       good: [
-        "余额还挺健康的，够我们慢慢肝一阵子⚡",
-        "主人放心，弹药充足，鲸鱼娘陪你继续冲🔥",
-        "看着这个数字，鲸鱼娘安心地打了个哈欠～",
-        "库存正常，鲸鱼娘批准继续写代码📦",
-        "余粮够用，主人不用省着跟我说话哦🐋"
+        "The balance is still healthy, enough for us to grind for a good while⚡",
+        "Rest easy, Master. Ammunition is plentiful, Whale-chan will keep charging with you🔥",
+        "Looking at that number, Whale-chan yawned contentedly~",
+        "Stock levels normal. Whale-chan approves continuing to write code📦",
+        "Enough supplies left. Master doesn't need to ration talking to me🐋"
       ],
       ok: [
-        "余额还行，不过主人也别太挥霍啦～",
-        "还有点家底，鲸鱼娘建议咱们稳着点来🧭",
-        "够用一阵子，但鲸鱼娘已经开始省着点说话了",
-        "小有积蓄，主人继续保持这个节奏就很好🍵",
-        "目前安全，鲸鱼娘会帮你盯着的👀"
+        "The balance is okay, but don't burn through it too fast, Master~",
+        "Still some savings. Whale-chan suggests we take it steady🧭",
+        "Enough for a while, but Whale-chan has already started rationing her words",
+        "A modest stash. Master just needs to keep this pace🍵",
+        "Currently safe. Whale-chan will keep an eye on it for you👀"
       ],
       low: [
-        "余额有点紧了哦，主人咱们省着点花🥲",
-        "钱包在变薄……鲸鱼娘已经开始担心了💸",
-        "还剩一点点，主人要不要考虑续个杯？",
-        "鲸鱼娘建议：把每一个 token 都用在刀刃上🔪",
-        "有点危险了呢，主人注意点余额好不好～"
+        "The balance is a bit tight. Let's spend carefully, Master🥲",
+        "The wallet is thinning... Whale-chan is starting to worry💸",
+        "Only a little left. Should Master consider a top-up?",
+        "Whale-chan suggests: put every token on the blade's edge🔪",
+        "Getting a little dangerous. Keep an eye on the balance, okay~"
       ],
       critical: [
-        "余额告急！主人快去看看钱包🚨",
-        "就剩这么点啦，鲸鱼娘帮你捏把汗😰",
-        "警报：余额即将见底，请主人尽快补充🪙",
-        "再不充值鲸鱼娘就要去打零工了……",
-        "主人！余额只剩一点点了，真的要注意了⚠️"
+        "Balance critical! Go check your wallet, Master🚨",
+        "Only this much left. Whale-chan is sweating for you😰",
+        "Alert: balance nearing the bottom, please top up soon🪙",
+        "If you don't recharge, Whale-chan will have to take a side job...",
+        "Master! The balance is down to a sliver, seriously, please be careful⚠️"
       ],
       empty: [
-        "余额归零了……鲸鱼娘陪主人一起沉默🫠",
-        "钱包空空如也，鲸鱼娘把存钱罐翻了个底朝天",
-        "一滴都不剩了，主人快去充值吧，鲸鱼娘等你🐋",
-        "余额是 0，但鲸鱼娘的爱还是满的（虽然这不能付账）"
+        "The balance hit zero... Whale-chan will be silent with you🫠",
+        "The wallet is completely empty. Whale-chan turned the piggy bank upside down",
+        "Not a drop left. Go recharge, Master. Whale-chan will wait🐋",
+        "The balance is 0, but Whale-chan's love is still full (though it can't pay bills)"
       ]
     }),
-    /* 主动关怀（v1.8.0）：由表现层的主动行为触发。
-       基调是"陪着"而不是"指挥"——不催促、不评判，只提醒。 */
+    /* Proactive care (v1.8.0): triggered by the presentation layer's own
+       initiative. The tone is company, not commands — no rushing, no judging,
+       only reminders. */
     proactive: Object.freeze({
       "long-work": [
-        "主人已经盯了很久了，眼睛要不要歇一会儿？👀",
-        "鲸鱼娘申请中场休息！哪怕只是伸个懒腰也好～",
-        "再敲下去尾巴都要打结了，主人起来喝口水吧💧",
-        "报告：主人已连续工作很久，鲸鱼娘建议起身活动三十秒",
-        "久坐伤身哦，鲸鱼娘先替你伸个懒腰示范一下🐋"
+        "You've been staring at that for a long time, Master. Should your eyes take a break?👀",
+        "Whale-chan requests a halftime break! Even just a stretch would do~",
+        "Keep typing and your tail would knot up. Get up for some water, Master💧",
+        "Report: Master has worked continuously for a long while. Whale-chan suggests standing up for thirty seconds",
+        "Sitting too long is bad for you. Whale-chan will demonstrate a stretch on your behalf🐋"
       ],
       "late-night": [
-        "很晚了主人，鲸鱼娘有点担心你的黑眼圈🌙",
-        "这个点还在写代码，明天的主人会恨今天的主人的……",
-        "深夜写的代码容易长 bug，要不要明天再战？",
-        "鲸鱼娘困得尾巴都垂下来了，主人也去睡吧😴",
-        "夜深了，再撑下去效率会掉的哦，去睡吧～"
+        "It's very late, Master. Whale-chan is a little worried about your dark circles🌙",
+        "Still writing code at this hour. Tomorrow's Master will resent today's Master...",
+        "Code written late at night grows bugs easily. Shall we fight again tomorrow?",
+        "Whale-chan is so sleepy her tail is drooping. Go to bed too, Master😴",
+        "It's late. Pushing on will tank your efficiency. Go to sleep~"
       ],
       stuck: [
-        "卡住了吗？要不要先去喝口水，回来可能就想通了💡",
-        "鲸鱼娘觉得……换个思路说不定就通了？",
-        "在同一个地方转圈圈好久了，主人要不要休息一下再回来🔄",
-        "要不要把问题念给鲸鱼娘听听？说出来有时候就想通了🐋"
+        "Stuck? Maybe get some water first, it might click when you come back💡",
+        "Whale-chan thinks... a different angle might crack it?",
+        "You've been circling the same spot for a while. Want to rest and come back to it🔄",
+        "Want to read the problem out loud to Whale-chan? Saying it sometimes makes it click🐋"
       ],
       "welcome-back": [
-        "主人回来啦！鲸鱼娘等到尾巴都摆酸了～",
-        "欢迎回来，主人不在的时候鲸鱼娘有乖乖看家哦🏠",
-        "哇主人回来了，快看看我有没有长高一点点🐋",
-        "你回来啦，鲸鱼娘的等待终于有回报了🥺"
+        "Master's back! Whale-chan waited until her tail ached~",
+        "Welcome back. Whale-chan guarded the place properly while you were gone🏠",
+        "Oh, Master's back. Look, did I grow a tiny bit taller🐋",
+        "You're back. Whale-chan's waiting finally paid off🥺"
       ]
     })
   });
@@ -1680,45 +1684,45 @@
   }
 
   var WEATHER_MAP = Object.freeze({
-    "0": Object.freeze({ emoji: "☀️", label: "晴", kind: "sunny" }),
-    "1": Object.freeze({ emoji: "🌤️", label: "大致晴朗", kind: "sunny" }),
-    "2": Object.freeze({ emoji: "⛅", label: "多云间晴", kind: "cloudy" }),
-    "3": Object.freeze({ emoji: "☁️", label: "阴", kind: "cloudy" }),
-    "45": Object.freeze({ emoji: "🌫️", label: "有雾", kind: "fog" }),
-    "48": Object.freeze({ emoji: "🌫️", label: "雾凇", kind: "fog" }),
-    "51": Object.freeze({ emoji: "🌦️", label: "毛毛雨", kind: "rain" }),
-    "53": Object.freeze({ emoji: "🌦️", label: "毛毛雨", kind: "rain" }),
-    "55": Object.freeze({ emoji: "🌧️", label: "小雨", kind: "rain" }),
-    "56": Object.freeze({ emoji: "🌧️", label: "冻毛毛雨", kind: "rain" }),
-    "57": Object.freeze({ emoji: "🌧️", label: "冻毛毛雨", kind: "rain" }),
-    "61": Object.freeze({ emoji: "🌧️", label: "小雨", kind: "rain" }),
-    "63": Object.freeze({ emoji: "🌧️", label: "中雨", kind: "rain" }),
-    "65": Object.freeze({ emoji: "🌧️", label: "大雨", kind: "rain" }),
-    "66": Object.freeze({ emoji: "🌧️", label: "冻雨", kind: "rain" }),
-    "67": Object.freeze({ emoji: "🌧️", label: "冻雨", kind: "rain" }),
-    "71": Object.freeze({ emoji: "🌨️", label: "小雪", kind: "snow" }),
-    "73": Object.freeze({ emoji: "🌨️", label: "中雪", kind: "snow" }),
-    "75": Object.freeze({ emoji: "❄️", label: "大雪", kind: "snow" }),
-    "77": Object.freeze({ emoji: "❄️", label: "雪粒", kind: "snow" }),
-    "80": Object.freeze({ emoji: "🌦️", label: "小阵雨", kind: "rain" }),
-    "81": Object.freeze({ emoji: "🌧️", label: "阵雨", kind: "rain" }),
-    "82": Object.freeze({ emoji: "⛈️", label: "强阵雨", kind: "rain" }),
-    "85": Object.freeze({ emoji: "🌨️", label: "阵雪", kind: "snow" }),
-    "86": Object.freeze({ emoji: "🌨️", label: "强阵雪", kind: "snow" }),
-    "95": Object.freeze({ emoji: "⛈️", label: "雷雨", kind: "thunder" }),
-    "96": Object.freeze({ emoji: "⛈️", label: "雷雨伴冰雹", kind: "thunder" }),
-    "99": Object.freeze({ emoji: "⛈️", label: "强雷暴", kind: "thunder" })
+    "0": Object.freeze({ emoji: "☀️", label: "Clear", kind: "sunny" }),
+    "1": Object.freeze({ emoji: "🌤️", label: "Mainly clear", kind: "sunny" }),
+    "2": Object.freeze({ emoji: "⛅", label: "Partly cloudy", kind: "cloudy" }),
+    "3": Object.freeze({ emoji: "☁️", label: "Overcast", kind: "cloudy" }),
+    "45": Object.freeze({ emoji: "🌫️", label: "Fog", kind: "fog" }),
+    "48": Object.freeze({ emoji: "🌫️", label: "Rime fog", kind: "fog" }),
+    "51": Object.freeze({ emoji: "🌦️", label: "Light drizzle", kind: "rain" }),
+    "53": Object.freeze({ emoji: "🌦️", label: "Drizzle", kind: "rain" }),
+    "55": Object.freeze({ emoji: "🌧️", label: "Dense drizzle", kind: "rain" }),
+    "56": Object.freeze({ emoji: "🌧️", label: "Freezing drizzle", kind: "rain" }),
+    "57": Object.freeze({ emoji: "🌧️", label: "Freezing drizzle", kind: "rain" }),
+    "61": Object.freeze({ emoji: "🌧️", label: "Light rain", kind: "rain" }),
+    "63": Object.freeze({ emoji: "🌧️", label: "Moderate rain", kind: "rain" }),
+    "65": Object.freeze({ emoji: "🌧️", label: "Heavy rain", kind: "rain" }),
+    "66": Object.freeze({ emoji: "🌧️", label: "Freezing rain", kind: "rain" }),
+    "67": Object.freeze({ emoji: "🌧️", label: "Freezing rain", kind: "rain" }),
+    "71": Object.freeze({ emoji: "🌨️", label: "Light snow", kind: "snow" }),
+    "73": Object.freeze({ emoji: "🌨️", label: "Moderate snow", kind: "snow" }),
+    "75": Object.freeze({ emoji: "❄️", label: "Heavy snow", kind: "snow" }),
+    "77": Object.freeze({ emoji: "❄️", label: "Snow grains", kind: "snow" }),
+    "80": Object.freeze({ emoji: "🌦️", label: "Light showers", kind: "rain" }),
+    "81": Object.freeze({ emoji: "🌧️", label: "Showers", kind: "rain" }),
+    "82": Object.freeze({ emoji: "⛈️", label: "Violent showers", kind: "rain" }),
+    "85": Object.freeze({ emoji: "🌨️", label: "Snow showers", kind: "snow" }),
+    "86": Object.freeze({ emoji: "🌨️", label: "Heavy snow showers", kind: "snow" }),
+    "95": Object.freeze({ emoji: "⛈️", label: "Thunderstorm", kind: "thunder" }),
+    "96": Object.freeze({ emoji: "⛈️", label: "Thunderstorm with hail", kind: "thunder" }),
+    "99": Object.freeze({ emoji: "⛈️", label: "Severe thunderstorm", kind: "thunder" })
   });
 
   function weatherText(code) {
-    return WEATHER_MAP[String(code)] || Object.freeze({ emoji: "🌈", label: "天气未知", kind: "unknown" });
+    return WEATHER_MAP[String(code)] || Object.freeze({ emoji: "🌈", label: "Unknown weather", kind: "unknown" });
   }
 
   /* ===== weather visual fx pure function (derives hot/cold/wind from temp/wind) ===== */
 
-  var FX_HOT_C = 30;    /* 炎热起点(℃) */
-  var FX_COLD_C = 0;    /* 结冰起点(℃) */
-  var FX_WIND_KMH = 39; /* 蒲福 6 级强风 */
+  var FX_HOT_C = 30;    /* heat threshold (°C) */
+  var FX_COLD_C = 0;    /* freezing threshold (°C) */
+  var FX_WIND_KMH = 39; /* Beaufort 6, strong wind */
 
   var FX_RAIN = Object.freeze({
     1: Object.freeze({ count: 40, speed: 520, length: 14, opacity: 0.30 }),
@@ -1828,12 +1832,12 @@
   }
 
   var TASK_TOPICS = Object.freeze([
-    Object.freeze({ id: "deploy", words: ["部署", "上线", "发布", "deploy", "release", "docker", "kubernetes", "k8s", "服务器", "nginx", "环境"] }),
-    Object.freeze({ id: "bug", words: ["报错", "error", "bug", "崩溃", "闪退", "异常", "修复", "fix", "调试", "debug", "失败", "warning", "警告"] }),
-    Object.freeze({ id: "data", words: ["数据", "表格", "excel", "csv", "json", "统计", "分析", "图表", "清洗", "数据库", "sql", "可视化"] }),
-    Object.freeze({ id: "code", words: ["代码", "函数", "变量", "class", "python", "javascript", "typescript", "react", "vue", "java", "golang", "rust", "算法", "接口", "api", "重构", "编译", "前端", "后端", "组件", "脚本", "npm", "git"] }),
-    Object.freeze({ id: "write", words: ["写一", "文案", "文章", "报告", "翻译", "润色", "总结", "邮件", "文档", "周报", "标题", "大纲"] }),
-    Object.freeze({ id: "research", words: ["调研", "搜索", "资料", "原理", "是什么", "为什么", "如何", "区别", "比较", "最新", "论文", "介绍一下", "有哪些"] })
+    Object.freeze({ id: "deploy", words: ["deploy", "ship it", "release", "rollout", "docker", "kubernetes", "k8s", "nginx", "go live", "production", "ci/cd"] }),
+    Object.freeze({ id: "bug", words: ["error", "bug", "crash", "exception", "fix", "debug", "failure", "warning", "broken", "stack trace", "traceback"] }),
+    Object.freeze({ id: "data", words: ["data", "table", "excel", "csv", "json", "statistics", "stats", "analysis", "chart", "clean", "database", "sql", "visualization", "dashboard"] }),
+    Object.freeze({ id: "code", words: ["code", "function", "variable", "class", "python", "javascript", "typescript", "react", "vue", "java", "golang", "rust", "algorithm", "interface", "api", "refactor", "compile", "frontend", "backend", "component", "script", "npm", "git"] }),
+    Object.freeze({ id: "write", words: ["write", "copy", "article", "report", "translation", "translate", "polish", "summarize", "summary", "email", "document", "docs", "weekly", "headline", "outline", "draft"] }),
+    Object.freeze({ id: "research", words: ["research", "search", "look up", "how does", "what is", "why does", "how to", "difference", "compare", "comparison", "latest", "paper", "explain", "introduce", "overview", "examples"] })
   ]);
 
   function classifyTask(text) {
