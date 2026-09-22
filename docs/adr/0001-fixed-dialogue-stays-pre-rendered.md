@@ -1,0 +1,3 @@
+# Fixed dialogue stays pre-rendered; live synthesis is for dynamic lines only
+
+We considered replacing the whole voice pipeline with live kokoro synthesis. Instead, fixed dialogue keeps its existing offline pre-render path (committed `.ogg` clips in `assets/voice/ja/`); the new kokoro-live sidecar only synthesizes dynamic lines (achievement text, nudges, etc.) that have no pre-rendered clip. Fixed dialogue is a curated, finite, already-built asset set with zero playback latency — going fully live would trade that away for no benefit, plus added latency and a new failure mode on every single line.
