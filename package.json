@@ -22,6 +22,7 @@
     "cordis.patch.yml"
   ],
   "scripts": {
+    "dev": "dsh web --patch cordis.local.yml --port 3081",
     "test": "node --test test/*test.mjs",
     "qa": "node test/motion-qa.mjs && node test/cdp-whale-moe.mjs",
     "qa:soak": "node test/soak-work.mjs",

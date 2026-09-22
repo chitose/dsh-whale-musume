@@ -7,6 +7,15 @@
 
 ## Making changes and verifying them
 
+0. To boot a dev DSH instance that loads this plugin straight from your working tree (no packaging/reinstall step), create a `cordis.local.yml` at the repo root pointing at `lib/index.js`:
+
+   ```yaml
+   insert:
+     - id: my-plugin
+       name: 'file:///C:/path/to/dsh-whale-musume/lib/index.js'
+   ```
+
+   This file is personal/untracked (gitignored), since the path is machine-specific. Then run `npm run dev` (`dsh web --patch cordis.local.yml`). Asset edits (`assets/*.js`/`.css`) just need a browser hard-refresh (`Ctrl+F5`); changes to `lib/index.js`/`lib/client.js` need `npm run dev` restarted.
 1. Edit the files under `assets/` (the state machine lives in `whale-moe-core.js`, the presentation layer in `dsh-whale-moe.js`, and the styles in `dsh-whale-moe.css`).
 2. After syncing the assets to the copy, run:
 

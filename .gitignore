@@ -19,3 +19,4 @@ Thumbs.db
 .voice-preview/
 __pycache__/
 *.pyc
+cordis.local.yml
