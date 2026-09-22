@@ -665,3 +665,87 @@ body[data-dsh-whale-night]::after {
   [data-dsh-whale-cell][data-dsh-whale-bubble-kind="bomb"] { background: ButtonFace; border: 2px solid CanvasText; }
   [data-dsh-whale-game-overlay] { background: Canvas; }
 }
+
+/* ===== dialog line manager (Manage Dialog…) ===== */
+[data-dsh-whale-dialog-manager] {
+  position: fixed;
+  inset: 0;
+  /* Opened from inside the DSH Settings panel, whose own z-index scale we
+     don't control — go as high as CSS allows so it's always on top. */
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 45%);
+}
+[data-dsh-whale-dialog-manager][hidden] { display: none; }
+[data-dsh-whale-dialog-panel] {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(560px, 92vw);
+  max-height: 82vh;
+  padding: 16px;
+  overflow-y: auto;
+  color: var(--dsw-alias-label-primary, #1a1a1a);
+  background: var(--dsw-alias-bg-overlay, #fff);
+  border: 1px solid var(--dsw-alias-border-l3, rgb(0 0 0 / 18%));
+  border-radius: 16px;
+  box-shadow: 0 14px 34px rgb(0 0 0 / 26%);
+}
+[data-dsh-whale-dialog-panel] > button {
+  align-self: flex-end;
+  padding: 6px 14px;
+  color: var(--dsw-alias-label-primary, #1a1a1a);
+  background: var(--dsw-alias-bg-layer-2, #f3f3f3);
+  border: 1px solid var(--dsw-alias-border-l2, rgb(0 0 0 / 12%));
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+[data-dsh-whale-dialog-section] {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--dsw-alias-border-l2, rgb(0 0 0 / 10%));
+}
+[data-dsh-whale-dialog-section] h4 {
+  margin: 0;
+  color: var(--dsw-alias-label-secondary, #666);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+[data-dsh-whale-dialog-row] {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+[data-dsh-whale-dialog-row] textarea {
+  flex: 1;
+  min-height: 34px;
+  padding: 6px 8px;
+  color: inherit;
+  background: var(--dsw-alias-bg-layer-2, #f3f3f3);
+  border: 1px solid var(--dsw-alias-border-l2, rgb(0 0 0 / 12%));
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  resize: vertical;
+}
+[data-dsh-whale-dialog-row] input[type="checkbox"] {
+  margin-top: 9px;
+  flex: none;
+}
+[data-dsh-whale-dialog-row] button {
+  flex: none;
+  padding: 6px 10px;
+  color: var(--dsw-alias-label-primary, #1a1a1a);
+  background: var(--dsw-alias-bg-layer-2, #f3f3f3);
+  border: 1px solid var(--dsw-alias-border-l2, rgb(0 0 0 / 12%));
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}

@@ -3335,6 +3335,7 @@
   root.__dshWhaleMoeIdleChat = idleChat;
   root.__dshWhaleMoeClaimQuest = claimQuestById;
   root.__dshWhaleMoeApplyBadge = applyBadge;
+  root.__dshWhaleMoeOpenDialogManager = openDialogManager;
 
   function onUserActivity() {
     memory.lastInteractionAt = Date.now();
