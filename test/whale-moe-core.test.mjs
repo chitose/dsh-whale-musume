@@ -149,6 +149,23 @@ test("pickDialogueAvoidRecent avoids recent lines", () => {
   assert.equal(pick, "Morning~ Get up or I'll drink all your coffee☕");
 });
 
+test("resolveLines: mutes are dropped, edited text is substituted, untouched lines pass through", () => {
+  const lines = ["a", "b", "c"];
+  const overrides = { "idle:1": { muted: true }, "idle:2": { text: "c-edited" } };
+  assert.deepEqual(core.resolveLines(lines, "idle", overrides), ["a", "c-edited"]);
+});
+
+test("resolveLines is a no-op without overrides", () => {
+  const lines = ["a", "b"];
+  assert.deepEqual(core.resolveLines(lines, "idle", null), lines);
+});
+
+test("pickDialogue honors mute/edit overrides", () => {
+  const overrides = { "daily.holiday:0": { muted: true } };
+  const line = core.pickDialogue("daily", "holiday", 0, () => 0, overrides);
+  assert.notEqual(line, core.DIALOGUE.daily.holiday[0]);
+});
+
 test("meme keyword groups match and have lines", () => {
   assert.equal(core.matchKeyword("I'm a grinder", true), "worker");
   assert.equal(core.matchKeyword("slacking off all day", true), "slack");

@@ -54,6 +54,29 @@
     try { root.localStorage.setItem("whale-moe:" + key, value ? "1" : "0"); } catch (e) { /* storage unavailable */ }
   }
 
+  /* Per-line mute/edit overrides from the "Manage Dialog" settings UI, keyed
+     by the same "<state>:<index>" / "<bank>.<event>:<index>" ids core.js
+     expects. See core.resolveLines. */
+  var DIALOG_OVERRIDES_KEY = "whale-moe:dialogOverrides";
+  function readDialogOverrides() {
+    try {
+      var raw = root.localStorage.getItem(DIALOG_OVERRIDES_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+  function writeDialogOverrides(overrides) {
+    try { root.localStorage.setItem(DIALOG_OVERRIDES_KEY, JSON.stringify(overrides)); } catch (e) { /* storage unavailable */ }
+  }
+
+  var corePickDialogue = core.pickDialogue;
+  var corePickDialogueAvoidRecent = core.pickDialogueAvoidRecent;
+  function pickDialogue(bank, event, counter, rng) {
+    return corePickDialogue(bank, event, counter, rng, readDialogOverrides());
+  }
+  function pickDialogueAvoidRecent(bank, event, counter, rng, recent) {
+    return corePickDialogueAvoidRecent(bank, event, counter, rng, recent, readDialogOverrides());
+  }
+
   var MODES = Object.freeze({ auto: 1, bar: 1, side: 1, float: 1, mini: 1 });
   function readMode() {
     try {
@@ -159,6 +182,112 @@
       reconcile();
     });
     return btn;
+  }
+
+  function createManageDialogButton() {
+    var btn = doc.createElement("button");
+    btn.type = "button";
+    btn.setAttribute("data-dsh-whale-manage-dialog", "true");
+    btn.textContent = "Manage Dialog…";
+    btn.addEventListener("click", function (event) {
+      event.stopPropagation();
+      openDialogManager();
+    });
+    return btn;
+  }
+
+  /* Dialog-management modal: view/mute/edit every fixed LINES/DIALOGUE entry.
+     Overrides are keyed "<state>:<index>" / "<bank>.<event>:<index>", matching
+     core.resolveLines. Built lazily on first open, then just unhidden. */
+  function commitDialogOverride(id, originalText, muted, text) {
+    var overrides = readDialogOverrides();
+    var entry = {};
+    if (muted) entry.muted = true;
+    if (text !== originalText) entry.text = text;
+    if (entry.muted || entry.text !== undefined) overrides[id] = entry;
+    else delete overrides[id];
+    writeDialogOverrides(overrides);
+  }
+
+  function buildDialogRow(id, originalText) {
+    var overrides = readDialogOverrides();
+    var override = overrides[id] || {};
+    var row = doc.createElement("div");
+    row.setAttribute("data-dsh-whale-dialog-row", "true");
+
+    var mute = doc.createElement("input");
+    mute.type = "checkbox";
+    mute.checked = !!override.muted;
+    mute.setAttribute("aria-label", "Mute this line");
+
+    var input = doc.createElement("textarea");
+    input.rows = 1;
+    input.value = typeof override.text === "string" ? override.text : originalText;
+
+    var reset = doc.createElement("button");
+    reset.type = "button";
+    reset.textContent = "Reset";
+
+    function commit() { commitDialogOverride(id, originalText, mute.checked, input.value); }
+    mute.addEventListener("change", commit);
+    input.addEventListener("change", commit);
+    reset.addEventListener("click", function () {
+      mute.checked = false;
+      input.value = originalText;
+      commitDialogOverride(id, originalText, false, originalText);
+    });
+
+    row.appendChild(mute);
+    row.appendChild(input);
+    row.appendChild(reset);
+    return row;
+  }
+
+  function buildDialogSection(title, idPrefix, lines) {
+    var section = doc.createElement("section");
+    section.setAttribute("data-dsh-whale-dialog-section", "true");
+    var heading = doc.createElement("h4");
+    heading.textContent = title;
+    section.appendChild(heading);
+    for (var i = 0; i < lines.length; i += 1) section.appendChild(buildDialogRow(idPrefix + ":" + i, lines[i]));
+    return section;
+  }
+
+  function openDialogManager() {
+    var existing = doc.querySelector("[data-dsh-whale-dialog-manager]");
+    if (existing) { existing.hidden = false; return; }
+
+    var overlay = doc.createElement("div");
+    overlay.setAttribute("data-dsh-whale-dialog-manager", "true");
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-label", "Manage dialog lines");
+    overlay.addEventListener("click", function (event) {
+      if (event.target === overlay) overlay.hidden = true;
+    });
+
+    var panel = doc.createElement("div");
+    panel.setAttribute("data-dsh-whale-dialog-panel", "true");
+
+    var close = doc.createElement("button");
+    close.type = "button";
+    close.textContent = "Close";
+    close.addEventListener("click", function () { overlay.hidden = true; });
+    panel.appendChild(close);
+
+    var states = Object.keys(core.LINES);
+    for (var i = 0; i < states.length; i += 1) panel.appendChild(buildDialogSection(states[i], states[i], core.LINES[states[i]]));
+
+    var banks = Object.keys(core.DIALOGUE);
+    for (var b = 0; b < banks.length; b += 1) {
+      var events = Object.keys(core.DIALOGUE[banks[b]]);
+      for (var e = 0; e < events.length; e += 1) {
+        var prefix = banks[b] + "." + events[e];
+        panel.appendChild(buildDialogSection(prefix, prefix, core.DIALOGUE[banks[b]][events[e]]));
+      }
+    }
+
+    overlay.appendChild(panel);
+    doc.body.appendChild(overlay);
   }
 
   var layerState = { active: "a", loaded: { a: "", b: "" }, gen: 0, pendingSwap: "", pendingSince: 0 };
@@ -411,6 +540,7 @@
     menu.setAttribute("data-dsh-whale-prefs", "true");
     menu.hidden = true;
     for (var i = 0; i < PREFS.length; i += 1) menu.appendChild(createToggleButton(PREFS[i].label, PREFS[i].key));
+    menu.appendChild(createManageDialogButton());
 
     rootNode.appendChild(frame);
     applyA11y(frame);
@@ -1465,13 +1595,13 @@
     if (!readPref("chat")) return "";
     dialogueCounters[bank] = dialogueCounters[bank] || {};
     dialogueCounters[bank][event] = (dialogueCounters[bank][event] || 0) + 1;
-    var line = core.pickDialogue(bank, event, dialogueCounters[bank][event], Math.random);
+    var line = pickDialogue(bank, event, dialogueCounters[bank][event], Math.random);
     if (growth && (bank === "interact" || bank === "work")) {
       var tier = core.moodTier(growth.mood);
       if (tier === "low" && Math.random() < 0.15) {
-        line = core.pickDialogue("bond", "low-mood", dialogueCounters[bank][event], Math.random);
+        line = pickDialogue("bond", "low-mood", dialogueCounters[bank][event], Math.random);
       } else if (tier === "high" && Math.random() < 0.15) {
-        line = core.pickDialogue("bond", "high-mood", dialogueCounters[bank][event], Math.random);
+        line = pickDialogue("bond", "high-mood", dialogueCounters[bank][event], Math.random);
       }
     }
     return line;
@@ -1531,7 +1661,7 @@
     burst("🎯");
     if (!BUSY_STATES[memory.state.state]) showMood("daily-done", 3200, true);
     if (!BUSY_STATES[memory.state.state] && readPref("chat") && bubbleFree()) {
-      showChatLine(core.pickDialogue("daily", "signin", 0, Math.random));
+      showChatLine(pickDialogue("daily", "signin", 0, Math.random));
     }
     root.dispatchEvent(new CustomEvent("whale-moe-prefs-change", { detail: { key: "quests", value: 1 } }));
     return true;
@@ -1566,7 +1696,7 @@
     } catch (e) { /* ignore */ }
     if (!BUSY_STATES[memory.state.state]) showMood(pose, 7000, true);
     if (readPref("chat")) {
-      var line = core.pickDialogue("daily", "holiday", 0, Math.random);
+      var line = pickDialogue("daily", "holiday", 0, Math.random);
       if (line) showChatLine(line);
     }
   }
@@ -2278,7 +2408,7 @@
       memory.viewChangedAt = now;
     }
     var signals = holdSignals(collectSignals(), now);
-    var computed = core.computeState(memory.state, signals, now, Math.random);
+    var computed = core.computeState(memory.state, signals, now, Math.random, readDialogOverrides());
     render(computed);
     weatherFxReconcile(computed);
     if (readPref("pet")) idleChatTick(now);
@@ -2474,7 +2604,7 @@
   function weatherLine(now, counter) {
     var summary = weatherSummary();
     if (!summary) return "";
-    var line = core.pickDialogueAvoidRecent("weather", summary.kind, counter || 0, Math.random, recentLines);
+    var line = pickDialogueAvoidRecent("weather", summary.kind, counter || 0, Math.random, recentLines);
     if (!line) return "";
     var tail = " · now " + Math.round(summary.temp) + "°C " + summary.label;
     return line + tail;
@@ -2845,7 +2975,7 @@
     if (tier === "unknown") return false;
     var gap = (tier === "good" || tier === "rich") ? BALANCE_CALM_ANNOUNCE_MS : BALANCE_ANNOUNCE_MS;
     if (now - balanceState.announcedAt < gap) return false;
-    var line = core.pickDialogue("balance", tier, 0, Math.random);
+    var line = pickDialogue("balance", tier, 0, Math.random);
     if (!line) return false;
     balanceState.announcedAt = now;
     showChatLine(line);
@@ -2951,7 +3081,7 @@
     if (!proactiveEnabled()) return false;
     if (now - proactiveState.lastAt < PROACTIVE.minGapMs) return false;
     if (memory.state.state !== "idle" || !bubbleFree()) return false;
-    var line = core.pickDialogue("proactive", kind, 0, Math.random);
+    var line = pickDialogue("proactive", kind, 0, Math.random);
     if (!line) return false;
     proactiveState.lastAt = now;
     proactiveState.lastKind = kind;
@@ -3142,7 +3272,7 @@
     if (bucket === "night") return false;
     idleChat.lastGreetAt = now;
     idleChat.lastGreetBucket = bucket;
-    var line = core.pickDialogueAvoidRecent("greet", bucket, 0, Math.random, recentLines);
+    var line = pickDialogueAvoidRecent("greet", bucket, 0, Math.random, recentLines);
     var summary = weatherSummary();
     if (line && summary) line += " · now " + Math.round(summary.temp) + "°C " + summary.label;
     showChatLine(line);
@@ -3159,7 +3289,7 @@
     var line = "";
     var bucket = core.greetBucket(new Date(now).getHours());
     if (now - idleChat.lastGreetAt >= GREET_GAP_MS && bucket !== "night") {
-      line = core.pickDialogueAvoidRecent("greet", bucket, 0, Math.random, recentLines);
+      line = pickDialogueAvoidRecent("greet", bucket, 0, Math.random, recentLines);
       idleChat.lastGreetAt = now;
       idleChat.lastGreetBucket = bucket;
     } else if (city) {
@@ -3186,18 +3316,18 @@
     }
     if (!line) {
       var topic = latestTaskTopic();
-      line = core.pickDialogueAvoidRecent("context", topic, 0, Math.random, recentLines);
+      line = pickDialogueAvoidRecent("context", topic, 0, Math.random, recentLines);
     }
     if (!line && growth && growth.level >= 3 && Math.random() < 0.25) {
       var tier = core.moodTier(growth.mood);
       var bondEvent = growth.level >= 7 ? "l7" : (growth.level >= 5 ? "l5" : "l3");
       if (tier === "low") bondEvent = "low-mood";
       else if (tier === "high" && Math.random() < 0.5) bondEvent = "high-mood";
-      line = core.pickDialogueAvoidRecent("bond", bondEvent, 0, Math.random, recentLines);
+      line = pickDialogueAvoidRecent("bond", bondEvent, 0, Math.random, recentLines);
     }
     if (!line) {
       var memeBank = Math.random() < 0.5 ? "worker" : (Math.random() < 0.5 ? "slack" : "ddl");
-      line = core.pickDialogueAvoidRecent("meme", memeBank, 0, Math.random, recentLines);
+      line = pickDialogueAvoidRecent("meme", memeBank, 0, Math.random, recentLines);
     }
     if (line) showChatLine(line);
   }

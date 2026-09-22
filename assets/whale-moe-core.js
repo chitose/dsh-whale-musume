@@ -114,8 +114,22 @@
     ]
   });
 
-  function pickLine(state, lineCount) {
-    var lines = LINES[state] || [];
+  /* Applies user overrides (mute / edited text) from the dialog-management
+     settings UI. idPrefix + array index is the override key, since LINES/
+     DIALOGUE entries have no id of their own. */
+  function resolveLines(lines, idPrefix, overrides) {
+    if (!overrides) return lines;
+    var out = [];
+    for (var i = 0; i < lines.length; i += 1) {
+      var o = overrides[idPrefix + ":" + i];
+      if (o && o.muted) continue;
+      out.push(o && typeof o.text === "string" ? o.text : lines[i]);
+    }
+    return out;
+  }
+
+  function pickLine(state, lineCount, overrides) {
+    var lines = resolveLines(LINES[state] || [], state, overrides);
     if (lines.length === 0) return "";
     return lines[Math.abs(lineCount | 0) % lines.length];
   }
@@ -217,7 +231,7 @@
    * > curious(window) > waiting > afk/idle. Afk is evaluated after errors
    * and tools so real work never gets covered by the nap state.
    */
-  function computeState(prev, signals, now, rng) {
+  function computeState(prev, signals, now, rng, overrides) {
     var p = base(prev);
     var t = typeof now === "number" && Number.isFinite(now) ? now : 0;
     var s = signals && typeof signals === "object" ? signals : {};
@@ -245,7 +259,7 @@
     return {
       state: state,
       pose: POSES[state] || null,
-      line: speak ? pickLine(state, lineCount) : "",
+      line: speak ? pickLine(state, lineCount, overrides) : "",
       speak: speak,
       at: t,
       since: changed ? t : p.since,
@@ -1852,16 +1866,16 @@
     return "general";
   }
 
-  function pickDialogue(bank, event, counter, rng) {
-    var lines = DIALOGUE[bank] && DIALOGUE[bank][event];
-    if (!lines || lines.length === 0) return "";
+  function pickDialogue(bank, event, counter, rng, overrides) {
+    var lines = resolveLines((DIALOGUE[bank] && DIALOGUE[bank][event]) || [], bank + "." + event, overrides);
+    if (lines.length === 0) return "";
     var r = typeof rng === "function" ? rng() : Math.random();
     return lines[(Math.abs(counter | 0) + Math.floor(r * 97)) % lines.length];
   }
 
-  function pickDialogueAvoidRecent(bank, event, counter, rng, recent) {
-    var lines = DIALOGUE[bank] && DIALOGUE[bank][event];
-    if (!lines || lines.length === 0) return "";
+  function pickDialogueAvoidRecent(bank, event, counter, rng, recent, overrides) {
+    var lines = resolveLines((DIALOGUE[bank] && DIALOGUE[bank][event]) || [], bank + "." + event, overrides);
+    if (lines.length === 0) return "";
     var recentSet = Array.isArray(recent) ? recent : [];
     var candidates = [];
     for (var i = 0; i < lines.length; i += 1) {
@@ -1881,6 +1895,7 @@
     TEASE_CHANCE: TEASE_CHANCE,
     POSES: POSES,
     LINES: LINES,
+    resolveLines: resolveLines,
     applyNames: applyNames,
     pickBalanceAccount: pickBalanceAccount,
     balanceTier: balanceTier,
