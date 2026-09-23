@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Whale-chan JP voice pilot — step 2 of 2.
+"""Umika JP voice pilot — step 2 of 2.
 
 Renders every line in .voice-preview/pilot.json with every requested Japanese
 voice using kokoro-onnx, and reports what the model actually saw.
@@ -148,7 +148,7 @@ def write_index(preview, job, manifest):
     page = f"""<!doctype html>
 <html lang="en">
 <meta charset="utf-8">
-<title>Whale-chan JP voice pilot</title>
+<title>Umika JP voice pilot</title>
 <style>
   body {{ font: 15px/1.6 system-ui, sans-serif; margin: 2rem auto; max-width: 60rem; color: #12314a; }}
   h1 {{ font-size: 1.4rem; }}
@@ -162,7 +162,7 @@ def write_index(preview, job, manifest):
   figcaption {{ font-size: .72rem; color: #6b8199; }}
   audio {{ height: 32px; }}
 </style>
-<h1>Whale-chan JP voice pilot — {len(job["items"])} lines × {len(variants)} variants × {len(voices)} voices</h1>
+<h1>Umika JP voice pilot — {len(job["items"])} lines × {len(variants)} variants × {len(voices)} voices</h1>
 <p>Approve a voice here, then the full 612-line library can be rendered the same way.
 <strong>clean</strong> = pitch markers removed, every phoneme accepted by the {manifest["vocabSize"]}-token vocabulary.
 <strong>raw</strong> = misaki's verbatim output, the way the upstream example feeds it.</p>
@@ -184,7 +184,7 @@ def main():
 
     onnxruntime.set_default_logger_severity(3)
 
-    parser = argparse.ArgumentParser(description="Render the Whale-chan JP voice pilot")
+    parser = argparse.ArgumentParser(description="Render the Umika JP voice pilot")
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     preview = os.path.join(root, ".voice-preview")
     parser.add_argument("--job", default=os.path.join(preview, "pilot.json"))

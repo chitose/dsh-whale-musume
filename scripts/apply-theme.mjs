@@ -16,7 +16,7 @@ const DEFAULT_TARGET = process.env.DSH_INSTALL_DIR || "DeepSeekHarness";
 const BACKUP_ROOT = process.env.DSH_WHALE_BACKUP || path.join(os.tmpdir(), "dsh-whale-moe-backup");
 const MARKER = "DSH-WHALE-MOE-THEME v1";
 const PACK_ID = "whale-moe";
-const LABEL = "Whale-chan · Ocean Dessert Workshop";
+const LABEL = "Umika · Ocean Dessert Workshop";
 
 const REL = {
   indexHtml: "node_modules/@deepseek-ai/dsh-web-frontend/dist/index.html",
@@ -265,10 +265,10 @@ export function untheme(target = DEFAULT_TARGET, options = {}) {
   return backupDir;
 }
 
-/* ---- mascot settings section: Whale-chan (mascot) ---- */
+/* ---- mascot settings section: Umika (mascot) ---- */
 
-const MASCOT_SETTINGS_MARKER = "DSH-WHALE-MOE:MASCOT-SETTINGS v28";
-const MASCOT_SETTINGS_LEGACY = ["DSH-WHALE-MOE:MASCOT-SETTINGS v1", "DSH-WHALE-MOE:MASCOT-SETTINGS v2", "DSH-WHALE-MOE:MASCOT-SETTINGS v3", "DSH-WHALE-MOE:MASCOT-SETTINGS v4", "DSH-WHALE-MOE:MASCOT-SETTINGS v5", "DSH-WHALE-MOE:MASCOT-SETTINGS v6", "DSH-WHALE-MOE:MASCOT-SETTINGS v7", "DSH-WHALE-MOE:MASCOT-SETTINGS v8", "DSH-WHALE-MOE:MASCOT-SETTINGS v9", "DSH-WHALE-MOE:MASCOT-SETTINGS v10", "DSH-WHALE-MOE:MASCOT-SETTINGS v11", "DSH-WHALE-MOE:MASCOT-SETTINGS v12", "DSH-WHALE-MOE:MASCOT-SETTINGS v13", "DSH-WHALE-MOE:MASCOT-SETTINGS v14", "DSH-WHALE-MOE:MASCOT-SETTINGS v15", "DSH-WHALE-MOE:MASCOT-SETTINGS v16", "DSH-WHALE-MOE:MASCOT-SETTINGS v17", "DSH-WHALE-MOE:MASCOT-SETTINGS v18", "DSH-WHALE-MOE:MASCOT-SETTINGS v19", "DSH-WHALE-MOE:MASCOT-SETTINGS v20", "DSH-WHALE-MOE:MASCOT-SETTINGS v21", "DSH-WHALE-MOE:MASCOT-SETTINGS v22", "DSH-WHALE-MOE:MASCOT-SETTINGS v23", "DSH-WHALE-MOE:MASCOT-SETTINGS v24", "DSH-WHALE-MOE:MASCOT-SETTINGS v25", "DSH-WHALE-MOE:MASCOT-SETTINGS v26", "DSH-WHALE-MOE:MASCOT-SETTINGS v27"];
+const MASCOT_SETTINGS_MARKER = "DSH-WHALE-MOE:MASCOT-SETTINGS v29";
+const MASCOT_SETTINGS_LEGACY = ["DSH-WHALE-MOE:MASCOT-SETTINGS v1", "DSH-WHALE-MOE:MASCOT-SETTINGS v2", "DSH-WHALE-MOE:MASCOT-SETTINGS v3", "DSH-WHALE-MOE:MASCOT-SETTINGS v4", "DSH-WHALE-MOE:MASCOT-SETTINGS v5", "DSH-WHALE-MOE:MASCOT-SETTINGS v6", "DSH-WHALE-MOE:MASCOT-SETTINGS v7", "DSH-WHALE-MOE:MASCOT-SETTINGS v8", "DSH-WHALE-MOE:MASCOT-SETTINGS v9", "DSH-WHALE-MOE:MASCOT-SETTINGS v10", "DSH-WHALE-MOE:MASCOT-SETTINGS v11", "DSH-WHALE-MOE:MASCOT-SETTINGS v12", "DSH-WHALE-MOE:MASCOT-SETTINGS v13", "DSH-WHALE-MOE:MASCOT-SETTINGS v14", "DSH-WHALE-MOE:MASCOT-SETTINGS v15", "DSH-WHALE-MOE:MASCOT-SETTINGS v16", "DSH-WHALE-MOE:MASCOT-SETTINGS v17", "DSH-WHALE-MOE:MASCOT-SETTINGS v18", "DSH-WHALE-MOE:MASCOT-SETTINGS v19", "DSH-WHALE-MOE:MASCOT-SETTINGS v20", "DSH-WHALE-MOE:MASCOT-SETTINGS v21", "DSH-WHALE-MOE:MASCOT-SETTINGS v22", "DSH-WHALE-MOE:MASCOT-SETTINGS v23", "DSH-WHALE-MOE:MASCOT-SETTINGS v24", "DSH-WHALE-MOE:MASCOT-SETTINGS v25", "DSH-WHALE-MOE:MASCOT-SETTINGS v26", "DSH-WHALE-MOE:MASCOT-SETTINGS v27", "DSH-WHALE-MOE:MASCOT-SETTINGS v28"];
 const MASCOT_SETTINGS_ANCHOR = "}, ThemePackRow));";
 
 function mascotBlock(marker) {
@@ -357,11 +357,11 @@ function mascotBlock(marker) {
 			return (0, react_jsx_runtime.jsxs)("label", { style: MASCOT_ROW_STYLE, children: [(0, react_jsx_runtime.jsx)("span", { children: label }), (0, react_jsx_runtime.jsx)("span", { children: String(value) + (suffix || "") })] });
 		}
 		const MASCOT_ACHIEVEMENTS = [
-			["first-pat", "🫳", "First Headpat", "Pat Whale-chan's head for the first time"], ["ten-pats", "🖐️", "Ten Pats", "Reach 10 headpats in total"], ["hundred-pats", "💯", "Hundred Pats", "Reach 100 headpats in total"],
-			["first-feed", "🍰", "First Snack", "Feed her a snack for the first time"], ["first-triple", "🎉", "Triple Tap", "Trigger the heart-hands easter egg"], ["thanks", "💬", "Sweet Talker", "Say thank you to Whale-chan"],
+			["first-pat", "🫳", "First Headpat", "Pat Umika's head for the first time"], ["ten-pats", "🖐️", "Ten Pats", "Reach 10 headpats in total"], ["hundred-pats", "💯", "Hundred Pats", "Reach 100 headpats in total"],
+			["first-feed", "🍰", "First Snack", "Feed her a snack for the first time"], ["first-triple", "🎉", "Triple Tap", "Trigger the heart-hands easter egg"], ["thanks", "💬", "Sweet Talker", "Say thank you to Umika"],
 			["lv5", "⭐", "Level Five", "Reach bond level 5"], ["lv10", "👑", "Level Ten", "Reach bond level 10"], ["signin3", "📅", "Regular", "Check in 3 days in a row"],
 			["signin7", "🗓️", "Week Promise", "Check in 7 days in a row"], ["night-owl", "🌙", "Late-night Company", "Interact once between 22:00 and 6:00"], ["comeback", "👋", "Welcome Back", "Come back after being away 2+ hours"],
-			["day1", "💞", "One Day Bond", "Whale-chan has kept you company for 1 day"], ["day7", "💎", "One Week Together", "Whale-chan has kept you company for 7 days"], ["day30", "🏛️", "Thirty-day Pact", "Whale-chan has kept you company for 30 days"],
+			["day1", "💞", "One Day Bond", "Umika has kept you company for 1 day"], ["day7", "💎", "One Week Together", "Umika has kept you company for 7 days"], ["day30", "🏛️", "Thirty-day Pact", "Umika has kept you company for 30 days"],
 			["first-tool", "🛠️", "Clock In", "See a tool run for the first time"], ["tools-10", "🔧", "Ten Tools", "See tools run 10 times"], ["tools-50", "🏭", "Fifty Tools", "See tools run 50 times"], ["tools-100", "🛰️", "Hundred Tools", "See tools run 100 times"],
 			["first-code", "💻", "First Code", "See a code block/terminal for the first time"], ["code-20", "📟", "Code Maniac", "See 20 code blocks/terminals in total"], ["first-success", "✅", "Off to a Flyer", "Complete a task for the first time"],
 			["success-10", "🏆", "Ten Wins", "Complete 10 tasks in total"], ["first-failure", "🩹", "First Crash", "Hit a task error for the first time"], ["fail-10", "🚑", "Ten Crashes", "Hit 10 task errors in total"],
@@ -415,9 +415,9 @@ function mascotBlock(marker) {
 		}
 		function MascotSwitchGrid() {
 			const rows = [
-				{ label: "Whale-chan", prefKey: "pet" },
+				{ label: "Umika", prefKey: "pet" },
 				{ label: "Dialogue bubbles", prefKey: "chat" },
-				{ label: "Japanese voice", prefKey: "voiceJa" },
+				{ label: "Voice", prefKey: "voiceJa" },
 				{ label: "Particles", prefKey: "particles" },
 				{ label: "Mini games", prefKey: "game" },
 				{ label: "Keyword awareness", prefKey: "keywords" },
@@ -426,6 +426,18 @@ function mascotBlock(marker) {
 				{ label: "Weather effects", prefKey: "weatherFx" }
 			];
 			return (0, react_jsx_runtime.jsx)("div", { style: { display: "grid", gap: "2px 14px", gridTemplateColumns: "1fr 1fr", padding: "2px 0 8px", width: "100%" }, children: rows.map((r) => (0, react_jsx_runtime.jsx)(MascotPrefRow, { key: r.prefKey, label: r.label, prefKey: r.prefKey, compact: true })) });
+		}
+		function MascotLanguageRow() {
+			const [language, setLanguage] = mascotReact.useState(MascotValue("voiceLanguage", "ja"));
+			return (0, react_jsx_runtime.jsxs)("label", { style: MASCOT_ROW_STYLE, children: [
+				(0, react_jsx_runtime.jsx)("span", { children: "Dialogue language" }),
+				(0, react_jsx_runtime.jsxs)("select", { value: language, onChange: (event) => {
+					const value = event.target.value;
+					setLanguage(value);
+					try { window.localStorage.setItem("whale-moe:voiceLanguage", value); } catch (e) {}
+					window.dispatchEvent(new CustomEvent("whale-moe-prefs-change", { detail: { key: "voiceLanguage", value } }));
+				}, children: [(0, react_jsx_runtime.jsx)("option", { value: "ja", children: "Japanese" }), (0, react_jsx_runtime.jsx)("option", { value: "en", children: "English" })] })
+			] });
 		}
 		function MascotDailyQuests() {
 			const [tick, setTick] = mascotReact.useState(0);
@@ -538,7 +550,7 @@ function mascotBlock(marker) {
 		function MascotPrefRows() {
 			return (0, react_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", width: "100%" }, children: [
 				(0, react_jsx_runtime.jsx)(MascotOverviewCard, {}),
-				(0, react_jsx_runtime.jsxs)(MascotAccordion, { title: "Companion behaviour", icon: "🎛️", summary: "How Whale-chan appears and talks", defaultOpen: true, children: [(0, react_jsx_runtime.jsx)(MascotSwitchGrid, {})] }),
+				(0, react_jsx_runtime.jsxs)(MascotAccordion, { title: "Companion behaviour", icon: "🎛️", summary: "How Umika appears and talks", defaultOpen: true, children: [(0, react_jsx_runtime.jsx)(MascotSwitchGrid, {}), (0, react_jsx_runtime.jsx)(MascotLanguageRow, {})] }),
 				(0, react_jsx_runtime.jsx)(MascotAccordion, { title: "Weather", icon: "⛅", summary: "City and weather effects", defaultOpen: false, children: [(0, react_jsx_runtime.jsx)(MascotWeatherRow, {}), (0, react_jsx_runtime.jsx)("span", { style: { color: "var(--dsw-alias-label-secondary)", fontSize: "11px", lineHeight: "15px", padding: "0 0 6px" }, children: "Effects only show once a city is set and the weather data is fresh; they ease off while you are working and thunder flashes stop." })] }),
 				(0, react_jsx_runtime.jsx)(MascotDailyCard, {}),
 				(0, react_jsx_runtime.jsx)(MascotAccordion, { title: "Achievement wall", icon: "🏅", summary: "Unlocked " + MascotValue("achievements", "").split(",").filter(Boolean).length + " / " + MASCOT_ACHIEVEMENTS.length, defaultOpen: false, children: [(0, react_jsx_runtime.jsx)(MascotAchievementRow, {})] }),
@@ -564,7 +576,7 @@ export function patchMascotClient(source) {
     throw new Error(
       "--mascot-settings cannot patch this DSH build: it has no theme-pack settings slot " +
         `(anchor ${JSON.stringify(MASCOT_SETTINGS_ANCHOR)} not found in ${REL.themeClient}).\n` +
-        "  Whale-chan herself, including the Japanese voice, works from --target alone;\n" +
+        "  Umika herself, including the Japanese voice, works from --target alone;\n" +
         "  every toggle (mascot / bubbles / Japanese voice / particles) is in her gear menu.\n" +
         "  For a section on the DSH settings page, install the plugin as a bundle instead:\n" +
         "  its lib/client.js registers settings.section (id=mascot) natively, on any build."

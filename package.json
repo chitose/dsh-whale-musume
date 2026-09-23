@@ -19,9 +19,11 @@
   "files": [
     "lib",
     "assets",
+    "scripts/setup-voice.mjs",
     "cordis.patch.yml"
   ],
   "scripts": {
+    "setup:voice": "node scripts/setup-voice.mjs",
     "dev": "dsh web --patch cordis.local.yml --port 3081",
     "test": "node --test test/*test.mjs",
     "qa": "node test/motion-qa.mjs && node test/cdp-whale-moe.mjs",

@@ -4,7 +4,7 @@
 
 - **Bundled Japanese voice**: all 653 dialogue lines plus her celebration line are pre-rendered with Kokoro-82M (`jf_tebukuro`) and ship as Ogg Vorbis under `assets/voice/ja/` — 15.7 MB for 64 minutes of audio, 21–23 dB SNR against the WAV masters. A new **"Japanese voice"** toggle (on by default) speaks every line that appears in a bubble; it follows the "Dialogue bubbles" toggle. A line with no clip (dynamically composed announcements such as "Achievement unlocked: …") falls through to the optional MiMo TTS bridge, so the two never speak over each other. Browser autoplay refusals are swallowed and re-armed on the next user gesture. A clone without the generated pack installs and behaves exactly as before
 - **Fix: some bubbles never spoke** (reported from a live test): the reconcile loop writes two bubbles directly rather than through `showLine()` — the per-state line (the most-seen bubble of all: idle / thinking / tool / success / failure) and the triple-pat celebration line — and both bypassed the voice dispatch. Both now speak, and the celebration line has a clip of its own
-- **Naming no longer mutes the voice**: 74% of clips contain "Master" or "Whale-chan", so the earlier rule (stay silent when a custom address or self-name is set) silenced three quarters of the library and looked like a bug. The clips still carry the built-in names, and the bubble keeps yours
+- **Naming no longer mutes the voice**: 74% of clips contain "Master" or "Umika", so the earlier rule (stay silent when a custom address or self-name is set) silenced three quarters of the library and looked like a bug. The clips still carry the built-in names, and the bubble keeps yours
 - **Silent bubbles are now diagnosable**: `window.__dshWhaleVoice` reports the manifest state and the last 20 lines that were not voiced, each with a reason (`not-in-pack`, `autoplay-blocked`, `autoplay-refused`, `manifest-not-loaded`, `voice-off`, `bubbles-off`, `playback-error`)
 - **Fix: an interrupted clip disabled the voice**: replacing `src` while `play()` is still pending rejects with `AbortError` ("interrupted by a new load request"), which the refusal handler mistook for an autoplay-policy block and then silenced every later line until the next click. Refusals are now classified (policy vs. superseded) and only a policy refusal disarms playback; the browser check runs a regression test for it
 - **Tooling**: `scripts/voice-pilot.mjs` (line selection, translation store, batch/merge, model download), `scripts/kokoro-render.py` (kokoro-onnx rendering with format, silence and vocabulary assertions) and `scripts/voice-pack.py` (compression with a per-file SNR gate). Codec choice is measured, not assumed: libsndfile's Opus encoder produces ~7 dB SNR even at 260 kbps, so the pack uses Vorbis
@@ -15,7 +15,7 @@
 ## v2.1.0 (2026-09-14)
 
 - **Optional MiMo TTS dialogue playback** (Issue #9 / PR #10, thanks @ppy-web): when a `dsh-xiaomi-tts` service is detected, a "dialogue playback" toggle appears, off by default; once enabled it speaks the head, belly, tail, and triple-combo lines. A missing install, missing configuration, or playback failure never affects the original interaction, and async playback rejection protection was added
-- **Fix: a dialog could make Whale-chan disappear permanently** (Issue #12 / PR #13, thanks @icemaple77): off-canvas drawers lying entirely outside the viewport are no longer treated as visible dialogs; the settings page and visible-dialog scenarios now switch to a 120px mini in the bottom-right corner instead of hiding her entirely
+- **Fix: a dialog could make Umika disappear permanently** (Issue #12 / PR #13, thanks @icemaple77): off-canvas drawers lying entirely outside the viewport are no longer treated as visible dialogs; the settings page and visible-dialog scenarios now switch to a 120px mini in the bottom-right corner instead of hiding her entirely
 - **Fix: settings panel registration timing**: declare the `slots` inject per the DSH client convention, avoiding a startup where the service is unavailable and the "mascot" settings section is skipped forever
 - **Fix: multi-currency balance misjudgement** (Issue #14 / PR #15, thanks @icemaple77): when DeepSeek returns both USD and CNY accounts, prefer CNY; fall back to the first record when there is no CNY
 - **Continuous integration**: added GitHub Actions, running the full test suite on Node.js 18 and 22; unit tests **102 → 108, all green**
@@ -87,14 +87,14 @@ The contents of the four roadmap versions v1.6.0–v1.9.0 are released together,
 
 ## v1.5.0 (2026-08-28)
 
-- **New · custom mascot self-name** (issue #4, @Vulpexl): the overview card in the settings panel gains a "her self-name" input paired with the existing "what should I call you"; leaving it blank or clearing it falls back to the default "Whale-chan". Every self-name occurrence in the dialogue library (363 at the time of the Chinese release, 385 after the English translation) is substituted uniformly at the output point rather than rewritten line by line
+- **New · custom mascot self-name** (issue #4, @Vulpexl): the overview card in the settings panel gains a "her self-name" input paired with the existing "what should I call you"; leaving it blank or clearing it falls back to the default "Umika". Every self-name occurrence in the dialogue library (363 at the time of the Chinese release, 385 after the English translation) is substituted uniformly at the output point rather than rewritten line by line
 - **New · recovery entry point after closing** (issue #5, @VectorAC): after turning the mascot off in settings, a recall button (🐋) appears in the bottom-left corner; clicking it calls her back and the button disappears immediately. Scenarios where she is auto-hidden because of the page (such as the settings page) do not show the button, to avoid intruding
 - Implementation: name/self-name substitution was extracted into the pure core function `applyNames(line, title, selfName)` (the core still never touches localStorage, with storage reads left in the presentation layer), for easier unit testing and reuse
 - Tests: unit 97 → 99, all green (8 new assertions for self-name substitution + 1 for dialogue library default self-name coverage)
 
 ## v1.4.2 (2026-08-28)
 
-- **Fix: staying forever on the "crash" pose art after an error** (PR #7, wrzrmzx): `errorVisible()` used to treat any error node appearing after startup as a permanently "live error", while DSH keeps the error cards of failed steps, so Whale-chan was pinned to the failure pose art forever. It now decides the page has turned based on "does the conversation keep progressing after the error" (new `ERROR_MIN_MS = 3000` minimum reaction duration); a new `SETTLE_MS = 10000` load-period settlement window was also added, so historical error cards asynchronously mounted after a refresh are not misjudged as live errors
+- **Fix: staying forever on the "crash" pose art after an error** (PR #7, wrzrmzx): `errorVisible()` used to treat any error node appearing after startup as a permanently "live error", while DSH keeps the error cards of failed steps, so Umika was pinned to the failure pose art forever. It now decides the page has turned based on "does the conversation keep progressing after the error" (new `ERROR_MIN_MS = 3000` minimum reaction duration); a new `SETTLE_MS = 10000` load-period settlement window was also added, so historical error cards asynchronously mounted after a refresh are not misjudged as live errors
 - Fixed "open mascot settings" doing nothing (PR #2, haitang1): the context menu used to look up the button by the text "settings", while the new DSH settings entry is a pure icon button (`[data-slot="sidebar.settings"] button`); it now performs a three-level lookup: structural slot → `settings.trigger` host button → text fallback
 - The bundle install path now provides the "mascot" settings panel (PR #2, haitang1): `lib/client.js` registers `settings.section` (id=mascot, label=mascot), with contents from the same source as `--mascot-settings` v27 (overview card / companionship display toggles / weather / daily and progression / achievement wall / data and reset), reading `whale-moe:*` localStorage and staying in live sync with the desktop pet itself
 - **Adapted to DSH 0.1.1-rc.2**: the settings panel is now registered through the `settings.section` slot rather than relying on rewriting the dist file of `@deepseek-ai/dsh-client-ui-theme` (that directory was removed in 0.1.1-rc.2, so the old patch path is completely dead)
@@ -136,20 +136,20 @@ The contents of the four roadmap versions v1.6.0–v1.9.0 are released together,
 - README gained a "bundle installation" section and corrected the settings panel description (bundle mode ships its own panel, confirmed by testing)
 
 ## v1.1.5 (2026-08-16)
-- Fixed the fresh-install experience: `apply` no longer registers the "Whale-chan · Ocean Dessert Workshop" theme option, so a fresh install is pure desktop pet mode
+- Fixed the fresh-install experience: `apply` no longer registers the "Umika · Ocean Dessert Workshop" theme option, so a fresh install is pure desktop pet mode
 - Kept the legacy `patchHost/patchClient/untheme` helper functions for cleaning up older versions
 - Added an end-to-end acceptance flow "from the Release zip to a fresh DSH copy booting up", with CDP all green
 
 ## v1.1.4 (2026-08-16)
 
-- Fixed Whale-chan shrinking in half-screen windows: removed the rule that auto-shrank her to 48px below a ≤980px viewport, so she keeps her normal size at any window width
+- Fixed Umika shrinking in half-screen windows: removed the rule that auto-shrank her to 48px below a ≤980px viewport, so she keeps her normal size at any window width
 - Fixed poses freezing because image-swap animations were paused by the browser in background/headless tabs: added a 1.6s timeout fallback that force-lands the loaded new pose
 - The installer's backup directory creation now uses recursive, and the default backup location was generalized to the system temp directory
 - The CDP narrow-screen assertion changed to "keeps normal size", and the full regression remains green
 
 ## v1.1.3 (2026-08-15)
 
-- Fixed "Whale-chan shrinks after code blocks appear": disabled automatic miniaturization for code-heavy content
+- Fixed "Umika shrinks after code blocks appear": disabled automatic miniaturization for code-heavy content
   - The floating form stays at 200px regardless of code volume, no longer shrinking to 56px
   - The side/bottom forms also no longer shrink because of code blocks, keeping only the narrow-screen (≤980px) adaptation
   - The manual mini form is unaffected (if mini was stored in historical settings)
@@ -166,9 +166,9 @@ The contents of the four roadmap versions v1.6.0–v1.9.0 are released together,
 
 ## v1.1.1 (2026-08-15)
 
-- Unified the self-name to "Whale-chan", removing the mixed use of DS-chan / Whale-chan
+- Unified the self-name to "Umika", removing the mixed use of DS-chan / Umika
 - Idle daily actions (such as bringing coffee) regained the "press down → swap image → spring up" transition on entry, no longer switching instantly
-- The settings panel and theme name were synchronized to Whale-chan
+- The settings panel and theme name were synchronized to Umika
 - motion QA gained a regression assertion that "idle actions must enter with animation"
 
 ## v1.1.0 (2026-08-15)
@@ -199,7 +199,7 @@ The contents of the four roadmap versions v1.6.0–v1.9.0 are released together,
 
 ## v1.0.0 (2026-08-15)
 
-- First public release: the Whale-chan mascot plugin
+- First public release: the Umika mascot plugin
 - Floating drag (drag pose + cursor-following sway)
 - Idle / work dual states with a 320ms momentum-blocking transition
 - Head-pat progression, check-in, companionship time, 30 achievements, achievement wall

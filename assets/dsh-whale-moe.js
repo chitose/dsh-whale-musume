@@ -14,6 +14,7 @@
   /* Bundled Japanese voice clips (assets/voice/ja). client.js rewrites this to
      the plugin asset route; the theme install copies the same tree to /assets/. */
   var VOICE_ROOT = "/assets/voice/ja/";
+  var VOICE_API = "/api/dsh-whale-musume/voice";
   var VOICE_MANIFEST_VERSION = "?v=1";
   var POSE_VERSION = "?v=5";
   var DEBOUNCE_MS = 120;
@@ -23,7 +24,7 @@
   var PREFS = [
     { key: "pet", label: "Mascot" },
     { key: "chat", label: "Dialogue bubbles" },
-    { key: "voiceJa", label: "Voice (JP clips)" },
+    { key: "voiceJa", label: "Voice" },
     { key: "particles", label: "Particles" }
   ];
 
@@ -177,11 +178,25 @@
       event.stopPropagation();
       var next = !readPref(key);
       writePref(key, next);
+      root.dispatchEvent(new root.CustomEvent("whale-moe-prefs-change", { detail: { key: key, value: next ? "1" : "0" } }));
       btn.setAttribute("aria-pressed", String(next));
       btn.textContent = label + (next ? ": on" : ": off");
       reconcile();
     });
     return btn;
+  }
+
+  function createLanguageSelect() {
+    var select = doc.createElement("select");
+    select.setAttribute("aria-label", "Dialogue language");
+    select.innerHTML = '<option value="ja">Japanese</option><option value="en">English</option>';
+    select.value = voiceLanguage();
+    select.addEventListener("change", function (event) {
+      event.stopPropagation();
+      try { root.localStorage.setItem("whale-moe:voiceLanguage", select.value); } catch (e) { /* unavailable */ }
+      root.dispatchEvent(new root.CustomEvent("whale-moe-prefs-change", { detail: { key: "voiceLanguage", value: select.value } }));
+    });
+    return select;
   }
 
   function createManageDialogButton() {
@@ -517,7 +532,7 @@
     var gear = doc.createElement("button");
     gear.type = "button";
     gear.setAttribute("data-dsh-whale-gear", "true");
-    gear.setAttribute("aria-label", "Whale-chan preferences");
+    gear.setAttribute("aria-label", "Umika preferences");
     gear.textContent = "⚙";
     gear.addEventListener("click", function (event) {
       event.stopPropagation();
@@ -529,7 +544,7 @@
     var gearMini = doc.createElement("button");
     gearMini.type = "button";
     gearMini.setAttribute("data-dsh-whale-gear-mini", "true");
-    gearMini.setAttribute("aria-label", "Whale-chan preferences");
+    gearMini.setAttribute("aria-label", "Umika preferences");
     gearMini.textContent = "⚙";
     gearMini.addEventListener("click", function (event) {
       event.stopPropagation();
@@ -540,6 +555,7 @@
     menu.setAttribute("data-dsh-whale-prefs", "true");
     menu.hidden = true;
     for (var i = 0; i < PREFS.length; i += 1) menu.appendChild(createToggleButton(PREFS[i].label, PREFS[i].key));
+    menu.appendChild(createLanguageSelect());
     menu.appendChild(createManageDialogButton());
 
     rootNode.appendChild(frame);
@@ -704,7 +720,11 @@
 
   function toggleMenu() {
     var menu = doc.querySelector("[data-dsh-whale-prefs]");
-    if (menu) menu.hidden = !menu.hidden;
+    if (menu) {
+      var language = menu.querySelector('select[aria-label="Dialogue language"]');
+      if (language) language.value = voiceLanguage();
+      menu.hidden = !menu.hidden;
+    }
   }
 
   function showContextMenu(x, y) {
@@ -715,7 +735,7 @@
     var items = [
       { label: "Feed a snack", action: function () { var out = applyGrowth({ type: "feed" }, Date.now(), 0); applyQuestSignal("feed", 1); burst("🍰"); showMood("eat", 3000); var line = say("interact", "feed"); if (line) showLine(line); if (out.unlocks.length) announceUnlocks(out.unlocks); } },
       { label: "Poke her", action: function () { applyGrowth({ type: "poke" }, Date.now(), 0); burst("💢"); showMood("angry", 3000); var line = say("interact", "poke"); if (line) showLine(line); } },
-      { label: "Praise Whale-chan", action: function () { applyGrowth({ type: "praise" }, Date.now(), 0); burst("✨"); showMood("tail-swing", 3000, true); var line = say("interact", "praise"); if (line) showLine(line); } }
+      { label: "Praise Umika", action: function () { applyGrowth({ type: "praise" }, Date.now(), 0); burst("✨"); showMood("tail-swing", 3000, true); var line = say("interact", "praise"); if (line) showLine(line); } }
     ];
     if (readPref("game")) {
       items.push({ label: "Mini game: Bubble Pop", action: function () { openGame(); } });
@@ -822,8 +842,29 @@
      announcements, or banks added later) simply stays silent here. */
   var voiceManifest = null;
   var voiceRequested = false;
+  var voiceManifestPromise = null;
   var voiceAudio = null;
   var voiceBlocked = false;
+  var voiceTranslations = null;
+  var voiceTranslationsPromise = null;
+  var activeVoiceLine = "";
+  var activeVoiceText = null;
+  var voiceGeneration = 0;
+  function voiceLanguage() {
+    try { return root.localStorage.getItem("whale-moe:voiceLanguage") === "en" ? "en" : "ja"; } catch (e) { return "ja"; }
+  }
+  function spokenTitle(language) { var value = title(); return language === "ja" && value === "Master" ? "マスター" : value; }
+  function spokenSelfName(language) { var value = selfName(); return language === "ja" && value === "Umika" ? "くじらちゃん" : value; }
+  function loadVoiceTranslations() {
+    if (voiceTranslations || voiceTranslationsPromise || typeof root.fetch !== "function") return;
+    voiceTranslationsPromise = root.fetch(VOICE_ROOT + "translations.json").then(function (response) {
+      if (!response.ok) throw new Error("translations unavailable");
+      return response.json();
+    }).then(function (data) {
+      voiceTranslations = data;
+      if (activeVoiceLine && activeVoiceText && voiceLanguage() === "ja") activeVoiceText.textContent = localizeLine(activeVoiceLine);
+    }).catch(function () { /* live translation can still resolve later */ }).then(function () { voiceTranslationsPromise = null; });
+  }
   /* Diagnosable state: `__dshWhaleVoice.misses` answers "why was that bubble
      silent" without a debugger. Bounded so a long session cannot grow it. */
   var voiceMisses = [];
@@ -841,14 +882,15 @@
   }
 
   function loadVoiceManifest() {
-    if (voiceRequested || typeof root.fetch !== "function") return;
+    if (voiceRequested || typeof root.fetch !== "function") return voiceManifestPromise;
     voiceRequested = true;
     try {
-      root.fetch(VOICE_ROOT + "manifest.json" + VOICE_MANIFEST_VERSION)
+      voiceManifestPromise = root.fetch(VOICE_ROOT + "manifest.json" + VOICE_MANIFEST_VERSION)
         .then(function (response) { return response && response.ok ? response.json() : null; })
         .then(function (json) { if (json && json.files) voiceManifest = json; })
         .catch(function () { /* no voice pack installed: stay silent */ });
     } catch (e) { /* fetch unavailable */ }
+    return voiceManifestPromise;
   }
 
   /* Pure: caller supplies the manifest and root, which keeps it testable. */
@@ -867,10 +909,6 @@
     return readPref("voiceJa") && readPref("chat");
   }
 
-  function lineHasVoice(line) {
-    return voiceEnabled() && !!voiceSourceFor(line, voiceManifest, VOICE_ROOT);
-  }
-
   function voiceBlockedReason(error) {
     var name = (error && error.name) || "";
     var message = String((error && error.message) || "");
@@ -886,12 +924,12 @@
     return ""; /* an unknown media error is not proof of a policy refusal */
   }
 
-  function playVoiceFor(line) {
+  function playVoiceFor(line, sourceOverride) {
     if (typeof line !== "string" || !line) return false;
     if (!readPref("voiceJa")) { noteVoiceMiss(line, "voice-off"); return false; }
     if (!readPref("chat")) { noteVoiceMiss(line, "bubbles-off"); return false; }
-    if (!voiceManifest) { noteVoiceMiss(line, "manifest-not-loaded"); loadVoiceManifest(); return false; }
-    var source = voiceSourceFor(line, voiceManifest, VOICE_ROOT);
+    if (!voiceManifest && !sourceOverride) { noteVoiceMiss(line, "manifest-not-loaded"); loadVoiceManifest(); return false; }
+    var source = sourceOverride || voiceSourceFor(line, voiceManifest, VOICE_ROOT);
     if (!source) { noteVoiceMiss(line, "not-in-pack"); return false; }
     if (voiceBlocked) { noteVoiceMiss(line, "autoplay-blocked"); return false; }
     try {
@@ -919,12 +957,47 @@
     }
   }
 
+  function speakLine(line, textNode) {
+    activeVoiceLine = line;
+    activeVoiceText = textNode;
+    var generation = ++voiceGeneration;
+    var language = voiceLanguage();
+    var shown = localizeLine(line);
+    function current() {
+      var bubble = textNode && textNode.closest && textNode.closest("[data-dsh-whale-bubble]");
+      return generation === voiceGeneration && voiceLanguage() === language && textNode && textNode.isConnected && bubble && !bubble.hidden;
+    }
+    if (voiceAudio && typeof voiceAudio.pause === "function") voiceAudio.pause();
+    if (typeof root.fetch !== "function" || !readPref("chat")) return shown;
+    var enabled = readPref("voiceJa");
+    root.fetch(VOICE_API + "/synthesize", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ line: line, language: language, title: spokenTitle(language), selfName: spokenSelfName(language), speak: enabled })
+    }).then(function (response) {
+      if (!response.ok) throw new Error("live voice unavailable");
+      return response.json();
+    }).then(function (result) {
+      if (!current()) return;
+      memory.bubbleHideAt = Date.now() + 4500;
+      if (result.text) {
+        if (typingTimer) { root.clearTimeout(typingTimer); typingTimer = null; }
+        textNode.textContent = result.text;
+      }
+      if (enabled && result.audio) playVoiceFor(line, result.audio);
+    }).catch(function () {
+      if (!current() || !enabled || !readPref("voiceJa")) return;
+      memory.bubbleHideAt = Date.now() + 4500;
+      Promise.resolve(language === "ja" ? loadVoiceManifest() : null).then(function () {
+        if (!current()) return;
+        if (language !== "ja" || !playVoiceFor(line)) emitInteractionLine(shown);
+      });
+    });
+    return shown;
+  }
+
   function showInteractionLine(line) {
     if (!line) return;
     showLine(line);
-    /* The bundled clip already speaks this line; only hand lines the pack does
-       not cover to the optional MiMo TTS bridge, so they never double-speak. */
-    if (!lineHasVoice(line)) emitInteractionLine(localizeLine(line));
   }
 
   function bellyReact(now) {
@@ -964,7 +1037,6 @@
       spawnParticles(12, now);
       showMood("star", 2200);
       var trip = applyGrowth({ type: "triple" }, now, 0);
-      if (readPref("chat")) emitInteractionLine(localizeLine("Ehehe~ I like Master best!"));
       if (trip.unlocks.length) announceUnlocks(trip.unlocks);
       var node = doc.querySelector("[data-dsh-whale-root]");
       if (node && !motionReduced()) {
@@ -1002,15 +1074,13 @@
     var wasHidden = bubble.hidden;
     bubble.classList.remove("dsh-whale-out");
     if (memory.bubbleOutTimer) { root.clearTimeout(memory.bubbleOutTimer); memory.bubbleOutTimer = null; }
-    var localized = localizeLine(line);
     /* Every bubble path speaks: the clips carry the built-in names, so a custom
        "call me" or self-name makes the audio say マスター/くじらちゃん while the
        bubble shows the custom name. Speaking is the point of the feature, and
        muting every line that mentions a name would silence 74% of the library. */
-    playVoiceFor(line);
-    typeBubble(text, localized);
+    typeBubble(text, speakLine(line, text));
     bubble.hidden = false;
-    memory.bubbleHideAt = Date.now() + 4500;
+    memory.bubbleHideAt = Date.now() + (voiceEnabled() ? 20000 : 4500);
     if (wasHidden) bubble.classList.add("dsh-whale-pop");
   }
 
@@ -1193,7 +1263,7 @@
   function openGame() {
     if (!readPref("game")) return;
     if (gameOpen) return;
-    if (detectView() === "settings") return; /* Whale-chan is hidden on the settings page, no entry point; defensive here */
+    if (detectView() === "settings") return; /* Umika is hidden on the settings page, no entry point; defensive here */
     if (catchOpen) closeCatchGame();
     loadGameStats();
     gameState = core.gameNewState(Date.now(), Math.random);
@@ -1720,21 +1790,24 @@
   function title() {
     try { var t = root.localStorage.getItem("whale-moe:title"); return t && t.trim() ? t.trim() : "Master"; } catch (e) { return "Master"; }
   }
-  /* Whale-chan's self-name (the counterpart of "what should I call you"):
-     falls back to "Whale-chan" when empty or unavailable.
+  /* Umika's self-name (the counterpart of "what should I call you"):
+     falls back to "Umika" when empty or unavailable.
      The hundreds of self-references in the dialogue library are all swapped
      here in one place rather than rewritten line by line. */
   function selfName() {
     try {
       var n = root.localStorage.getItem("whale-moe:selfName");
-      if (!n || !n.trim()) return "Whale-chan";
+      if (!n || !n.trim()) return "Umika";
       var v = n.trim();
       return v.length > 12 ? v.slice(0, 12) : v;
-    } catch (e) { return "Whale-chan"; }
+    } catch (e) { return "Umika"; }
   }
   function localizeLine(line) {
+    if (voiceLanguage() === "ja" && voiceTranslations && voiceTranslations[line]) {
+      return voiceTranslations[line].split("マスター").join(spokenTitle("ja")).split("くじらちゃん").join(spokenSelfName("ja"));
+    }
     if (core && typeof core.applyNames === "function") return core.applyNames(line, title(), selfName());
-    return String(line).split("Master").join(title()).split("Whale-chan").join(selfName());
+    return String(line).split("Master").join(title()).split("Umika").join(selfName());
   }
   function isNight(now) {
     var h = new Date(now || Date.now()).getHours();
@@ -2086,10 +2159,9 @@
       if (!memory.celebrationVisible) {
         memory.celebrationVisible = true;
         memory.lastLine = celebLine;
-        playVoiceFor("Ehehe~ I like Master best!");
-        typeBubble(bubbleText, celebLine);
+        typeBubble(bubbleText, speakLine("Ehehe~ I like Master best!", bubbleText));
         bubble.hidden = false;
-        memory.bubbleHideAt = Date.now() + 4500;
+        memory.bubbleHideAt = Date.now() + (voiceEnabled() ? 20000 : 4500);
         bubble.classList.remove("dsh-whale-pop");
         void bubble.offsetWidth;
         bubble.classList.add("dsh-whale-pop");
@@ -2103,10 +2175,9 @@
     if (computed.speak && readPref("chat") && view === "workbench" && eventStates[computed.state] && !typingTimer) {
       /* This path writes the bubble directly rather than via showLine(), so it
          needs its own voice call — these state lines are the most-seen bubbles. */
-      playVoiceFor(computed.line);
-      typeBubble(bubbleText, localizeLine(computed.line));
+      typeBubble(bubbleText, speakLine(computed.line, bubbleText));
       bubble.hidden = false;
-      memory.bubbleHideAt = Date.now() + 4500;
+      memory.bubbleHideAt = Date.now() + (voiceEnabled() ? 20000 : 4500);
       if (!motionReduced() && computed.line !== memory.lastLine) {
         bubble.classList.remove("dsh-whale-pop");
         void bubble.offsetWidth;
@@ -3348,11 +3419,23 @@
     if (root.__dshWhaleMoeStarted) return;
     root.__dshWhaleMoeStarted = true;
     if (voiceEnabled()) loadVoiceManifest();
+    if (voiceLanguage() === "ja") loadVoiceTranslations();
     root.addEventListener("pointerdown", onUserActivity, true);
     root.addEventListener("keydown", onUserActivity, true);
     root.addEventListener("resize", schedule);
     root.addEventListener("storage", schedule);
-    root.addEventListener("whale-moe-prefs-change", schedule);
+    root.addEventListener("whale-moe-prefs-change", function (event) {
+      if (event.detail && event.detail.key === "voiceJa" && event.detail.value === "0") {
+        voiceGeneration += 1;
+        if (voiceAudio && typeof voiceAudio.pause === "function") voiceAudio.pause();
+      }
+      var currentBubble = activeVoiceText && activeVoiceText.closest && activeVoiceText.closest("[data-dsh-whale-bubble]");
+      if (event.detail && event.detail.key === "voiceLanguage" && voiceLanguage() === "ja") loadVoiceTranslations();
+      if (event.detail && event.detail.key === "voiceLanguage" && activeVoiceLine && currentBubble && !currentBubble.hidden) {
+        typeBubble(activeVoiceText, speakLine(activeVoiceLine, activeVoiceText));
+      }
+      schedule();
+    });
     root.addEventListener("visibilitychange", function () {
       if (doc.hidden) {
         if (gameOpen) { gamePausedFlag = true; gamePauseBadge(true, "hidden"); }

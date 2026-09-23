@@ -1,8 +1,7 @@
-# dsh-whale-musume bundle patch —— overlays the Whale-chan desktop pet onto a profile composition (zero-intrusion).
+# dsh-whale-musume bundle patch —— overlays the Umika desktop pet onto a profile composition (zero-intrusion).
 # One package, two sides (dsh.bundle + dsh.client):
-#   · Host plugin (worker side): registers the read-only /api/dsh-whale-musume/assets static asset route,
-#     serving the in-package assets (CSS / JS / generated/*.webp / calibration table) to the browser;
-#   · Browser plugin (dsh.client): injects the Whale-chan styles and state machine script, with the asset root
+#   · Host plugin (worker side): serves bundled assets and proxies the local Kokoro sidecar;
+#   · Browser plugin (dsh.client): injects the Umika styles and state machine script, with the asset root
 #     pointing at that route; wakes the mascot automatically on first mount; all assets load locally, with no external requests and no telemetry.
 - insert:
     - id: dsh-whale-musume

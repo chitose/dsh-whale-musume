@@ -9,7 +9,7 @@
 | Type | # | Title | Author | Status | Action |
 |------|---|------|------|------|------|
 | Issue | 9 | feat: optional MiMo TTS integration, PCM streaming dialogue playback | ppy-web | OPEN | ✅ Replied to confirm scope and invited a PR + applied the `enhancement` label |
-| PR | 7 | fix: after an error Whale-chan stays stuck on the "crash" pose art forever | wrzrmzx | Merged | ✅ Nothing left over |
+| PR | 7 | fix: after an error Umika stays stuck on the "crash" pose art forever | wrzrmzx | Merged | ✅ Nothing left over |
 | PR | 2 | fix: right-click settings + bundle settings panel v1.4.2 | haitang1 | Merged | ✅ Nothing left over |
 | Issue | 6 | settings panel missing in bundle mode | ppy-web | Closed | ✅ Fixed by PR #2 |
 | Issue | 5 | suggestion for a way to bring the mascot back after dismissing it | VectorAC | Closed | ✅ Landed in v1.5.0 |

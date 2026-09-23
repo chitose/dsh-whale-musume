@@ -37,6 +37,8 @@ node test/cdp-whale-moe.mjs
 
 ## Japanese voice pipeline
 
+- Live voice setup: `npm run setup:voice` installs the local Kokoro sidecar and offline Argos translator. `node test/voice-live-smoke.mjs` checks both languages against the real models;
+- `voice-pilot.mjs --all` also refreshes the committed `assets/voice/ja/translations.json` used to display curated Japanese dialogue;
 - **Full manual: [`docs/voice-pipeline.md`](docs/voice-pipeline.md)** — setup, how to change a translation, how to regenerate only the affected clips, and the traps;
 - Sources: the English lines in `assets/whale-moe-core.js`, the Japanese in `.voice-preview/ja/part-*.json`, and the presenter's own fixed strings in `EXTRAS` (`scripts/voice-pilot.mjs`);
 - Generated: 654 clips in `assets/voice/ja/` (committed, 15.7 MB) plus the cache in `.voice-preview/` (git-ignored);

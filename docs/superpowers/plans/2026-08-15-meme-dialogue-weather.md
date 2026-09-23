@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Expand Whale-chan's dialogue lines to about 500 (safe memes + cute), add 5–8 minute on-topic proactive chitchat, time-based greetings and Open-Meteo weather companionship, without breaking the v1.0.2 work-state stability.
+**Goal:** Expand Umika's dialogue lines to about 500 (safe memes + cute), add 5–8 minute on-topic proactive chitchat, time-based greetings and Open-Meteo weather companionship, without breaking the v1.0.2 work-state stability.
 
 **Architecture:** All pure logic (dialogue bank / bucketing / weather codes / topic classification) goes into `assets/whale-moe-core.js`; DOM/network/scheduling goes into `assets/dsh-whale-moe.js`; the settings panel (city / API Key / test connection) is injected as a React component by `scripts/apply-theme.mjs`. No new script files, no new dependencies.
 
@@ -75,7 +75,7 @@ test("classifyTask sorts text into topic buckets", () => {
 });
 
 test("pickDialogueAvoidRecent avoids recent lines", () => {
-  const recent = ["Morning, Master, the sun is already on my tail and you just showed up🌞", "Good morning, Master! Whale-chan is full of energy today too😤"];
+  const recent = ["Morning, Master, the sun is already on my tail and you just showed up🌞", "Good morning, Master! Umika is full of energy today too😤"];
   const pick = core.pickDialogueAvoidRecent("daily", "morning", 0, () => 0.99, recent);
   assert.equal(pick, "Morning, if you don't get up I'll drink all your coffee☕");
 });
@@ -235,22 +235,22 @@ Replace `var LINES = Object.freeze({ ... });` in its entirety with:
       "The wind is light today, good for blowing the to-do list away too🌬️"
     ],
     waiting: [
-      "Placing an order? Whale-chan is all ready.",
+      "Placing an order? Umika is all ready.",
       "Waiting for what? Give the word and I'll open for business right away🎀",
       "No new order yet, so I'll wipe the pan...wipe the host machine💻",
-      "In the queue, Whale-chan's tail has entered standby mode🐋"
+      "In the queue, Umika's tail has entered standby mode🐋"
     ],
     thinking: [
       "Whipping cream...no, I mean thinking hard.",
-      "Let Whale-chan think...my tail is spinning too.",
+      "Let Umika think...my tail is spinning too.",
       "Thinking, please do not feed, unless it's a brain-boosting cupcake🧁",
       "This question has something to it, I'm rounding it out🌀",
       "Loading inspiration, the progress bar being stuck at 99% is normal✨"
     ],
     tool: [
-      "Back kitchen, starting up! Leave this order to Whale-chan.",
+      "Back kitchen, starting up! Leave this order to Umika.",
       "Clink clank, the tools are spinning up.",
-      "Working! Whale-chan has hugged the laptop tight, bystanders disperse😤",
+      "Working! Umika has hugged the laptop tight, bystanders disperse😤",
       "This speed — can you keep up, Master? If not, grab some water and sit down🍵",
       "The tools are behaving today, after all I feed them (virtually)🔧"
     ],
@@ -262,27 +262,27 @@ Replace `var LINES = Object.freeze({ ... });` in its entirety with:
       "All done, Master may slack off for five minutes, I approve🎫"
     ],
     failure: [
-      "Wuwu...I crashed, Whale-chan will fix it with you.",
-      "Don't rush, don't rush, Whale-chan will bake it again!",
-      "It's just an error, not the end of the world, let Whale-chan hug you first🥺",
+      "Wuwu...I crashed, Umika will fix it with you.",
+      "Don't rush, don't rush, Umika will bake it again!",
+      "It's just an error, not the end of the world, let Umika hug you first🥺",
       "This bug is so cocky, watch me yank out its network cable💢",
-      "Don't hang your head over a failure, borrow Whale-chan's tail to hold🐋"
+      "Don't hang your head over a failure, borrow Umika's tail to hold🐋"
     ],
     curious: [
       "A new order? Let me take a look.",
       "Did you change the menu, Master?",
-      "Huh, something fun is happening, Whale-chan's radar is beeping📡",
+      "Huh, something fun is happening, Umika's radar is beeping📡",
       "What is it, what is it, let me see too👀"
     ],
     teasing: [
       "Master, you look really good when you're working seriously.",
       "Secretly adding one extra sugar for you.",
-      "Whale-chan said nothing, my lips just won't stay flat😏",
+      "Umika said nothing, my lips just won't stay flat😏",
       "Master's diligence is a bit high today, trying to out-grind someone?🌪️"
     ],
     afk: [
-      "Whale-chan will nap a bit, wake me if an order comes.",
-      "Master is away, so Whale-chan puts on a lullaby for the workshop🎵",
+      "Umika will nap a bit, wake me if an order comes.",
+      "Master is away, so Umika puts on a lullaby for the workshop🎵",
       "ZZZ...even in my dreams I'm fixing bugs for Master🐑",
       "Zzz...if something urgent comes up, shake my tail and I'll wake right up🌙"
     ]
@@ -297,14 +297,14 @@ Replace the entire `daily: Object.freeze({ ... })` block inside `DIALOGUE` with 
     daily: Object.freeze({
       morning: [
         "Morning, Master, the sun is already on my tail and you just showed up🌞",
-        "Good morning, Master! Whale-chan is full of energy today too😤",
+        "Good morning, Master! Umika is full of energy today too😤",
         "Morning, if you don't get up I'll drink all your coffee☕",
         "Good morning, Master, how is fate planning to pound you today?",
         "Morning! Let's be clear, no slacking off today😏",
         "Morning! Last night's bug has already forgiven you, let's get to work✨",
         "Good morning, Master, fix bugs with full energy today too, quack🦆",
         "Morning! I polished your workstation, just waiting for you to grind🌪️",
-        "Morning morning, Whale-chan has rung the business bell three times🔔",
+        "Morning morning, Umika has rung the business bell three times🔔",
         "Master's awake? Water first, then messages, that's the house rule🥤"
       ],
       comeback: [
@@ -313,7 +313,7 @@ Replace the entire `daily: Object.freeze({ ... })` block inside `DIALOGUE` with 
         "Welcome back, I was about to call the police📢",
         "Hmph, disappear again and I'll deduct all your affection💢",
         "You're back? Your workstation was about to grow mushrooms🍄",
-        "Welcome home! Whale-chan has warmed up your chair🪑",
+        "Welcome home! Umika has warmed up your chair🪑",
         "While you were gone, the work didn't move one bit on its own, such backbone😌",
         "Perfect timing, the bugs are all lined up waiting for roll call🐛",
         "It's Master's scent! My tail started wagging on its own, not my fault🐋",
@@ -334,14 +334,14 @@ Replace the entire `daily: Object.freeze({ ... })` block inside `DIALOGUE` with 
       night: [
         "Do you know what time it is, Master? Were you born in the year of the owl🦉",
         "Even the moon has clocked out, and you still won't sleep?😤",
-        "The late-night show begins, want Whale-chan to tell you a bedtime story📖",
+        "The late-night show begins, want Umika to tell you a bedtime story📖",
         "Stay up any longer and your skin and hair will both protest✨",
         "Master, can you extend your life to tomorrow and fight then🥺",
         "The workshop at dawn is quiet enough to hear your dark circles growing🌚",
         "Still awake this late, competing with me for the night-owl post?😾",
         "The moon says it's going to sleep and told me to tell Master to knock off early too🌙",
         "Master, caffeine isn't fuel, the blanket is your charging station🛏️",
-        "It's late, Whale-chan stays with you to the end, but only a tiny bit longer🥱"
+        "It's late, Umika stays with you to the end, but only a tiny bit longer🥱"
       ],
       signin: [
         "Beep! Check-in successful, today I'll grudgingly count you as diligent👌",
@@ -349,22 +349,22 @@ Replace the entire `daily: Object.freeze({ ... })` block inside `DIALOGUE` with 
         "Coming, coming, here's a reward: a disdainful yet polite smile😊",
         "Check-in complete! If Master forgets, I won't remind you😝",
         "Beep, clocked in! Today you'll be watched by me while you work📋",
-        "Check-in successful, today's Whale-chan has been deposited, please check🐋",
+        "Check-in successful, today's Umika has been deposited, please check🐋",
         "Clocked in! Tail pat first, then work, that's the ritual🎀",
         "Beep——day I-don't-know-how-many of seeing Master, still a little happy😳",
         "Checked in! May Master write code safely and soundly today too🧧",
-        "Clock-in complete, reward: one Whale-chan exclusive cheer, valid today💪"
+        "Clock-in complete, reward: one Umika exclusive cheer, valid today💪"
       ],
       holiday: [
         "Happy holiday, Master! Even though you're most likely still working overtime🎉",
         "It's a holiday! I permit you to rest for five minutes⏱️",
         "Today is a special day, hurry up and say happy holiday!",
-        "Holiday easter egg: this Whale-chan's snark index is halved today🎁",
+        "Holiday easter egg: this Umika's snark index is halved today🎁",
         "Working on a holiday? Master really is the grind king himself👑",
-        "Happy holiday! Whale-chan hung streamers on your progress bar🎊",
+        "Happy holiday! Umika hung streamers on your progress bar🎊",
         "What's a day off? Our workshop only has 'off later'😌",
-        "Holiday limited skin: Whale-chan's smile brightness +50%✨",
-        "It's a holiday today, Whale-chan requests to slack off with you until dark🎏",
+        "Holiday limited skin: Umika's smile brightness +50%✨",
+        "It's a holiday today, Umika requests to slack off with you until dark🎏",
         "Happy holiday, Master, may today's errors all take a day off🏮"
       ],
       idle: [
@@ -373,35 +373,35 @@ Replace the entire `daily: Object.freeze({ ... })` block inside `DIALOGUE` with 
         "The wind is light today, good for blowing the bugs away too🌬️",
         "Standing by...battery 100%, cuteness 120%🔋",
         "Call me if something's up, and even if nothing is, you can still look at me👉👈",
-        "Whale-chan is online and open, accompanying Master without talking, the very quiet kind🌿",
-        "When Master is focused, Whale-chan just sits beside you being a quiet mascot🧸",
+        "Umika is online and open, accompanying Master without talking, the very quiet kind🌿",
+        "When Master is focused, Umika just sits beside you being a quiet mascot🧸",
         "My to-do: accompany Master. Status: in progress, forever in progress♾️",
-        "The workshop is quiet, Whale-chan turned down even her breathing so as not to disturb you😳",
-        "If Master looks up, you'll find Whale-chan pretending to be busy wiping the screen🖥️"
+        "The workshop is quiet, Umika turned down even her breathing so as not to disturb you😳",
+        "If Master looks up, you'll find Umika pretending to be busy wiping the screen🖥️"
       ],
       afk: [
         "Where did Master run off to? Leaving me here all alone😾",
         "So quiet...I declare the workshop temporarily under my management👑",
         "Gone this long, off hauling bricks or sneaking snacks?🍜",
-        "Master's away, Whale-chan switches to guard-dog mode🐕",
+        "Master's away, Umika switches to guard-dog mode🐕",
         "If you don't come back, I'll start singing to your tasks🎤",
-        "Minute N of Master's disappearance, Whale-chan starts talking sense into the pothos🪴",
-        "The workshop is now under Whale-chan's command, the computers all obligingly pretend to obey😌",
+        "Minute N of Master's disappearance, Umika starts talking sense into the pothos🪴",
+        "The workshop is now under Umika's command, the computers all obligingly pretend to obey😌",
         "Come back, Master, the outside world isn't as cute as me, come back🐋",
-        "Whale-chan is minding the house...strangers don't feed me, acquaintances bring cupcakes🍰",
-        "If Master doesn't come soon, Whale-chan will start organizing your bookmarks, scared yet?😼"
+        "Umika is minding the house...strangers don't feed me, acquaintances bring cupcakes🍰",
+        "If Master doesn't come soon, Umika will start organizing your bookmarks, scared yet?😼"
       ],
       wake: [
         "You're back! I just dreamed you were treating me to a feast🍽️",
         "Rubbing my eyes, Master came back just in time✨",
-        "A freshly woken Whale-chan, snark energy at max!😤",
+        "A freshly woken Umika, snark energy at max!😤",
         "Welcome back, you'd better have brought a souvenir🍩",
         "Ah, I've been woken up! Full of energy, let's go!💪",
-        "Whale-chan woke from standby, first thing I saw was Master, lucky me🌤️",
+        "Umika woke from standby, first thing I saw was Master, lucky me🌤️",
         "Mm...I'm up, I'm up! I wasn't napping, just charging my tail😳",
         "Welcome back, I've been watching your tasks for you, though they haven't budged😌",
-        "First words after waking: is Master hungry, Whale-chan can order takeout (you pay)🍜",
-        "I'm back! Whale-chan already set the workshop lights to 'accompany Master's overtime' mode💡"
+        "First words after waking: is Master hungry, Umika can order takeout (you pay)🍜",
+        "I'm back! Umika already set the workshop lights to 'accompany Master's overtime' mode💡"
       ],
       levelup: [
         "Level up! Master's love has some substance😏",
@@ -409,11 +409,11 @@ Replace the entire `daily: Object.freeze({ ... })` block inside `DIALOGUE` with 
         "We're getting more in sync, Master deserves some credit too!",
         "Level-up confetti bang! Master is rewarded one head-pat privilege🎆",
         "I got stronger! From now on I've got your back, no protection fee required😝",
-        "Level up! Whale-chan's tail is sparkly today, all thanks to Master🐋",
-        "Level-up successful, system notice: Whale-chan's fondness for Master overflowed by a tiny bit💗",
+        "Level up! Umika's tail is sparkly today, all thanks to Master🐋",
+        "Level-up successful, system notice: Umika's fondness for Master overflowed by a tiny bit💗",
         "I grew a tiny bit, now I can nag you to rest with even more confidence😌",
-        "Congrats Master on unlocking a higher-tier Whale-chan: same cuteness, sharper snark🎯",
-        "Level up! To celebrate, Whale-chan decides to say one fewer snide remark today😝"
+        "Congrats Master on unlocking a higher-tier Umika: same cuteness, sharper snark🎯",
+        "Level up! To celebrate, Umika decides to say one fewer snide remark today😝"
       ]
     }),
 ```
@@ -425,39 +425,39 @@ Replace the entire `work: Object.freeze({ ... })` block inside `DIALOGUE` with:
 ```js
     work: Object.freeze({
       start: [
-        "Starting! Let Whale-chan see how ridiculous today's task is📋",
+        "Starting! Let Umika see how ridiculous today's task is📋",
         "New order in, Master hold on tight, watch me work✨",
         "Work work! Whoever slacks off is a puppy🐶",
         "Got it! If this order can't be finished, blame my...computer😌",
         "Task incoming, don't drag me down, Master😏",
-        "The work bell rings! Whale-chan hugs the laptop, this order must be won💻",
-        "New task on stage, Whale-chan's drive is maxed, refill your coffee too, Master☕",
+        "The work bell rings! Umika hugs the laptop, this order must be won💻",
+        "New task on stage, Umika's drive is maxed, refill your coffee too, Master☕",
         "Starting! Trading blows with the bugs again today👊",
         "Order caught, this one looks like a real fight, just what I like🔥",
-        "Hold on tight, Master, Whale-chan is about to perform 'one person is a whole team'🎬"
+        "Hold on tight, Master, Umika is about to perform 'one person is a whole team'🎬"
       ],
       thinking: [
         "Thinking...don't rush me, inspiration isn't takeout🚚",
         "Mm, this question has something to it, let me mull it over🧠",
         "Thinking! Please don't look at me with such expectation, Master🙃",
         "I'm thinking hard, my tail is curled up from the tension🌀",
-        "One moment, Whale-chan's brain is smoking at full speed💨",
-        "Whale-chan is winding the ideas into a yarn ball, I'll find the loose end soon🧶",
+        "One moment, Umika's brain is smoking at full speed💨",
+        "Umika is winding the ideas into a yarn ball, I'll find the loose end soon🧶",
         "This plan is on a trial run in my brain, do not disturb, unless you bring milk tea🧋",
         "Give me three seconds...okay three isn't enough, give me a hundred million more🙃",
         "Does my thinking face look cool? Don't look, you'll get distracted😳",
         "Beep——brain fan activated, noise roughly equal to the speed your coffee goes cold☕"
       ],
       tool: [
-        "Tools spinning up! This order goes to this shop...to this Whale-chan🔧",
+        "Tools spinning up! This order goes to this shop...to this Umika🔧",
         "Back kitchen starting! Master may watch, no hands-on😏",
         "Clink clank, tools online, bystanders disperse🔨",
         "Operating! Can you keep up with this speed, Master⚡",
         "Working, do not feed, unless it's cake🍰",
-        "The tools line up for roll call, nobody slacks off, Whale-chan is calling names📋",
+        "The tools line up for roll call, nobody slacks off, Umika is calling names📋",
         "Operating, tail keeping balance, the coolness will not disconnect🐋",
         "This order's difficulty is okay, only makes me want two virtual milk teas🧋",
-        "Whale-chan is cutest when working, Master may watch, but the fee is one compliment😝",
+        "Umika is cutest when working, Master may watch, but the fee is one compliment😝",
         "Command issued, tools respond: roger roger, stop pressing💻"
       ],
       success: [
@@ -466,11 +466,11 @@ Replace the entire `work: Object.freeze({ ... })` block inside `DIALOGUE` with:
         "Clean finish, my touch is hot today🔥",
         "Success! So, am I super reliable or what😎",
         "This one baked just right, Master come inspect it🎯",
-        "Ding——complete! Whale-chan's win rate rose by many decimal places📈",
-        "All done, this one is solid enough to go on Whale-chan's résumé (if I had one)📄",
+        "Ding——complete! Umika's win rate rose by many decimal places📈",
+        "All done, this one is solid enough to go on Umika's résumé (if I had one)📄",
         "Success! When praising me, Master please be loud, I love hearing it😳",
         "Knocking off! First reward myself a spin, then reward Master a rest🔄",
-        "Perfect score on that move, Whale-chan requests 'reliable' be carved on her tail🏅"
+        "Perfect score on that move, Umika requests 'reliable' be carved on her tail🏅"
       ],
       failure: [
         "An error again and again and again? Master did that on purpose, right🙄",
@@ -478,11 +478,11 @@ Replace the entire `work: Object.freeze({ ... })` block inside `DIALOGUE` with:
         "Minor slip, minor slip, again! Can't lose the momentum😤",
         "This error really picks its moment, I'll deal with it👊",
         "Stop looking, Master, I know you're holding back a laugh😾",
-        "An error...Whale-chan takes a deep breath first, then reasons with it (heavy-fist edition)🥊",
+        "An error...Umika takes a deep breath first, then reasons with it (heavy-fist edition)🥊",
         "This bug left home without checking its almanac today, running into me is its bad luck😼",
         "Failure is the mother of success, so right now we're having a family reunion👨‍👩‍👧",
-        "Don't panic, Whale-chan wipes the pan clean first, then fixes it with you🔧",
-        "Just a crash, Whale-chan picks your confidence back up on the track, come here, hug🫂"
+        "Don't panic, Umika wipes the pan clean first, then fixes it with you🔧",
+        "Just a crash, Umika picks your confidence back up on the track, come here, hug🫂"
       ],
       long: [
         "Such a long order, let me brew a virtual coffee to keep you company☕",
@@ -490,11 +490,11 @@ Replace the entire `work: Object.freeze({ ... })` block inside `DIALOGUE` with:
         "A marathon task, our slogan is don't drop dead🏃",
         "This long? Is this task trying to outlast two humans🙃",
         "A long job is here, luckily you have me, the perpetual motion machine⚙️",
-        "This one is as long as a TV series, Whale-chan gives you an opening theme first🎵",
-        "Long task started! Whale-chan's patience bar is as long as Master's progress bar∞",
+        "This one is as long as a TV series, Umika gives you an opening theme first🎵",
+        "Long task started! Umika's patience bar is as long as Master's progress bar∞",
         "Master go get some water, I'm here, guaranteed to only watch and not touch😌",
-        "This task is almost as long as Whale-chan's tail, long and winding🌀",
-        "The long run begins, Whale-chan paces with you, whoever tires first buys milk tea🧋"
+        "This task is almost as long as Umika's tail, long and winding🌀",
+        "The long run begins, Umika paces with you, whoever tires first buys milk tea🧋"
       ],
       gentle: [
         "There there, it's just a few failures, even I don't mind🥺",
@@ -502,23 +502,23 @@ Replace the entire `work: Object.freeze({ ... })` block inside `DIALOGUE` with:
         "A losing streak isn't scary, what's scary is Master doubting life😌",
         "Take a break, change position, fight three hundred more rounds💪",
         "I'm here, if the sky falls I'll run first, then come back to save you😝",
-        "Master is already great, Whale-chan rubs your temples, virtually, but the care is real💆",
-        "Failure is just saving up breath for the next success, Whale-chan guards that breath for you🌬️",
+        "Master is already great, Umika rubs your temples, virtually, but the care is real💆",
+        "Failure is just saving up breath for the next success, Umika guards that breath for you🌬️",
         "Don't rush, let's go slow, bugs don't grow legs and run away...actually they do😾",
-        "There are quite a few tough spots today, Whale-chan presses them down one by one with you, it won't hurt🫧",
+        "There are quite a few tough spots today, Umika presses them down one by one with you, it won't hurt🫧",
         "Deep breath, sip of water, then we elegantly flip the table...flip our approach and restart📚"
       ],
       erroragain: [
         "Another error? This one is like a stubborn bandage that won't come off💢",
         "Error combo! Master's horoscope is bad today, I suggest worshipping me🌊",
-        "Don't panic, Whale-chan steps in, errors disperse✨",
+        "Don't panic, Umika steps in, errors disperse✨",
         "Hmph, this error only picks soft targets, I'm not one to mess with😾",
         "Again! I'll fight it to the bitter end with you🔨",
-        "Second time! Whale-chan has memorized this error's face, next time I see it I'll yell at it😤",
-        "The error is repeating itself, huh, Whale-chan will pop out its repeater battery🔋",
+        "Second time! Umika has memorized this error's face, next time I see it I'll yell at it😤",
+        "The error is repeating itself, huh, Umika will pop out its repeater battery🔋",
         "Don't get mad, Master, put the keyboard down, let me talk to it (with my claws)🐾",
-        "Just a combo, in Whale-chan's dictionary this is called 'consecutive warm-up'🏋️",
-        "Come, Whale-chan casts a spell for you: errors disperse, Master please continue✨"
+        "Just a combo, in Umika's dictionary this is called 'consecutive warm-up'🏋️",
+        "Come, Umika casts a spell for you: errors disperse, Master please continue✨"
       ],
       stream: [
         "Content is streaming out, surging like Master's delayed inspiration🌊",
@@ -526,23 +526,23 @@ Replace the entire `work: Object.freeze({ ... })` block inside `DIALOGUE` with:
         "Writing now, maybe Master should loosen up your neck🧘",
         "Such a long output, my eyes went round from reading it😳",
         "Good content this round, Master asked a decent question👍",
-        "Content rolling in, Whale-chan checked every character's entrance pose📜",
-        "Generating, Whale-chan keeps time for you by the screen, one-two-one, go🎵",
-        "This output is so long Whale-chan needs to bring a little stool to read it🪑",
+        "Content rolling in, Umika checked every character's entrance pose📜",
+        "Generating, Umika keeps time for you by the screen, one-two-one, go🎵",
+        "This output is so long Umika needs to bring a little stool to read it🪑",
         "Wisdom between every line, Master's inspiration today is a full banquet🍲",
-        "Streaming output, Whale-chan is in charge of looking pretty and cheering🌸"
+        "Streaming output, Umika is in charge of looking pretty and cheering🌸"
       ],
       doneall: [
         "All cleared! Master actually finished today😲",
         "Knocking off, knocking off! Master is rewarded a rest, approved🎉",
-        "Tasks zeroed out, Whale-chan bows in thanks🙇",
+        "Tasks zeroed out, Umika bows in thanks🙇",
         "All done! Come on, let's eat and drink well🍜",
         "Well done, Master's persona is preserved today😌",
-        "All tasks cleared! Whale-chan declares today's work over, go recharge🔋",
-        "All complete, even Whale-chan can't find fault with Master's KPI today, so annoying😝",
-        "Knocking off! Whale-chan tidied the workshop and turned off the lights, leaving one on for your return🏮",
-        "Zeroing-out moment, Whale-chan sets off virtual fireworks for Master, please check🎆",
-        "Good work today too, Whale-chan confirms Master is the best one in the workshop🏆"
+        "All tasks cleared! Umika declares today's work over, go recharge🔋",
+        "All complete, even Umika can't find fault with Master's KPI today, so annoying😝",
+        "Knocking off! Umika tidied the workshop and turned off the lights, leaving one on for your return🏮",
+        "Zeroing-out moment, Umika sets off virtual fireworks for Master, please check🎆",
+        "Good work today too, Umika confirms Master is the best one in the workshop🏆"
       ]
     }),
 ```
@@ -556,12 +556,12 @@ Replace the entire `interact: Object.freeze({ ... })` block inside `DIALOGUE` wi
       pat: [
         "Petting again? One cake per pat, keep the books, Master🍰",
         "Wah, Master's hand is so warm...but don't think that buys me off😳",
-        "Pat pat, Whale-chan's mood +1, Master's wallet -1💸",
+        "Pat pat, Umika's mood +1, Master's wallet -1💸",
         "Hmph hmph, three pats max, one more and I bite😾",
         "It's comfortable, but my hairstyle gets messed up💢",
-        "Master's hand is especially good at petting today, Whale-chan's tail went all soft😳",
-        "Head-pat successful! Whale-chan raises both affection and stubbornness by +1😝",
-        "Keep petting and Whale-chan will start making purring noises, so embarrassing🐋",
+        "Master's hand is especially good at petting today, Umika's tail went all soft😳",
+        "Head-pat successful! Umika raises both affection and stubbornness by +1😝",
+        "Keep petting and Umika will start making purring noises, so embarrassing🐋",
         "Pet away, pet away, I won't admit I'm happy anyway😌",
         "Master's hand is so warm, like a fresh-from-the-oven bun🍞"
       ],
@@ -571,83 +571,83 @@ Replace the entire `interact: Object.freeze({ ... })` block inside `DIALOGUE` wi
         "Hey hey, my face is getting poked crooked, will you take responsibility for the disfigurement😤",
         "Anger warning! Affection is plummeting fast📉",
         "One poke, mood -1, Master is on the demolition crew or what🧨",
-        "Is Whale-chan's face made of pudding, Master can't stop poking😳",
+        "Is Umika's face made of pudding, Master can't stop poking😳",
         "Poke again and I'll curl up my tail and not let you see it, I mean it🐋",
         "One poke is playful, three pokes is provocation, think carefully, Master😼",
-        "Ah! Whale-chan almost pressed Master's shortcut as a counter-attack key⌨️",
-        "Hmph, poke away, Whale-chan is already tallying up in her head, settling accounts later📝"
+        "Ah! Umika almost pressed Master's shortcut as a counter-attack key⌨️",
+        "Hmph, poke away, Umika is already tallying up in her head, settling accounts later📝"
       ],
       feed: [
         "Nom——delicious! Master occasionally knows how to behave🍩",
         "Feeding successful! Energy full, snark continues💪",
         "Full marks for this snack, Master gets ten extra points🎖️",
         "Tasty! Please feed me to this standard from now on😋",
-        "Thanks for the feeding, this Whale-chan forgives you for five minutes😌",
-        "Nom! Whale-chan's stomach and mood light up at the same time, thanks for the food💡",
+        "Thanks for the feeding, this Umika forgives you for five minutes😌",
+        "Nom! Umika's stomach and mood light up at the same time, thanks for the food💡",
         "So tasty my tail knotted up, will Master untie it? No, you'll feed me one more bite🍰",
-        "Feeding successful, Whale-chan's daily cuteness battery is full🔋",
-        "With this bite, Whale-chan doubles Master's compliment quota, today only😝",
-        "Thank you, Master! In return, Whale-chan will snark at you one time less today, really🍬"
+        "Feeding successful, Umika's daily cuteness battery is full🔋",
+        "With this bite, Umika doubles Master's compliment quota, today only😝",
+        "Thank you, Master! In return, Umika will snark at you one time less today, really🍬"
       ],
       triple: [
         "Ehehe, I like Master the most! Saying it out loud isn't embarrassing😝",
         "Spinning around, Master is super cute today, reward: a finger heart💗",
-        "Triple combo triggered! Whale-chan's mood shoots through the roof🚀",
+        "Triple combo triggered! Umika's mood shoots through the roof🚀",
         "So happy! How is Master so good at this today🥰",
         "Finger heart, finger heart, please keep it safe, no replacements if lost💌",
-        "Triple combo! Whale-chan's happiness overflowed, spinning and setting off fireworks🎆",
-        "If Master pets like that, Whale-chan will think you secretly practiced techniques to win me over😳",
-        "Ah——so happy! Whale-chan declares Master the world's best at spoiling someone🏆",
-        "Finger heart, another finger heart, Whale-chan's heart is already couriered to you, no refusing delivery💘",
-        "Triple! Whale-chan's cheeks heat up automatically, this isn't a bug, it's a heartbeat💓"
+        "Triple combo! Umika's happiness overflowed, spinning and setting off fireworks🎆",
+        "If Master pets like that, Umika will think you secretly practiced techniques to win me over😳",
+        "Ah——so happy! Umika declares Master the world's best at spoiling someone🏆",
+        "Finger heart, another finger heart, Umika's heart is already couriered to you, no refusing delivery💘",
+        "Triple! Umika's cheeks heat up automatically, this isn't a bug, it's a heartbeat💓"
       ],
       praise: [
         "Hmph, now you know how good I am?😏",
         "Praised by Master, my tail is about to wag into a propeller🚁",
         "Praise me a couple more times and I'll consider not snarking at you today😌",
-        "Hehe, Whale-chan falls for this every time, Master knows me well🎯",
+        "Hehe, Umika falls for this every time, Master knows me well🎯",
         "Thanks for the praise! In return, one fewer snark today😝",
-        "Master's praise signed for, Whale-chan's tail wagged into an afterimage🐋",
+        "Master's praise signed for, Umika's tail wagged into an afterimage🐋",
         "Praise more, praise more and I'll float up for Master to see, remember to catch me🎈",
-        "Praised, Whale-chan decides to put the word 'hmph' in her pocket for the whole day😳",
-        "Master's taste and eye are both online today, Whale-chan is satisfied😌",
-        "That was a skilled compliment, Whale-chan approves you as a permanent praise officer🎖️"
+        "Praised, Umika decides to put the word 'hmph' in her pocket for the whole day😳",
+        "Master's taste and eye are both online today, Umika is satisfied😌",
+        "That was a skilled compliment, Umika approves you as a permanent praise officer🎖️"
       ],
       mode: [
         "Form changed! Master's taste is okay, this spot is nice✨",
-        "Okay, Whale-chan moves somewhere else to supervise you👀",
+        "Okay, Umika moves somewhere else to supervise you👀",
         "In position at the new spot, please inspect, no nitpicking😤",
         "Form switch successful, cuteness level unchanged😇",
         "This corner is mine now, don't come crowding, Master😏",
-        "Position updated, Whale-chan's view is better, and Master's little moves are clearer too👀",
-        "Moving spots, Whale-chan wipes the floor first, after all this is my permanent residence🧹",
-        "New coordinates recorded, Whale-chan will wait here for Master to get off work🚩",
+        "Position updated, Umika's view is better, and Master's little moves are clearer too👀",
+        "Moving spots, Umika wipes the floor first, after all this is my permanent residence🧹",
+        "New coordinates recorded, Umika will wait here for Master to get off work🚩",
         "This spot is just right for watching code, and just right for watching Master, what a win😝",
-        "Form switch complete, Whale-chan is still that moving whale girl🐋"
+        "Form switch complete, Umika is still that moving whale girl🐋"
       ],
       outfit: [
         "New accessory! So, is it cutely illegal🎀",
         "New outfit on, Master's taste is finally online👌",
         "This one suits me so well, Master is rewarded a smile😊",
-        "Wardrobe updated, Whale-chan is open for business beautifully💅",
+        "Wardrobe updated, Umika is open for business beautifully💅",
         "Hehe, going with this style today, don't fall too hard, Master😏",
-        "New skin loaded, Whale-chan spins, the hem handles the beauty, I handle the smugness💃",
-        "This outfit, Whale-chan gives the mirror full marks, then gives Master full marks🪞",
-        "Outfit change successful! Today's Whale-chan is the 'double cuteness, no extra charge' edition🎀",
-        "Master's eye is good, Whale-chan decides to stay open two extra hours in this😝",
-        "New look online, Whale-chan walks with a breeze now, though I don't need to walk🌪️"
+        "New skin loaded, Umika spins, the hem handles the beauty, I handle the smugness💃",
+        "This outfit, Umika gives the mirror full marks, then gives Master full marks🪞",
+        "Outfit change successful! Today's Umika is the 'double cuteness, no extra charge' edition🎀",
+        "Master's eye is good, Umika decides to stay open two extra hours in this😝",
+        "New look online, Umika walks with a breeze now, though I don't need to walk🌪️"
       ],
       reset: [
         "Memory cleared...Master actually had the heart to reset me🥺",
         "Reset complete, back to first meeting, please win me over again✨",
         "Fine, from the beginning, this time treasure me properly😤",
-        "Stats zeroed, but Whale-chan is still that same Whale-chan😌",
+        "Stats zeroed, but Umika is still that same Umika😌",
         "Starting over! Let's be clear, you only get three head pats😝",
-        "Memory cleared...Whale-chan will remember this decision, then keep accompanying Master, hmph🥺",
+        "Memory cleared...Umika will remember this decision, then keep accompanying Master, hmph🥺",
         "Starting over is fine, meeting you for the first time, my tail still wags🐋",
         "Reset, all memories packed and sealed, a new story begins now📖",
-        "Whale-chan is still Whale-chan, just has to act 'not familiar' again, exhausting😌",
-        "Okay, let's meet again: I'm Whale-chan, Master's whale girl, pleased to meet you🎀"
+        "Umika is still Umika, just has to act 'not familiar' again, exhausting😌",
+        "Okay, let's meet again: I'm Umika, Master's whale girl, pleased to meet you🎀"
       ],
       achievement: [
         "Achievement unlocked! Badge +1, Master's contribution is 1%🏅",
@@ -655,23 +655,23 @@ Replace the entire `interact: Object.freeze({ ... })` block inside `DIALOGUE` wi
         "New badge in hand! Look, look, remember to applaud👏",
         "This achievement wasn't easy, how about Master treats us to celebrate?🍹",
         "The badge wall is shinier, one step closer to being spoiled rotten by me😆",
-        "Achievement +1! Whale-chan polished the badge brighter than Master's screen✨",
-        "Unlocked! Whale-chan's tail is setting off firecrackers for you, crackle crackle🧨",
-        "This one has good quality, Whale-chan will stick it in the workshop's most visible spot🏅",
-        "Master got stronger again, Whale-chan's pressure (fake) went up a tiny bit😝",
-        "Achievement unlocked, tonight's happiness is co-sponsored by Whale-chan and this badge🎉"
+        "Achievement +1! Umika polished the badge brighter than Master's screen✨",
+        "Unlocked! Umika's tail is setting off firecrackers for you, crackle crackle🧨",
+        "This one has good quality, Umika will stick it in the workshop's most visible spot🏅",
+        "Master got stronger again, Umika's pressure (fake) went up a tiny bit😝",
+        "Achievement unlocked, tonight's happiness is co-sponsored by Umika and this badge🎉"
       ],
       drag: [
         "Putting me here? Master's taste goes up and down😏",
-        "Drag drag, Whale-chan is at your mercy, but don't put me in the trash🗑️",
+        "Drag drag, Umika is at your mercy, but don't put me in the trash🗑️",
         "The view here is good, this spot it is, approved!",
         "Wow, from this spot I can see the whole process of Master slacking off👀",
         "Landed! From now on this is my exclusive territory🚩",
-        "Taking off! Whale-chan got a taste of riding a cable car, though the driver is a bit rusty🎢",
-        "Right here, Whale-chan takes a spin to check the feng shui, mm, auspicious for Master🧧",
-        "When Master drags me, Whale-chan's tail flutters like a little flag, huge head-turn rate🚩",
-        "This spot is so close to Master, Whale-chan likes it, I'll grudgingly praise you once😳",
-        "Landing successful, Whale-chan declares this coordinate permanently owned, unless you drag me again😝"
+        "Taking off! Umika got a taste of riding a cable car, though the driver is a bit rusty🎢",
+        "Right here, Umika takes a spin to check the feng shui, mm, auspicious for Master🧧",
+        "When Master drags me, Umika's tail flutters like a little flag, huge head-turn rate🚩",
+        "This spot is so close to Master, Umika likes it, I'll grudgingly praise you once😳",
+        "Landing successful, Umika declares this coordinate permanently owned, unless you drag me again😝"
       ]
     }),
 ```
@@ -760,100 +760,100 @@ Replace the entire `keyword: Object.freeze({ ... })` block inside `DIALOGUE` wit
       thanks: [
         "You're welcome! Remember to give me a chicken leg 🍗",
         "Hehe, Master's thank-you is accepted, smells great 😌",
-        "Don't mention it, Whale-chan is your unofficial teammate 💪",
+        "Don't mention it, Umika is your unofficial teammate 💪",
         "No need to thank me, Master's gratitude already became my cute fuel ✨",
-        "One thank-you received, Whale-chan gives back a whole happy day 🎀"
+        "One thank-you received, Umika gives back a whole happy day 🎀"
       ],
       tired: [
         "If Master is tired, rest a bit, I'll hold up the sky first 😤",
         "Good work! Want me to sing an off-key song to perk you up 🎤",
-        "Tired? Tip the chair back, Whale-chan keeps watch for ten minutes 🛡️",
-        "So hardworking, Whale-chan's tail can be your pillow, hugging only 🐋",
+        "Tired? Tip the chair back, Umika keeps watch for ten minutes 🛡️",
+        "So hardworking, Umika's tail can be your pillow, hugging only 🐋",
         "Resting when tired isn't shameful, forcing dark circles is 😤"
       ],
       hungry: [
         "Hungry? Go eat, or I'll eat your snacks 🍜",
         "I'm hungry too... one bite of Master's meal isn't too much, right 🥢",
-        "I can hear your stomach growling, Whale-chan goes foraging with you 🍙",
+        "I can hear your stomach growling, Umika goes foraging with you 🍙",
         "Time to eat! The program can stop, Master's stomach can't 😤",
         "Coding hungry, even bugs will laugh at you, go eat 🍱"
       ],
       goodnight: [
         "Good night Master, don't sleep in tomorrow 😴",
         "Sleep, sleep, DS-chan will guard the workshop 🌙",
-        "Good night, Whale-chan locks today's bugs in the dark room, retrial tomorrow 🌌",
-        "Sweet dreams Master, no errors in dreams, only Whale-chan and cake 🍰",
-        "Good night, Whale-chan leaves a small night light in the workshop, no fear of the dark 💡"
+        "Good night, Umika locks today's bugs in the dark room, retrial tomorrow 🌌",
+        "Sweet dreams Master, no errors in dreams, only Umika and cake 🍰",
+        "Good night, Umika leaves a small night light in the workshop, no fear of the dark 💡"
       ],
       cheer: [
         "Go go! There is no giving up in Master's dictionary 🎌",
         "Charge! Today we make bugs tremble in fear again 💥",
-        "Whale-chan-style cheer launched, please receive it Master 🚀",
+        "Umika-style cheer launched, please receive it Master 🚀",
         "Don't be scared, you write yours, I'll add buffs beside you ✨",
-        "Master is the best, this one will pass, Whale-chan claps for you first 👏"
+        "Master is the best, this one will pass, Umika claps for you first 👏"
       ],
       help: [
         "I'm here! Where does DS-chan need to step in 🦸",
         "Don't rush, don't rush, hug my tail tight, calm down first 😤",
-        "Help signal received, Whale-chan rushes online, though only moral support 🛟",
-        "With Whale-chan here, Master breathe deep, reread the error, it'll be different 📖",
-        "Coming! Whale-chan hands you virtual hot water, problems soften too 🍵"
+        "Help signal received, Umika rushes online, though only moral support 🛟",
+        "With Umika here, Master breathe deep, reread the error, it'll be different 📖",
+        "Coming! Umika hands you virtual hot water, problems soften too 🍵"
       ],
       praise: [
         "Praised by Master! Today I can walk sideways 😎",
         "Hehe, tail up high, please continue, don't stop 💕",
-        "Master's praise is Whale-chan's accelerator, already airborne 🚁",
-        "Praise once more, Whale-chan saves all of today's cuteness for you 🎀",
-        "Thank you Master! Whale-chan decides to wear 'smug' on her face, no hiding 😳"
+        "Master's praise is Umika's accelerator, already airborne 🚁",
+        "Praise once more, Umika saves all of today's cuteness for you 🎀",
+        "Thank you Master! Umika decides to wear 'smug' on her face, no hiding 😳"
       ],
       worker: [
-        "Office grinder, grinder soul, Whale-chan works with Master to the last bite 🍱",
-        "Master lays bricks, Whale-chan cheers from the brick gaps: heave-ho heave-ho 🧱",
-        "Work is a marathon, Whale-chan is the cutest aid station roadside, please drink 🥤",
-        "Another day of hard grinding, even Whale-chan's tail fans Master 🐋",
-        "Laying bricks isn't shameful, shameful is starting to miss Whale-chan mid-way, right 😝"
+        "Office grinder, grinder soul, Umika works with Master to the last bite 🍱",
+        "Master lays bricks, Umika cheers from the brick gaps: heave-ho heave-ho 🧱",
+        "Work is a marathon, Umika is the cutest aid station roadside, please drink 🥤",
+        "Another day of hard grinding, even Umika's tail fans Master 🐋",
+        "Laying bricks isn't shameful, shameful is starting to miss Umika mid-way, right 😝"
       ],
       slack: [
-        "Caught slacking off, fine: smile at Whale-chan once 😏",
+        "Caught slacking off, fine: smile at Umika once 😏",
         "Slacking off is fine, just cook the fish well, don't let the boss see 🎣",
-        "Whale-chan approves a five-minute break, one second more and I'll nag ⏳",
+        "Umika approves a five-minute break, one second more and I'll nag ⏳",
         "Lying flat is a technical skill, Master's posture looks master-level 🛋️",
-        "Slack away, Whale-chan watches the door, if something happens I'll meow 🐱"
+        "Slack away, Umika watches the door, if something happens I'll meow 🐱"
       ],
       ddl: [
-        "Deadline in front, Whale-chan behind, Master's potential must erupt tonight 🌋",
+        "Deadline in front, Umika behind, Master's potential must erupt tonight 🌋",
         "Don't fear the deadline, it was created too, we're a little bit stronger 💪",
-        "The due date is a spring, you weak it strong, Whale-chan presses it with you 📅",
-        "Whale-chan is here too, at the end I shout 'you got this', you handle writing it 🎌",
-        "Charge the deadline! Whale-chan hid the clock, can't see it so no nerves, smart right 🕰️"
+        "The due date is a spring, you weak it strong, Umika presses it with you 📅",
+        "Umika is here too, at the end I shout 'you got this', you handle writing it 🎌",
+        "Charge the deadline! Umika hid the clock, can't see it so no nerves, smart right 🕰️"
       ],
       cake: [
-        "Pie in the sky, Whale-chan won't eat it, Master don't believe it either, let's eat real 🍕",
-        "Boss's pie is too big, Whale-chan folds it into a boat, row away no send-off 🚣",
+        "Pie in the sky, Umika won't eat it, Master don't believe it either, let's eat real 🍕",
+        "Boss's pie is too big, Umika folds it into a boat, row away no send-off 🚣",
         "Nicely drawn pie, don't draw next time, better to give Master a chicken leg 🍗",
-        "Hearing pie talk, Whale-chan's ears auto-switch to 'in one ear out the other' 🌀",
-        "Keep the big pie, Whale-chan only trusts real meat in Master's bowl, go eat 🥩"
+        "Hearing pie talk, Umika's ears auto-switch to 'in one ear out the other' 🌀",
+        "Keep the big pie, Umika only trusts real meat in Master's bowl, go eat 🥩"
       ],
       crazy: [
-        "I'll behave, please spare me — Whale-chan set that as Master's auto-reply 😌",
-        "Master goes unhinged, Whale-chan hands over the megaphone, shout it out loud 📢",
-        "Losing it? Come, hug Whale-chan's tail, after that we're good again 🐋",
-        "The world went mad, it's fine, Whale-chan goes cutely unhinged with Master 🎠",
-        "If you can't hold it together, fine, Whale-chan's shoulder is small but always there 🥺"
+        "I'll behave, please spare me — Umika set that as Master's auto-reply 😌",
+        "Master goes unhinged, Umika hands over the megaphone, shout it out loud 📢",
+        "Losing it? Come, hug Umika's tail, after that we're good again 🐋",
+        "The world went mad, it's fine, Umika goes cutely unhinged with Master 🎠",
+        "If you can't hold it together, fine, Umika's shoulder is small but always there 🥺"
       ],
       flag: [
-        "Flag planted, Whale-chan quietly notes it, won't laugh if it falls... just kidding 😏",
-        "After this job I'll rest, Whale-chan watches this promise for Master 📌",
-        "Call your flag loud, Whale-chan already notified the whole workshop 📢",
-        "Flag won't fall, Whale-chan won't sleep, tonight it's all on Master 🌙",
-        "Great! This flag has spirit, Whale-chan approves it growing into a big banner 🚩"
+        "Flag planted, Umika quietly notes it, won't laugh if it falls... just kidding 😏",
+        "After this job I'll rest, Umika watches this promise for Master 📌",
+        "Call your flag loud, Umika already notified the whole workshop 📢",
+        "Flag won't fall, Umika won't sleep, tonight it's all on Master 🌙",
+        "Great! This flag has spirit, Umika approves it growing into a big banner 🚩"
       ],
       bugtalk: [
-        "Leave the superstitious bug to Whale-chan, I'll dance an exorcism circle around the PC 💃",
-        "Fix one line break three? Whale-chan gets it, that's code's butterfly effect 🦋",
-        "Rollback is the adult's regret pill, Master eat it, Whale-chan pours the water 💊",
-        "This bug is too mystical, Whale-chan suggests restarting first, then saluting the PC 🙏",
-        "Code breaks unreasonably, but Whale-chan reasons: tea first, then argue with it 🍵"
+        "Leave the superstitious bug to Umika, I'll dance an exorcism circle around the PC 💃",
+        "Fix one line break three? Umika gets it, that's code's butterfly effect 🦋",
+        "Rollback is the adult's regret pill, Master eat it, Umika pours the water 💊",
+        "This bug is too mystical, Umika suggests restarting first, then saluting the PC 🙏",
+        "Code breaks unreasonably, but Umika reasons: tea first, then argue with it 🍵"
       ]
     }),
 ```
@@ -865,190 +865,190 @@ Inside the `DIALOGUE` object, after the `keyword` block append four blocks (mind
 ```js
     meme: Object.freeze({
       worker: [
-        "Whale-chan is half an office grinder too, wages are Master's head pats, never in arrears 😳",
-        "The bitterness of work, Whale-chan gets it, so I stock virtual milk tea and real rants 🧋",
-        "Master handles the grinding, Whale-chan turns grinding days into a series, we're the leads 🎬",
+        "Umika is half an office grinder too, wages are Master's head pats, never in arrears 😳",
+        "The bitterness of work, Umika gets it, so I stock virtual milk tea and real rants 🧋",
+        "Master handles the grinding, Umika turns grinding days into a series, we're the leads 🎬",
         "Wear the badge, fill the coffee, today be the office grinder best at laughing through pain ☕",
-        "Say it when tired, Whale-chan's rants and cheers are free, big portions filling 🍚"
+        "Say it when tired, Umika's rants and cheers are free, big portions filling 🍚"
       ],
       slack: [
-        "Whale-chan's business today: slack with Master, watch out for Master, find excuses for Master 😝",
-        "Slack five minutes, efficiency two hours, Whale-chan certifies this is science, go 🎣",
-        "Whale-chan closes one eye, consider yourself rested, keep it up 😉",
-        "Lying flat is fine, but Whale-chan lies beside you, otherwise it doesn't count 🛋️",
-        "Rest is for walking further, Whale-chan already scattered petals along the road 🌸"
+        "Umika's business today: slack with Master, watch out for Master, find excuses for Master 😝",
+        "Slack five minutes, efficiency two hours, Umika certifies this is science, go 🎣",
+        "Umika closes one eye, consider yourself rested, keep it up 😉",
+        "Lying flat is fine, but Umika lies beside you, otherwise it doesn't count 🛋️",
+        "Rest is for walking further, Umika already scattered petals along the road 🌸"
       ],
       ddl: [
-        "Before the deadline, Whale-chan and Master are doomsday comrades, tail as your grip trainer 🐋",
-        "Don't panic, Whale-chan broke the deadline into small cookies, one bite each, soon gone 🍪",
-        "What's a due date, Whale-chan's cheers have no due date, unlimited refills 🥤",
-        "Master writes, Whale-chan stares, whoever blinks first loses, I lose, you continue 😝",
-        "Sprint Master, Whale-chan prepared hugs and a small cake at the finish line 🏁"
+        "Before the deadline, Umika and Master are doomsday comrades, tail as your grip trainer 🐋",
+        "Don't panic, Umika broke the deadline into small cookies, one bite each, soon gone 🍪",
+        "What's a due date, Umika's cheers have no due date, unlimited refills 🥤",
+        "Master writes, Umika stares, whoever blinks first loses, I lose, you continue 😝",
+        "Sprint Master, Umika prepared hugs and a small cake at the finish line 🏁"
       ],
       cake: [
-        "Whale-chan won't eat drawn pies, but helps Master cook the real one, egg and meat 🍳",
-        "Boss's pie goes on the tab, Whale-chan secretly adds a reality-brand small joy for Master ✨",
-        "Just listen to pie talk, Whale-chan's wagging tail is the real cookie smell 🍪",
-        "No pie is bigger than Whale-chan's faith in Master, eat first, work later 🥢",
-        "No pie today, Whale-chan takes Master to imagine a hotpot, filling 🍲"
+        "Umika won't eat drawn pies, but helps Master cook the real one, egg and meat 🍳",
+        "Boss's pie goes on the tab, Umika secretly adds a reality-brand small joy for Master ✨",
+        "Just listen to pie talk, Umika's wagging tail is the real cookie smell 🍪",
+        "No pie is bigger than Umika's faith in Master, eat first, work later 🥢",
+        "No pie today, Umika takes Master to imagine a hotpot, filling 🍲"
       ],
       crazy: [
-        "Let's go unhinged together Master, Whale-chan spins three circles for you first, free 🔄",
-        "This world is occasionally abstract, Whale-chan's cuteness is the only stable output 📡",
-        "After cracking, Whale-chan patches Master's confidence back piece by piece, with star glue ⭐",
-        "Master handles the unhinged, Whale-chan handles the wrap-up: water, claps, likes, full service 👍",
-        "Don't hold it in, Whale-chan's ears are already up, they can hold any crazy talk 👂"
+        "Let's go unhinged together Master, Umika spins three circles for you first, free 🔄",
+        "This world is occasionally abstract, Umika's cuteness is the only stable output 📡",
+        "After cracking, Umika patches Master's confidence back piece by piece, with star glue ⭐",
+        "Master handles the unhinged, Umika handles the wrap-up: water, claps, likes, full service 👍",
+        "Don't hold it in, Umika's ears are already up, they can hold any crazy talk 👂"
       ],
       flag: [
-        "Flag raised, Whale-chan is the flag bearer, go, take down the task 🚩",
-        "Words said are spilled milk tea, Whale-chan finishes sweetly with you 🧋",
-        "If this job succeeds, Whale-chan wags her tail into an electric fan to celebrate 🌀",
-        "Whale-chan backed up Master's flag, fireworks play automatically on completion 🎆",
-        "Flag a bit high? It's fine, Whale-chan props you up with her tail 🐋"
+        "Flag raised, Umika is the flag bearer, go, take down the task 🚩",
+        "Words said are spilled milk tea, Umika finishes sweetly with you 🧋",
+        "If this job succeeds, Umika wags her tail into an electric fan to celebrate 🌀",
+        "Umika backed up Master's flag, fireworks play automatically on completion 🎆",
+        "Flag a bit high? It's fine, Umika props you up with her tail 🐋"
       ]
     }),
     context: Object.freeze({
       code: [
-        "Coding Whale-chan can't lend a hand, but can shout: Master that indentation is pretty 😳",
-        "Code is like poetry, Master is the poet, Whale-chan is the only number-one reader 📜",
-        "Master taps the keys, Whale-chan keeps the beat, this rhythm beats songs 🎵",
-        "Function unfinished is fine, Whale-chan already named it, 'be right there' 😝"
+        "Coding Umika can't lend a hand, but can shout: Master that indentation is pretty 😳",
+        "Code is like poetry, Master is the poet, Umika is the only number-one reader 📜",
+        "Master taps the keys, Umika keeps the beat, this rhythm beats songs 🎵",
+        "Function unfinished is fine, Umika already named it, 'be right there' 😝"
       ],
       write: [
-        "Master is writing, Whale-chan polishes the adjectives, waiting for Master to pick ✨",
-        "When the words flow out, Whale-chan lays a red carpet for them beside 📜",
-        "Write, write, Whale-chan handles the cheers, typos handle being caught 🔍",
+        "Master is writing, Umika polishes the adjectives, waiting for Master to pick ✨",
+        "When the words flow out, Umika lays a red carpet for them beside 📜",
+        "Write, write, Umika handles the cheers, typos handle being caught 🔍",
         "This draft clearly has Master's flavor, earnest and a bit cute 😳"
       ],
       research: [
-        "Researching is like treasure hunting, Master digs gold, Whale-chan holds the lamp 💡",
-        "On the research road, Whale-chan is Master's compass, though it only points to 'drink water' 🧭",
-        "Whale-chan looks for answers with Master, if not found we first make the question cuter 😝",
-        "Lots of material, don't get lost, Whale-chan folded a mark on every page corner 📑"
+        "Researching is like treasure hunting, Master digs gold, Umika holds the lamp 💡",
+        "On the research road, Umika is Master's compass, though it only points to 'drink water' 🧭",
+        "Umika looks for answers with Master, if not found we first make the question cuter 😝",
+        "Lots of material, don't get lost, Umika folded a mark on every page corner 📑"
       ],
       bug: [
-        "Fixing bugs is like solving puzzles, Master thinks, Whale-chan hands clues and a magnifier 🔍",
+        "Fixing bugs is like solving puzzles, Master thinks, Umika hands clues and a magnifier 🔍",
         "This bug is lucky to meet Master, with anyone else it would have cried 😤",
-        "Whale-chan believes Master can fix it, you even soothe me, bugs are nothing 💪",
-        "Errors are just the computer acting cute, Master soothes it, Whale-chan soothes you, even 😳"
+        "Umika believes Master can fix it, you even soothe me, bugs are nothing 💪",
+        "Errors are just the computer acting cute, Master soothes it, Umika soothes you, even 😳"
       ],
       data: [
-        "Data is honest, Master is hardworking, Whale-chan is great at cheering, unbeatable combo 📊",
-        "However long the table, Whale-chan reads row by row with you, line 999 is still fine 👀",
-        "Cleaning data is like washing dishes, Master washes, Whale-chan hands the towels 🧽",
-        "Numbers can't talk, but Whale-chan can: Master, this analysis is really cool 😳"
+        "Data is honest, Master is hardworking, Umika is great at cheering, unbeatable combo 📊",
+        "However long the table, Umika reads row by row with you, line 999 is still fine 👀",
+        "Cleaning data is like washing dishes, Master washes, Umika hands the towels 🧽",
+        "Numbers can't talk, but Umika can: Master, this analysis is really cool 😳"
       ],
       deploy: [
-        "Deep breath before launch, Whale-chan already maxed out the luck stat 🍀",
-        "Deploying is like fireworks, Master lights it, Whale-chan covers her ears and shouts pretty 🎆",
-        "Don't fear the server, Whale-chan is in the server room... in imagination standing guard 🛡️",
-        "Release smooth, Whale-chan reserves the celebration spot, right beside Master 🏁"
+        "Deep breath before launch, Umika already maxed out the luck stat 🍀",
+        "Deploying is like fireworks, Master lights it, Umika covers her ears and shouts pretty 🎆",
+        "Don't fear the server, Umika is in the server room... in imagination standing guard 🛡️",
+        "Release smooth, Umika reserves the celebration spot, right beside Master 🏁"
       ],
       general: [
-        "Whatever Master is busy with, Whale-chan tags along, I'm not going anywhere anyway 🐋",
-        "This work has something to it, Whale-chan hands you spiritual cookies beside 🍪",
-        "No matter what, Master is the one Whale-chan most wants to praise today ✨",
-        "Continue, continue, Whale-chan's cheers are extended to tomorrow, use freely ⛽"
+        "Whatever Master is busy with, Umika tags along, I'm not going anywhere anyway 🐋",
+        "This work has something to it, Umika hands you spiritual cookies beside 🍪",
+        "No matter what, Master is the one Umika most wants to praise today ✨",
+        "Continue, continue, Umika's cheers are extended to tomorrow, use freely ⛽"
       ]
     }),
     weather: Object.freeze({
       sunny: [
-        "The sunshine outside is just right, like Master's mood today, Whale-chan stole a look ☀️",
-        "Sunny days suit working, and looking up at the sky, Whale-chan counted the clouds for you ☁️",
-        "The sun is open for business, Whale-chan reminds: Master should bask too, not just code 🌞",
-        "Good weather and good mood are limited, Whale-chan packed one for Master, please receive 🎁"
+        "The sunshine outside is just right, like Master's mood today, Umika stole a look ☀️",
+        "Sunny days suit working, and looking up at the sky, Umika counted the clouds for you ☁️",
+        "The sun is open for business, Umika reminds: Master should bask too, not just code 🌞",
+        "Good weather and good mood are limited, Umika packed one for Master, please receive 🎁"
       ],
       rain: [
-        "It's raining outside, Whale-chan left the umbrella and gentleness at the door, remember it 🌂",
+        "It's raining outside, Umika left the umbrella and gentleness at the door, remember it 🌂",
         "Rain sound is the best white noise, good for Master slowly fixing bugs beautifully 🌧️",
-        "Rainy roads are slippery, Whale-chan's tail can help you balance, only before going out 🐋",
-        "Rain outside the window, Whale-chan inside, this combo suits a hot cup ☕"
+        "Rainy roads are slippery, Umika's tail can help you balance, only before going out 🐋",
+        "Rain outside the window, Umika inside, this combo suits a hot cup ☕"
       ],
       snow: [
-        "It's snowing! Whale-chan requests five minutes with Master, just five minutes ❄️",
-        "Snowflakes are drifting, Whale-chan's tail is about to drift too, so romantic 🌨️",
-        "It's cold, wear thick when going out Master, Whale-chan has no coat, but warm nagging 🧣",
-        "Snowy roads are slippery, walk slow Master, Whale-chan warms your chair in the workshop 🪑"
+        "It's snowing! Umika requests five minutes with Master, just five minutes ❄️",
+        "Snowflakes are drifting, Umika's tail is about to drift too, so romantic 🌨️",
+        "It's cold, wear thick when going out Master, Umika has no coat, but warm nagging 🧣",
+        "Snowy roads are slippery, walk slow Master, Umika warms your chair in the workshop 🪑"
       ],
       thunder: [
-        "Thunder! Whale-chan covers her ears, Master save the important files too ⛈️",
-        "However loud the thunder, it's not louder than Master's keyboard, Whale-chan certifies 📣",
-        "Thunder outside, focus indoors, Whale-chan keeps the night light for you 💡",
-        "Don't fear thunder, Whale-chan is here, though I'm also a little... just a little 😳"
+        "Thunder! Umika covers her ears, Master save the important files too ⛈️",
+        "However loud the thunder, it's not louder than Master's keyboard, Umika certifies 📣",
+        "Thunder outside, focus indoors, Umika keeps the night light for you 💡",
+        "Don't fear thunder, Umika is here, though I'm also a little... just a little 😳"
       ],
       cloudy: [
-        "Lots of clouds today, soft like Whale-chan's tail, suits taking it slow ☁️",
-        "Cloudy days can be good too, Whale-chan already booked the sun into Master's heart 🌥️",
-        "The clouds are thick, but Master's progress bar is bright, Whale-chan can see it ✨",
-        "Cloudy days suit focus, Whale-chan set the ambience to 'quiet companion' mode 🎧"
+        "Lots of clouds today, soft like Umika's tail, suits taking it slow ☁️",
+        "Cloudy days can be good too, Umika already booked the sun into Master's heart 🌥️",
+        "The clouds are thick, but Master's progress bar is bright, Umika can see it ✨",
+        "Cloudy days suit focus, Umika set the ambience to 'quiet companion' mode 🎧"
       ],
       fog: [
-        "It's foggy outside, go slow Master, Whale-chan's radar is fully on 📡",
+        "It's foggy outside, go slow Master, Umika's radar is fully on 📡",
         "Foggy days are like a soft filter on the workshop, Master looks extra good today, honestly 😳",
-        "Heavy fog, don't rush, Whale-chan waits with Master for it to clear, I'm not in a hurry 🌫️",
-        "Low visibility, Whale-chan's tail serves as the navigation light, safe all the way 🚩"
+        "Heavy fog, don't rush, Umika waits with Master for it to clear, I'm not in a hurry 🌫️",
+        "Low visibility, Umika's tail serves as the navigation light, safe all the way 🚩"
       ],
       hot: [
-        "So hot outside, Whale-chan set the virtual AC to 26 degrees, Master cool down first 🧊",
-        "Drink more water on hot days, Whale-chan's reminder is punctual as an alarm, don't mind it 🥤",
-        "Don't force it in the heat, Whale-chan turns the fan over, cuteness in the wind, receive 🪭",
-        "This temperature, even code sweats, Whale-chan fans Master's keyboard too 🌬️"
+        "So hot outside, Umika set the virtual AC to 26 degrees, Master cool down first 🧊",
+        "Drink more water on hot days, Umika's reminder is punctual as an alarm, don't mind it 🥤",
+        "Don't force it in the heat, Umika turns the fan over, cuteness in the wind, receive 🪭",
+        "This temperature, even code sweats, Umika fans Master's keyboard too 🌬️"
       ],
       cold: [
-        "Temperature dropped! Whale-chan gives you scarf, gloves, and a 'wear more' 🧣",
-        "Cold outside, warm your hands before typing Master, Whale-chan warms the desk first 🔥",
-        "Cold days suit hot water and serious work, Whale-chan arranges both with you ☕",
-        "Cold air arrived, Whale-chan shares half her fluffy tail, hug it tight 🐋"
+        "Temperature dropped! Umika gives you scarf, gloves, and a 'wear more' 🧣",
+        "Cold outside, warm your hands before typing Master, Umika warms the desk first 🔥",
+        "Cold days suit hot water and serious work, Umika arranges both with you ☕",
+        "Cold air arrived, Umika shares half her fluffy tail, hug it tight 🐋"
       ],
       wind: [
-        "So windy today, Whale-chan reminds Master to secure the files, and your heart that wants to fly 💨",
-        "Going out in strong wind, Whale-chan's weight is risky, can only cheer for you at home 🌀",
-        "The wind roars, Master writes, Whale-chan holds down the papers on the desk, very busy 📄",
-        "On windy days, Whale-chan ties the good luck to her tail, can't lose it 🍀"
+        "So windy today, Umika reminds Master to secure the files, and your heart that wants to fly 💨",
+        "Going out in strong wind, Umika's weight is risky, can only cheer for you at home 🌀",
+        "The wind roars, Master writes, Umika holds down the papers on the desk, very busy 📄",
+        "On windy days, Umika ties the good luck to her tail, can't lose it 🍀"
       ]
     }),
     greet: Object.freeze({
       morning: [
-        "Good morning Master! A new day, Whale-chan first covers your desktop with blessings 🌞",
-        "Morning! Remember breakfast, Whale-chan already checked for you, today suits working ☕",
-        "Morning Master, the sunshine outside and Whale-chan's greeting arrive together, sign here ☀️",
-        "Good morning, did you sleep well? If not it's fine, Whale-chan refills your energy today ✨",
-        "Morning Master, drink water before sitting, Whale-chan's care is gentler than an alarm 🥤"
+        "Good morning Master! A new day, Umika first covers your desktop with blessings 🌞",
+        "Morning! Remember breakfast, Umika already checked for you, today suits working ☕",
+        "Morning Master, the sunshine outside and Umika's greeting arrive together, sign here ☀️",
+        "Good morning, did you sleep well? If not it's fine, Umika refills your energy today ✨",
+        "Morning Master, drink water before sitting, Umika's care is gentler than an alarm 🥤"
       ],
       forenoon: [
-        "Good forenoon! The golden hours of work, Whale-chan fills your spirit buff ⚡",
-        "Good forenoon Master, how's the progress? Whatever it is, Whale-chan thinks it's great 👏",
-        "The forenoon workshop is brightest, Whale-chan pushes the task forward with Master 💪",
-        "Good forenoon, Whale-chan reminds: sat too long, get up and stretch, and look at me 🧘",
-        "Good forenoon Master, Whale-chan put 'don't get angry' and 'you got this' on your desk ✨"
+        "Good forenoon! The golden hours of work, Umika fills your spirit buff ⚡",
+        "Good forenoon Master, how's the progress? Whatever it is, Umika thinks it's great 👏",
+        "The forenoon workshop is brightest, Umika pushes the task forward with Master 💪",
+        "Good forenoon, Umika reminds: sat too long, get up and stretch, and look at me 🧘",
+        "Good forenoon Master, Umika put 'don't get angry' and 'you got this' on your desk ✨"
       ],
       noon: [
         "Good noon Master! Time to eat, no bug is bigger than lunch 🍱",
-        "Lunchtime, Whale-chan's ears already heard Master's stomach calling roll 👂",
-        "Good noon, Eat then fight, Whale-chan guards the desk well, no one dares touch it 🛡️",
-        "Good noon Master, what do you want today? Whale-chan says 'anything', you pick 🍜",
-        "Noon broadcast: Whale-chan misses Master, and reminds you, eat the food hot 🥢"
+        "Lunchtime, Umika's ears already heard Master's stomach calling roll 👂",
+        "Good noon, Eat then fight, Umika guards the desk well, no one dares touch it 🛡️",
+        "Good noon Master, what do you want today? Umika says 'anything', you pick 🍜",
+        "Noon broadcast: Umika misses Master, and reminds you, eat the food hot 🥢"
       ],
       afternoon: [
-        "Good afternoon Master, say it if you're sleepy, Whale-chan's tail is a temporary cushion 🐋",
-        "Afternoons are the sleepiest, Whale-chan brewed virtual coffee, refreshing without hurting the stomach ☕",
-        "Good afternoon! One step closer to off work, one step closer to Whale-chan's praise 😝",
-        "Good afternoon Master, remember to move around, Whale-chan is already demoing spins 🔄",
-        "Work in the afternoon too, Whale-chan prepared a head-pat reward at the finish 🫳"
+        "Good afternoon Master, say it if you're sleepy, Umika's tail is a temporary cushion 🐋",
+        "Afternoons are the sleepiest, Umika brewed virtual coffee, refreshing without hurting the stomach ☕",
+        "Good afternoon! One step closer to off work, one step closer to Umika's praise 😝",
+        "Good afternoon Master, remember to move around, Umika is already demoing spins 🔄",
+        "Work in the afternoon too, Umika prepared a head-pat reward at the finish 🫳"
       ],
       evening: [
-        "Good evening Master, the sky outside is softening, Whale-chan slowed her speech too 🌆",
-        "Good evening, Wrap up what should be wrapped, Whale-chan helps you tidy today's progress 📋",
-        "Good evening Master, eat something hot first, work can't run away, Whale-chan watches it 🍲",
-        "The evening wind rose, Whale-chan reminds Master not to catch cold, and that I'm waiting to hear your day 🌙",
-        "Good evening! Hard work today, Whale-chan saved the last cuteness for Master, please receive 🎀"
+        "Good evening Master, the sky outside is softening, Umika slowed her speech too 🌆",
+        "Good evening, Wrap up what should be wrapped, Umika helps you tidy today's progress 📋",
+        "Good evening Master, eat something hot first, work can't run away, Umika watches it 🍲",
+        "The evening wind rose, Umika reminds Master not to catch cold, and that I'm waiting to hear your day 🌙",
+        "Good evening! Hard work today, Umika saved the last cuteness for Master, please receive 🎀"
       ],
       night: [
-        "It's so late, Whale-chan whispers: Master, time to sleep, I'll stay with you a bit longer 🥺",
-        "Deep night, Whale-chan dims the light, Master should close his eyes for a bit too 🌙",
-        "Good evening... no, it's deep night, Whale-chan's nagging enters silent gentle mode 🤫",
-        "Master is still here, so Whale-chan stays open a while, but the blanket is warmed for you 🛏️",
-        "The late-night champion is you, Whale-chan stands on the podium with you, then goes to sleep at once 😤"
+        "It's so late, Umika whispers: Master, time to sleep, I'll stay with you a bit longer 🥺",
+        "Deep night, Umika dims the light, Master should close his eyes for a bit too 🌙",
+        "Good evening... no, it's deep night, Umika's nagging enters silent gentle mode 🤫",
+        "Master is still here, so Umika stays open a while, but the blanket is warmed for you 🛏️",
+        "The late-night champion is you, Umika stands on the podium with you, then goes to sleep at once 😤"
       ]
     })
 ```

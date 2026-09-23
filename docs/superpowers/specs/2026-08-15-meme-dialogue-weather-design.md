@@ -1,11 +1,11 @@
-# Whale-chan Meme Chat + Cute Dialogue + Weather Companionship Design
+# Umika Meme Chat + Cute Dialogue + Weather Companionship Design
 
 Date: 2026-08-15
 Status: Approved by the user; implementation plan pending
 
 ## 1. Goals
 
-Without breaking the existing state machine or work-state stability (v1.0.2), expand Whale-chan's dialogue lines from about 190 to about 500, and give her:
+Without breaking the existing state machine or work-state stability (v1.0.2), expand Umika's dialogue lines from about 190 to about 500, and give her:
 
 1. A large set of safe memes plus cute-style dialogue (keeping the energetic childhood-friend persona: she can act clingy, can snark, and never offends)
 2. Low-frequency proactive small talk (once every 5-8 minutes) that stays as close as possible to the current task stage/content and never feels awkward

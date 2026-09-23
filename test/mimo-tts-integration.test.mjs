@@ -28,11 +28,12 @@ test("MiMo TTS setting is conditional and defaults to off", () => {
   assert.match(client, /defaultOff = prefKey === "mimoTts"/);
 });
 
-test("only approved interaction paths emit localized MiMo TTS lines", () => {
+test("all bubble paths reach MiMo only after live voice and clip fallback fail", () => {
   assert.match(presenter, /var MIMO_TTS_EVENT = "dsh-whale-musume:interaction-line"/);
-  assert.match(presenter, /function showInteractionLine\(line\)[\s\S]*?showLine\(line\);[\s\S]*?emitInteractionLine\(localizeLine\(line\)\)/);
+  assert.match(presenter, /function showInteractionLine\(line\)[\s\S]*?showLine\(line\);/);
   assert.match(presenter, /function bellyReact[\s\S]*?showInteractionLine\(line\)/);
   assert.match(presenter, /function tailReact[\s\S]*?showInteractionLine\(line\)/);
   assert.match(presenter, /var patLine = say\("interact", "pat"\);[\s\S]*?showInteractionLine\(patLine\)/);
-  assert.match(presenter, /readPref\("chat"\)\) emitInteractionLine\(localizeLine\("Ehehe~ I like Master best!"\)\)/);
+  assert.match(presenter, /if \(language !== "ja" \|\| !playVoiceFor\(line\)\) emitInteractionLine\(shown\)/);
+  assert.doesNotMatch(presenter, /emitInteractionLine\(localizeLine\("Ehehe~ I like Master best!"\)\)/);
 });

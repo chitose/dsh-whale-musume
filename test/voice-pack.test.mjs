@@ -28,10 +28,9 @@ function coreLines() {
   return lines;
 }
 
-/* Bubble texts the presenter writes itself instead of picking from a core bank:
-   every literal it hands to playVoiceFor() must be in the pack too. */
+/* Bubble texts the presenter writes itself instead of picking from a core bank. */
 function presenterLiterals_() {
-  return [...new Set([...presenter.matchAll(/playVoiceFor\("([^"]+)"\)/g)].map((match) => match[1]))];
+  return [...new Set([...presenter.matchAll(/speakLine\("([^"]+)"/g)].map((match) => match[1]))];
 }
 
 test("every voiced line has a clip, and no clip is orphaned", { skip: !packBuilt }, () => {
@@ -91,20 +90,13 @@ test("the presenter resolves a clip URL from the manifest and rejects unsafe val
   assert.equal(voiceSourceFor(undefined, manifestFor, "/v/"), "");
 });
 
-test("the presenter speaks only what it shows, and defers uncovered lines to MiMo TTS", () => {
+test("every bubble path requests live voice and has a fallback", () => {
   assert.match(presenter, /var VOICE_ROOT = "\/assets\/voice\/ja\/";/);
-  assert.match(presenter, /\{ key: "voiceJa", label: "Voice \(JP clips\)" \}/);
-  /* the showLine() funnel */
-  assert.match(
-    presenter,
-    /function showLineNow\(line\)[\s\S]*?var localized = localizeLine\(line\);[\s\S]*?playVoiceFor\(line\);[\s\S]*?typeBubble\(text, localized\)/
-  );
-  /* the reconcile loop writes two bubbles directly and used to be silent: the
-     state line (the most-seen bubble) and the celebration override */
-  assert.match(presenter, /playVoiceFor\(computed\.line\);\s*\n\s*typeBubble\(bubbleText, localizeLine\(computed\.line\)\);/);
-  assert.match(presenter, /playVoiceFor\("Ehehe~ I like Master best!"\);/);
-  /* a clip and the optional TTS bridge never both speak the same line */
-  assert.match(presenter, /function showInteractionLine\(line\)[\s\S]*?showLine\(line\);[\s\S]*?if \(!lineHasVoice\(line\)\) emitInteractionLine\(localizeLine\(line\)\)/);
+  assert.match(presenter, /typeBubble\(text, speakLine\(line, text\)\)/);
+  assert.match(presenter, /typeBubble\(bubbleText, speakLine\(computed\.line, bubbleText\)\)/);
+  assert.match(presenter, /typeBubble\(bubbleText, speakLine\("Ehehe~ I like Master best!", bubbleText\)\)/);
+  assert.match(presenter, /if \(language !== "ja" \|\| !playVoiceFor\(line\)\) emitInteractionLine\(shown\)/);
+  assert.match(presenter, /generation === voiceGeneration/);
   assert.match(presenter, /function voiceEnabled\(\)[\s\S]*?return readPref\("voiceJa"\) && readPref\("chat"\);/);
   /* names no longer mute anything: 74% of clips contain one, so muting looked
      like a broken feature rather than a naming choice */
@@ -182,6 +174,43 @@ function extractFunctionBody(name) {
   assert.ok(start > 0 && end > start, `${name} must exist`);
   return presenter.slice(start, end).trim();
 }
+
+test("dialogue text follows the selected language and personalized names", () => {
+  const make = new Function("voiceLanguage", "voiceTranslations", "title", "selfName", "spokenTitle", "spokenSelfName", "core", `${extractFunctionBody("localizeLine")}; return localizeLine;`);
+  const translations = { "Master likes Umika": "マスターはくじらちゃんが好き" };
+  const names = { title: () => "先生", selfName: () => "ミカ" };
+  const ja = make(() => "ja", translations, names.title, names.selfName, names.title, names.selfName, {});
+  assert.equal(ja("Master likes Umika"), "先生はミカが好き");
+  const en = make(() => "en", translations, names.title, names.selfName, names.title, names.selfName, {});
+  assert.equal(en("Master likes Umika"), "先生 likes ミカ");
+});
+
+test("a late synthesis response cannot replace or speak a newer bubble", async () => {
+  const requests = [];
+  const played = [];
+  const bubble = { hidden: false };
+  const textNode = { isConnected: true, textContent: "", closest: () => bubble };
+  const state = {
+    activeVoiceLine: "", activeVoiceText: null, voiceGeneration: 0, voiceAudio: null, typingTimer: null,
+    VOICE_API: "/api/voice",
+    root: { fetch: () => new Promise((resolve) => requests.push(resolve)), clearTimeout() {} },
+    voiceLanguage: () => "en", localizeLine: (line) => line, readPref: () => true,
+    title: () => "Master", selfName: () => "Umika", spokenTitle: () => "Master", spokenSelfName: () => "Umika",
+    playVoiceFor: (line, audio) => { played.push([line, audio]); return true; },
+    emitInteractionLine() {}, loadVoiceManifest() {}, memory: { bubbleHideAt: 0 },
+  };
+  const speakLine = new Function("state", `with (state) { ${extractFunctionBody("speakLine")}; return speakLine; }`)(state);
+  speakLine("old", textNode);
+  speakLine("new", textNode);
+  requests[0]({ ok: true, json: async () => ({ text: "old translated", audio: "/old.wav" }) });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(textNode.textContent, "");
+  assert.deepEqual(played, []);
+  requests[1]({ ok: true, json: async () => ({ text: "new translated", audio: "/new.wav" }) });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(textNode.textContent, "new translated");
+  assert.deepEqual(played, [["new", "/new.wav"]]);
+});
 
 function makeVoiceHarness(options = {}) {
   const plays = [];

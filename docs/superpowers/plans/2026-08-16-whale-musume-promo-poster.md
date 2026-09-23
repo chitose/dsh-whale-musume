@@ -1,8 +1,8 @@
-# Whale-chan Promo Poster Implementation Plan
+# Umika Promo Poster Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Produce one reviewable `2048 x 1152` PNG preview that presents Whale-chan as a real DeepSeek Harness desktop companion.
+**Goal:** Produce one reviewable `2048 x 1152` PNG preview that presents Umika as a real DeepSeek Harness desktop companion.
 
 **Architecture:** Build a deterministic fixed-size HTML/CSS composition from the current DSH QA screenshot and three transparent project WebP assets. Render it locally with Microsoft Edge headless, then verify exact dimensions, thumbnail readability, character edges, and the two-line copy constraint before showing it to the user.
 
@@ -127,7 +127,7 @@ Expected: exit code `0` with no exception.
 Use the local image viewer on `poster.png`. Confirm:
 
 ```text
-first focus = Whale-chan + I'm here to keep you company!
+first focus = Umika + I'm here to keep you company!
 second focus = recognizable DeepSeek Harness workspace
 only added copy = title + subtitle
 running = only large character

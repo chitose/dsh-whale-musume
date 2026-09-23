@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Whale-chan voice pack — step 3 of 3.
+"""Umika voice pack — step 3 of 3.
 
 Turns the rendered WAV set into the shippable compressed set, and measures the
 result against the masters instead of trusting the encoder.
@@ -257,7 +257,7 @@ def write_page(preview, job, pack, args):
     page = f"""<!doctype html>
 <html lang="en">
 <meta charset="utf-8">
-<title>Whale-chan voice pack ({pack["subtype"]})</title>
+<title>Umika voice pack ({pack["subtype"]})</title>
 <style>
   body {{ font: 15px/1.6 system-ui, sans-serif; margin: 2rem auto; max-width: 60rem; color: #12314a; }}
   .line {{ border-top: 1px solid #d7e3ec; padding: 1rem 0; }}
@@ -270,7 +270,7 @@ def write_page(preview, job, pack, args):
   audio {{ height: 32px; }}
   ul {{ color: #6b8199; }}
 </style>
-<h1>Whale-chan voice pack — {len(pack["entries"])} lines, {pack["subtype"]} (level {pack["compressionLevel"]})</h1>
+<h1>Umika voice pack — {len(pack["entries"])} lines, {pack["subtype"]} (level {pack["compressionLevel"]})</h1>
 <ul>{groups}</ul>
 <p>Compressed copy of the rendered set; the WAV masters live in <code>wav/</code>.
 Each file is listed with its SNR against the master.</p>

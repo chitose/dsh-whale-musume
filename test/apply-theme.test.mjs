@@ -31,7 +31,7 @@ test("patchHost tolerates an existing third pack after whale-maid", () => {
 test("patchClient appends the option after the whale-maid option and is idempotent", () => {
   const first = patchClient(CLIENT_BASE);
   assert.equal(first.changed, true);
-  assert.ok(first.source.includes('value: "whale-moe"') && first.source.includes("Whale-chan"));
+  assert.ok(first.source.includes('value: "whale-moe"') && first.source.includes("Umika"));
   assert.equal((first.source.match(/value: "whale-moe"/g) || []).length, 1);
   const second = patchClient(first.source);
   assert.equal(second.changed, false);
@@ -187,10 +187,10 @@ test("patchMascotClient adds the mascot settings section and is idempotent", () 
   const fixture = 'const store = 1;\nconst injected = (a) => a;\nctx.slots.inject("settings.theme.item", () => ctx.slots.register({}, ThemePackRow));';
   const out = patchMascotClient(fixture);
   assert.equal(out.changed, true);
-  assert.ok(out.source.includes("/* DSH-WHALE-MOE:MASCOT-SETTINGS v28 */"));
+  assert.ok(out.source.includes("/* DSH-WHALE-MOE:MASCOT-SETTINGS v29 */"));
   assert.ok(out.source.includes('id: "mascot"'));
   assert.ok(out.source.includes('label: "Mascot"'));
-  assert.ok(out.source.includes('label: "Whale-chan"'));
+  assert.ok(out.source.includes('label: "Umika"'));
   assert.ok(!out.source.includes('MascotModeRow'));
   assert.ok(!out.source.includes('Floating (draggable)'));
   assert.ok(out.source.includes("Reset to default position"));
@@ -221,24 +221,32 @@ test("patchMascotClient adds the mascot settings section and is idempotent", () 
   assert.equal(second.changed, false);
 });
 
-test("patchMascotClient upgrades legacy v1-v27 blocks to v28", () => {
+test("patchMascotClient upgrades legacy blocks to v29", () => {
   const fixture = 'const store = 1;\nconst injected = (a) => a;\nctx.slots.inject("settings.theme.item", () => ctx.slots.register({}, ThemePackRow));';
-  const legacy = patchMascotClient(fixture).source.replace("DSH-WHALE-MOE:MASCOT-SETTINGS v28", "DSH-WHALE-MOE:MASCOT-SETTINGS v4");
+  const legacy = patchMascotClient(fixture).source.replace("DSH-WHALE-MOE:MASCOT-SETTINGS v29", "DSH-WHALE-MOE:MASCOT-SETTINGS v4");
   const upgraded = patchMascotClient(legacy);
   assert.equal(upgraded.changed, true);
-  assert.ok(upgraded.source.includes("DSH-WHALE-MOE:MASCOT-SETTINGS v28"));
+  assert.ok(upgraded.source.includes("DSH-WHALE-MOE:MASCOT-SETTINGS v29"));
   assert.ok(!upgraded.source.includes("DSH-WHALE-MOE:MASCOT-SETTINGS v4"));
   assert.equal((upgraded.source.match(/id: "mascot"/g) || []).length, 1);
 });
 
 test("patchMascotClient upgrades the v27 block that predates the voice toggle", () => {
   const fixture = 'const store = 1;\nconst injected = (a) => a;\nctx.slots.inject("settings.theme.item", () => ctx.slots.register({}, ThemePackRow));';
-  const v27 = patchMascotClient(fixture).source.replace("DSH-WHALE-MOE:MASCOT-SETTINGS v28", "DSH-WHALE-MOE:MASCOT-SETTINGS v27");
+  const v27 = patchMascotClient(fixture).source.replace("DSH-WHALE-MOE:MASCOT-SETTINGS v29", "DSH-WHALE-MOE:MASCOT-SETTINGS v27");
   const upgraded = patchMascotClient(v27);
   assert.equal(upgraded.changed, true);
-  assert.ok(upgraded.source.includes("DSH-WHALE-MOE:MASCOT-SETTINGS v28"));
+  assert.ok(upgraded.source.includes("DSH-WHALE-MOE:MASCOT-SETTINGS v29"));
   assert.ok(upgraded.source.includes('prefKey: "voiceJa"'), "the voice toggle must reach existing installs");
   assert.equal((upgraded.source.match(/id: "mascot"/g) || []).length, 1);
+});
+
+test("patchMascotClient upgrades v28 settings to the language selector", () => {
+  const fixture = 'const store = 1;\nconst injected = (a) => a;\nctx.slots.inject("settings.theme.item", () => ctx.slots.register({}, ThemePackRow));';
+  const v28 = patchMascotClient(fixture).source.replace("DSH-WHALE-MOE:MASCOT-SETTINGS v29", "DSH-WHALE-MOE:MASCOT-SETTINGS v28");
+  const upgraded = patchMascotClient(v28);
+  assert.ok(upgraded.source.includes("DSH-WHALE-MOE:MASCOT-SETTINGS v29"));
+  assert.ok(upgraded.source.includes("Dialogue language"));
 });
 
 test("patchMascotClient explains itself on a DSH build without the theme-pack slot", () => {

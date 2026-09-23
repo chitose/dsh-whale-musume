@@ -1,9 +1,13 @@
 # Voice pipeline: update a translation, regenerate the voice
 
-Whale-chan's Japanese voice is a generated artifact. This is the operating manual
+For live dialogue voice, install the Cordis plugin bundle, run `npm run setup:voice` from the plugin directory once, then restart DSH Web. The command creates a Python 3.12 environment, installs Kokoro and an offline English→Japanese Argos model, and downloads the Kokoro model files. It works on Windows, macOS, and Linux where Python 3.12 or `uv` is available. Voice data is stored under the user data directory (`DSH_WHALE_VOICE_HOME` overrides it). The browser's language setting controls both bubble text and spoken audio. Generated WAV files survive restarts, use a 500 MB least-recently-used cache, and can be removed with **Clear voice cache** in Mascot settings. If setup or synthesis fails, fixed Japanese lines can use the shipped clips; the optional MiMo bridge can speak the remaining lines. A standalone theme install does not mount the host voice endpoint: Japanese uses the shipped clips and English remains text-only.
+
+The pre-rendered pack below remains useful as the Japanese fallback. Rebuilding it is separate from setting up live voice.
+
+Umika's Japanese voice is a generated artifact. This is the operating manual
 for changing what she says and rebuilding the audio.
 
-Nothing here is needed to *use* the plugin — only to change it.
+The live setup command above is optional for text bubbles and required for live voice. The offline rendering steps below are only for changing the bundled fallback pack.
 
 ---
 
@@ -182,7 +186,7 @@ possible but not implemented.
 shipping a broken clip.
 
 - **Every key covered, exactly once.** Missing, duplicate and stale keys are listed.
-- **No `Master` / `Whale-chan` in core-line translations.** They are placeholders;
+- **No `Master` / `Umika` in core-line translations.** They are placeholders;
   use `マスター` and `くじらちゃん` so the plugin's own naming still matches.
 - **Must contain Japanese characters** (kana/kanji) — an untranslated leftover fails.
 - **`~` is normalised to `～`**; emoji and kaomoji are stripped for speech

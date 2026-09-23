@@ -144,7 +144,7 @@ test("classifyTask sorts text into topic buckets", () => {
 });
 
 test("pickDialogueAvoidRecent avoids recent lines", () => {
-  const recent = ["Morning, Master. The sun already reached my tail before you did🌞", "Good morning! Whale-chan is at full power today too😤"];
+  const recent = ["Morning, Master. The sun already reached my tail before you did🌞", "Good morning! Umika is at full power today too😤"];
   const pick = core.pickDialogueAvoidRecent("daily", "morning", 0, () => 0.99, recent);
   assert.equal(pick, "Morning~ Get up or I'll drink all your coffee☕");
 });
@@ -192,22 +192,22 @@ test("meme keyword groups match and have lines", () => {
 });
 
 test("applyNames swaps the user title and the mascot self-name", () => {
-  assert.equal(core.applyNames("Hi Master, Whale-chan is here", "Boss", "Lil Whale"), "Hi Boss, Lil Whale is here");
-  assert.equal(core.applyNames("Whale-chan is busy", "Master", ""), "Whale-chan is busy");
-  assert.equal(core.applyNames("Whale-chan is busy", null, null), "Whale-chan is busy");
+  assert.equal(core.applyNames("Hi Master, Umika is here", "Boss", "Lil Whale"), "Hi Boss, Lil Whale is here");
+  assert.equal(core.applyNames("Umika is busy", "Master", ""), "Umika is busy");
+  assert.equal(core.applyNames("Umika is busy", null, null), "Umika is busy");
   assert.equal(core.applyNames("Hi Master", "", "Lil Whale"), "Hi Master");
   assert.equal(core.applyNames("a sentence with no names", "Boss", "Lil Whale"), "a sentence with no names");
   assert.equal(core.applyNames("", "Boss", "Lil Whale"), "");
   assert.equal(core.applyNames(undefined, "Boss", "Lil Whale"), "");
   /* Every self-reference in a line must be swapped (lines often say
-     "Whale-chan" more than once). */
-  assert.equal(core.applyNames("Whale-chan says Whale-chan is here", "Master", "Little Whale"), "Little Whale says Little Whale is here");
+     "Umika" more than once). */
+  assert.equal(core.applyNames("Umika says Umika is here", "Master", "Little Whale"), "Little Whale says Little Whale is here");
 });
 
 test("applyNames covers the default self-name carried by the line banks", () => {
   const allStates = Object.values(core.LINES).flat().join("|");
-  assert.ok(allStates.indexOf("Whale-chan") !== -1, "the line banks should keep the default self-name \"Whale-chan\"");
-  assert.equal(core.applyNames("Whale-chan", "Master", "Lil Whale"), "Lil Whale");
+  assert.ok(allStates.indexOf("Umika") !== -1, "the line banks should keep the default self-name \"Umika\"");
+  assert.equal(core.applyNames("Umika", "Master", "Lil Whale"), "Lil Whale");
 });
 
 test("balanceTier maps amounts to the six tiers", () => {
@@ -262,5 +262,5 @@ test("balance and proactive line banks are populated for every tier", () => {
   });
   /* New lines go through applyNames too, so the self-name is replaceable */
   const joined = Object.values(core.DIALOGUE.proactive).flat().join("|");
-  assert.ok(joined.indexOf("Whale-chan") !== -1, "proactive care lines should carry the default self-name");
+  assert.ok(joined.indexOf("Umika") !== -1, "proactive care lines should carry the default self-name");
 });

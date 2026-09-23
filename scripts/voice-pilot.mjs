@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
- * Whale-chan JP voice pilot — step 1 of 2.
+ * Umika JP voice pilot — step 1 of 2.
  *
  * Picks 10 representative lines out of the 612-line library in
  * assets/whale-moe-core.js, pairs each with a hand-written spoken-Japanese
@@ -9,7 +9,7 @@
  * Translation rules (the full 612-line pass must inherit these):
  *   - natural spoken Japanese, not a literal translation;
  *   - energetic childhood-friend persona, snark allowed, never commanding;
- *   - Master -> マスター, Whale-chan -> くじらちゃん (the plugin's own
+ *   - Master -> マスター, Umika -> くじらちゃん (the plugin's own
  *     applyNames() substitutes these at display time in every other language);
  *   - keep 。！？…～, turn "~" into "～";
  *   - strip emoji / kaomoji only, never punctuation;
@@ -282,7 +282,7 @@ function mergeParts(core) {
 
   const expected = lines.concat(EXTRAS.map((extra) => ({ key: extra.key })));
   const empty = expected.filter((line) => !String(store[line.key] || "").trim());
-  const leftoverNames = expected.filter((line) => /Master|Whale-chan/.test(String(store[line.key] || "")));
+  const leftoverNames = expected.filter((line) => /Master|Umika/.test(String(store[line.key] || "")));
   const asciiOnly = expected.filter((line) => {
     const value = String(store[line.key] || "");
     return value && !/[\u3040-\u30ff\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]/.test(value);
@@ -352,7 +352,7 @@ function buildFullJob(core) {
     const tts = stripEmoji(ja);
     /* Presenter-authored lines legitimately contain no name, but a core line
        that still does means the translation pass missed the substitution. */
-    if (!extraKeys.has(line.key) && /Master|Whale-chan/.test(tts)) {
+    if (!extraKeys.has(line.key) && /Master|Umika/.test(tts)) {
       throw new Error(`${line.key} still contains an untranslated name`);
     }
     if (!tts) throw new Error(`${line.key} produced empty speech text`);
@@ -370,7 +370,7 @@ function buildFullJob(core) {
 
   const job = {
     source: "assets/whale-moe-core.js",
-    purpose: "Whale-chan full JP dialogue set (core banks + presenter announcement lines)",
+    purpose: "Umika full JP dialogue set (core banks + presenter announcement lines)",
     dialogueCount: total,
     stateLines,
     voices: FULL_VOICES,
@@ -378,6 +378,11 @@ function buildFullJob(core) {
     items
   };
   fs.writeFileSync(path.join(OUT, "job.json"), `${JSON.stringify(job, null, 2)}\n`, "utf8");
+  fs.writeFileSync(
+    path.join(ROOT, "assets", "voice", "ja", "translations.json"),
+    `${JSON.stringify(Object.fromEntries(items.map((it) => [it.en, it.ja])), null, 2)}\n`,
+    "utf8"
+  );
   fs.writeFileSync(
     path.join(OUT, "lines.all.tsv"),
     `${["n\tkey\ten\tja"]
@@ -404,7 +409,7 @@ function buildPilotJob() {
     const en = lines[entry.index];
     const ja = normalizeJapanese(entry.ja);
     const tts = stripEmoji(ja);
-    if (/Master|Whale-chan/.test(tts)) {
+    if (/Master|Umika/.test(tts)) {
       throw new Error(`${entry.path}[${entry.index}] still contains an untranslated name: ${tts}`);
     }
     if (!tts) throw new Error(`${entry.path}[${entry.index}] produced empty speech text`);
@@ -421,7 +426,7 @@ function buildPilotJob() {
 
   const job = {
     source: "assets/whale-moe-core.js",
-    purpose: "Whale-chan JP voice pilot (10 lines, 4 voices, raw + clean phoneme variants)",
+    purpose: "Umika JP voice pilot (10 lines, 4 voices, raw + clean phoneme variants)",
     dialogueCount: total,
     stateLines,
     voices: VOICES,
@@ -458,4 +463,3 @@ try {
   console.error(`voice-pilot: ${error.message}`);
   process.exit(1);
 }
-

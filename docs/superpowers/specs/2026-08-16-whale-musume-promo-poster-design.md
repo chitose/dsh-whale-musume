@@ -5,7 +5,7 @@ Status: Visual direction and copy approved by the user; awaiting written design 
 
 ## 1. Goals
 
-Produce one `2048 x 1152` landscape main promo poster. The image must first make viewers feel that Whale-chan has come to the desktop to keep them company, and then, from the real DeepSeek Harness interface, understand that she is an actually running desktop mascot plugin.
+Produce one `2048 x 1152` landscape main promo poster. The image must first make viewers feel that Umika has come to the desktop to keep them company, and then, from the real DeepSeek Harness interface, understand that she is an actually running desktop mascot plugin.
 
 The poster does not carry a feature list, version notes, or installation instructions. Features are expressed through the character's actions and the real product environment, not through stacked copy.
 
@@ -20,7 +20,7 @@ Do not add feature rows, trust rows, version numbers, compatibility information,
 
 Concept name: **She really moved into DSH**
 
-Do not place Whale-chan in an unrelated ocean, candy, or comic scene. The real DSH workspace is the image space: she peeks out from the edge of the input area, picks up her laptop and enters the work state, and can also be picked up and moved with the mouse. The boundary-crossing relationship between the character and the interface is what creates the memorable hook.
+Do not place Umika in an unrelated ocean, candy, or comic scene. The real DSH workspace is the image space: she peeks out from the edge of the input area, picks up her laptop and enters the work state, and can also be picked up and moved with the mouse. The boundary-crossing relationship between the character and the interface is what creates the memorable hook.
 
 ## 4. Image Composition
 
@@ -69,7 +69,7 @@ Do not place Whale-chan in an unrelated ocean, candy, or comic scene. The real D
 
 ## 7. Acceptance Criteria
 
-- The first-glance focus is Whale-chan and "I'm here to keep you company!"; the second glance identifies the DeepSeek Harness workspace.
+- The first-glance focus is Umika and "I'm here to keep you company!"; the second glance identifies the DeepSeek Harness workspace.
 - Only two lines of new promo copy appear in the image, and they remain clearly readable when scaled to 25%.
 - `running` is the only large subject; `home-peek` and `pick-up` do not compete with it for attention.
 - Character edges are clean when viewed at 100%, with no obvious jaggies, blurry edges, thick white borders, or generative repaint artifacts.

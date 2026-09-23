@@ -1,8 +1,8 @@
 <div align="center">
   <a href="https://github.com/Sutera-Diffusus/dsh-whale-musume">
-    <img src="docs/images/logo.png" alt="Whale-chan logo" width="128">
+    <img src="docs/images/logo.png" alt="Umika logo" width="128">
   </a>
-  <h1>Whale-chan · dsh-whale-musume</h1>
+  <h1>Umika · dsh-whale-musume</h1>
   <p>A desktop mascot (Kanban Musume) plugin for <a href="https://github.com/deepseek-ai/deepseek-harness">DeepSeek Harness</a>.</p>
   <p>A whale girl who codes alongside you: she idles quietly by your side, and the moment work starts she picks up her laptop and gets busy with you.<br>Headpat her, raise her, unlock achievements, or drag her around the screen. Everything runs locally — no telemetry, no external requests.</p>
 
@@ -34,7 +34,7 @@
   </p>
 </div>
 
-![Whale-chan: here I come!](docs/images/homepage-promo.png)
+![Umika: here I come!](docs/images/homepage-promo.png)
 
 ---
 
@@ -114,7 +114,7 @@
 
 - Single-click headpat: blushing sprite + floating hearts/stars emoji;
 - Zone interactions: clicking different parts of her (head / belly / tail) has dedicated sprites, effects and lines;
-- Keyword expressions: when the chat hits one of the 13 meme keywords, Whale-chan transforms into a reaction image live;
+- Keyword expressions: when the chat hits one of the 13 meme keywords, Umika transforms into a reaction image live;
 - Triple-click: starry-eyed celebration + particle effects + spin animation;
 - Right-click menu: feed / poke / praise / mini-game: Bubble Pop / back to home position / open settings;
 - Click reactions switch instantly, with no sluggish transitions.
@@ -147,13 +147,12 @@
 
 - Mascot settings are integrated into the DSH settings page;
 - Collapsible groups: Companion / Weather / Balance / Daily & Growth / Achievement Wall / Growth Diary / Data & Reset, with the overview card and group cards aligned to equal width;
-- Pill toggles: mascot / speech bubble / Japanese voice / particle effects / mini-game / keyword awareness / slack-off reminder / late-night mode / weather effects / tool-type poses / drag inertia / proactive care / accessibility / balance care / show balance number;
+- Pill toggles: mascot / speech bubble / voice / particle effects / mini-game / keyword awareness / slack-off reminder / late-night mode / weather effects / tool-type poses / drag inertia / proactive care / accessibility / balance care / show balance number;
 - Off by default: line narration, keyword awareness (involves reading chat content), accessibility, balance care, show balance number (involves your account balance);
-- **Japanese voice** is on by default: every line that appears in a bubble is also spoken from a bundled pack of 654 pre-rendered clips (`assets/voice/ja/`, Kokoro-82M `jf_tebukuro`, 15.7 MB of Ogg Vorbis) — all 653 dialogue lines plus her celebration line. It covers every bubble path, including the work-state lines, and follows the bubble toggle. The clips carry the built-in names, so with a custom "How to address me" or self-name you will hear マスター/くじらちゃん while the bubble shows your name;
-- Any bubble that stays silent can be explained from the console: `__dshWhaleVoice.misses` lists the last 20 lines with a reason (`not-in-pack`, `autoplay-blocked`, `voice-off`, …). The only lines without clips are dynamically composed announcements such as "Achievement unlocked: …"; install MiMo TTS if you want those read too;
-- Plugin integration: with `dsh-xiaomi-tts` installed and enabled, you can narrate the lines triggered by head, belly, and tail clicks or a triple click; not installed, unconfigured, or failed playback never affects existing interactions, and lines that already have a bundled clip are not handed to it, so the two never speak at once;
+- **Live Kokoro voice:** run `npm run setup:voice` once and restart DSH Web. Choose English or Japanese in Mascot settings; bubbles and speech use that language. New lines are synthesized locally and cached across restarts, with a 500 MB limit and a clear control. The 654 bundled Japanese clips remain a fallback;
+- Mascot settings shows voice setup status. The optional `dsh-xiaomi-tts` bridge can speak lines when live voice and a bundled clip are unavailable;
 - Daily & Growth uses tabs: Today's Quests / Weekly Check-in / Titles, managed alongside the achievement wall;
-- The overview card lets you edit "How to address me" and **"her self-name"** — leave the latter empty and she defaults to "Whale-chan"; every self-reference is then replaced consistently across all 385 occurrences in her dialogue library;
+- The overview card lets you edit "How to address me" and **"her self-name"** — leave the latter empty and she defaults to "Umika"; every self-reference is then replaced consistently across all 385 occurrences in her dialogue library;
 - Growth data is displayed as compact horizontal cards with sensible information density.
 
 ### 🧩 Engineering
@@ -206,7 +205,7 @@
 
 ## Installation
 
-Whale-chan offers two installation methods. **Pick one — do not mix them:**
+Umika offers two installation methods. **Pick one — do not mix them:**
 
 | Method | How it works | Best for |
 | --- | --- | --- |
@@ -215,17 +214,17 @@ Whale-chan offers two installation methods. **Pick one — do not mix them:**
 
 ### Method A: Bundle Install (non-invasive, recommended)
 
-Whale-chan also ships as a standard DSH bundle that can be installed directly via `dsh plugin` or a plugin marketplace (e.g. mydsh.dev):
+Umika also ships as a standard DSH bundle that can be installed directly via `dsh plugin` or a plugin marketplace (e.g. mydsh.dev):
 
 ```powershell
 dsh plugin --profile web add github:Sutera-Diffusus/dsh-whale-musume
 ```
 
-After installing, restart `dsh web` and hard-refresh the page (`Ctrl+F5`) — Whale-chan appears automatically. This mode:
+After installing, restart `dsh web` and hard-refresh the page (`Ctrl+F5`) — Umika appears automatically. This mode:
 
 - The host plugin only registers a read-only static asset route `/api/dsh-whale-musume/assets`, serving styles/scripts/sprites to the browser;
-- The browser plugin injects Whale-chan herself; all assets come from the local machine — no external requests, no telemetry;
-- Toggles and mode preferences live in Whale-chan's own gear menu (localStorage, `whale-moe:*` keys);
+- The browser plugin injects Umika herself; all assets come from the local machine — no external requests, no telemetry;
+- Toggles and mode preferences live in Umika's own gear menu (localStorage, `whale-moe:*` keys);
 - The "Mascot" settings panel (pill toggles / growth data / achievement wall / weather) is registered into the DSH settings page by the browser plugin through the `settings.section` slot — **no built-in package files are rewritten**, so it also works on 0.1.1-rc.2 and above;
 - Compatibility fallback: if the `slots` service is missing or a sub-slot fails to render, the settings panel falls back to its built-in renderer and the desktop pet itself is unaffected.
 
@@ -279,7 +278,7 @@ The `Backup:` path in the script output is the backup directory for this run —
 
 1. Open the DSH web page (default `http://127.0.0.1:3080`);
 2. Hard refresh: `Ctrl + F5`;
-3. Once the page finishes loading, Whale-chan should appear in the bottom-right corner.
+3. Once the page finishes loading, Umika should appear in the bottom-right corner.
 
 ---
 
@@ -287,12 +286,12 @@ The `Backup:` path in the script output is the backup directory for this run —
 
 After installation, verify the core features in this order:
 
-1. **Click Whale-chan**: you should see a blush/hearts effect;
+1. **Click Umika**: you should see a blush/hearts effect;
 2. **Click three times in quick succession**: you should see a starry-eyed celebration + particle effects;
-3. **Drag Whale-chan**: she should switch to the "picked up" sprite and sway with the cursor, and her position should be saved on release;
-4. **Right-click Whale-chan**: you should see the menu — feed / poke / praise / Bubble Pop mini-game / back to home position / open settings;
+3. **Drag Umika**: she should switch to the "picked up" sprite and sway with the cursor, and her position should be saved on release;
+4. **Right-click Umika**: you should see the menu — feed / poke / praise / Bubble Pop mini-game / back to home position / open settings;
 5. **Open DSH Settings → Mascot**: you should see the pill toggles, growth data and the achievement wall;
-6. **Run a tool call**: Whale-chan should automatically switch to "working with her laptop" with a soft blue glow.
+6. **Run a tool call**: Umika should automatically switch to "working with her laptop" with a soft blue glow.
 
 Once all of the above pass, you can fill in a city under Settings → Mascot → Weather to turn on the weather companion, or start your progression journey with the daily quests.
 
@@ -302,8 +301,8 @@ Once all of the above pass, you can fill in a city under Settings → Mascot →
 
 ### Dragging
 
-- Hold and move Whale-chan; her position is saved automatically on release;
-- Right-click Whale-chan → **Back to home position** restores the default bottom-right spot.
+- Hold and move Umika; her position is saved automatically on release;
+- Right-click Umika → **Back to home position** restores the default bottom-right spot.
 
 ### Right-Click Menu
 
@@ -311,7 +310,7 @@ Once all of the above pass, you can fill in a city under Settings → Mascot →
 | --- | --- |
 | Feed a snack | Raises fullness and affection |
 | Poke | Lowers mood and triggers the annoyed sprite |
-| Praise Whale-chan | Raises mood and affection, triggers starry eyes |
+| Praise Umika | Raises mood and affection, triggers starry eyes |
 | Back to home position | Clears the saved floating position |
 | Open mascot settings | Jumps to the DSH settings page |
 
@@ -459,7 +458,7 @@ Regenerating the Japanese voice (translations, new lines, a different voice) is 
 | Images don't update | Hard-refresh (`Ctrl+F5`); asset URLs carry version numbers — if the browser cache is stale, clear the site cache |
 | No "Mascot" section in settings | Script method: run `--mascot-settings` and refresh; bundle method: confirm DSH is 0.1.1-rc.2+; check DSH version compatibility |
 | Accidental drags | A single click never starts a drag; movement must exceed 4px to enter drag mode |
-| Some bubbles have no voice | Paste `__dshWhaleVoice` into the browser console: it lists the last 20 unvoiced lines with a reason. `not-in-pack` means the line has no clip (only dynamically composed announcements do); `autoplay-blocked` clears on your next click; `voice-off` / `bubbles-off` are the toggles. See [docs/voice-pipeline.md](docs/voice-pipeline.md) |
+| Some bubbles have no voice | Check Kokoro status in Mascot settings and run `npm run setup:voice` if needed. `__dshWhaleVoice` in the browser console records fallback clip misses and autoplay blocks. See [docs/voice-pipeline.md](docs/voice-pipeline.md) |
 | Want to restore the default position | Right-click → Back to home position |
 | Mixed the two install methods | Fully uninstall/rollback with the corresponding method first, then reinstall with just one of them |
 
@@ -471,4 +470,4 @@ Regenerating the Japanese voice (translations, new lines, a different voice) is 
 
 ---
 
-**Whale-chan keeps you company while you code — and while you slack off.** 🐳
+**Umika keeps you company while you code — and while you slack off.** 🐳
