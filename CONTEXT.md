@@ -9,15 +9,15 @@ Any line of text Umika displays in a bubble, whether fixed dialogue or a dynamic
 _Avoid_: notification, message, alert.
 
 **Fixed dialogue**:
-A bubble line drawn from the curated, committed line set. The app also carries a pre-rendered Japanese clip as a fallback.
+A bubble line drawn from the curated, committed line set. Kokoro synthesizes it on demand when live voice is installed.
 _Avoid_: static line, scripted line.
 
 **Dynamic line**:
-A bubble line composed at runtime from live data (e.g. an achievement label), with no pre-rendered clip.
+A bubble line composed at runtime from live data (e.g. an achievement label).
 _Avoid_: dynamic text, runtime message.
 
 **Voice backend**:
-The mechanism that turns mascot feedback into audio: the kokoro-live sidecar, a shipped clip, the MiMo bridge, or none (silent, text-only).
+The mechanism that turns mascot feedback into audio: the kokoro-live sidecar, the MiMo bridge, or none (silent, text-only).
 _Avoid_: TTS engine, voice provider.
 
 **Kokoro-live sidecar**:

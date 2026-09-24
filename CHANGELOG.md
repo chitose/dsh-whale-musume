@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Live Kokoro only**: removed the committed Japanese `.ogg` pack and manifest. All mascot speech now goes through the Kokoro sidecar (`/api/dsh-whale-musume/voice/synthesize`); `assets/voice/ja/translations.json` remains as the curated Japanese text store, and `npm run qa:voice` now runs the live sidecar smoke test
+
 ## v2.2.0 (2026-09-21)
 
 - **Bundled Japanese voice**: all 653 dialogue lines plus her celebration line are pre-rendered with Kokoro-82M (`jf_tebukuro`) and ship as Ogg Vorbis under `assets/voice/ja/` — 15.7 MB for 64 minutes of audio, 21–23 dB SNR against the WAV masters. A new **"Japanese voice"** toggle (on by default) speaks every line that appears in a bubble; it follows the "Dialogue bubbles" toggle. A line with no clip (dynamically composed announcements such as "Achievement unlocked: …") falls through to the optional MiMo TTS bridge, so the two never speak over each other. Browser autoplay refusals are swallowed and re-armed on the next user gesture. A clone without the generated pack installs and behaves exactly as before

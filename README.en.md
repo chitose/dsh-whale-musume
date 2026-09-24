@@ -386,12 +386,11 @@ dsh-whale-musume/
 │  ├─ whale-moe-core.js          # Pure-function state machine (unit-testable)
 │  ├─ peek-calibration.json      # Peek-pose calibration data
 │  ├─ generated/                 # 90+ artworks (states / interactions / growth / games / weather / festivals / expressions)
-│  └─ voice/ja/                  # Generated voice pack: 654 Ogg Vorbis clips + manifest.json (15.7 MB)
+│  └─ voice/ja/translations.json # Curated Japanese text used by live Kokoro voice
 ├─ scripts/
 │  ├─ apply-theme.mjs            # Install / rollback / settings injection
 │  ├─ voice-pilot.mjs            # Voice: line selection, translation store, job builder
-│  ├─ kokoro-render.py           # Voice: Kokoro synthesis with format / silence / vocabulary assertions
-│  ├─ voice-pack.py              # Voice: compression with a per-file SNR gate
+│  ├─ kokoro-render.py           # Voice: optional offline Kokoro render checks
 │  ├─ gen-assets.py              # Artwork generation pipeline (calls a third-party image API; keys via environment variables)
 │  ├─ build-assets.py            # Artwork asset build
 │  ├─ build-review.py            # Generates the artwork review page
@@ -404,8 +403,7 @@ dsh-whale-musume/
 │  ├─ whale-moe-quest.test.mjs
 │  ├─ whale-moe-zones.test.mjs
 │  ├─ apply-theme.test.mjs
-│  ├─ voice-pack.test.mjs        # Voice pack coverage, URL contract, playback behaviour
-│  ├─ voice-browser-check.mjs    # Voice end-to-end check in headless Chrome (npm run qa:voice)
+│  ├─ voice-pack.test.mjs        # Live voice contract and playback behaviour
 │  ├─ cdp-whale-moe.mjs
 │  ├─ motion-qa.mjs
 │  ├─ soak-work.mjs
@@ -432,9 +430,8 @@ npm test
 # or equivalently:
 node --test test/whale-moe-core.test.mjs test/whale-moe-growth.test.mjs test/apply-theme.test.mjs test/whale-moe-game.test.mjs test/whale-moe-fx.test.mjs test/whale-moe-quest.test.mjs test/whale-moe-zones.test.mjs
 
-# Voice end-to-end (needs Chrome/Edge; Node 22+ for the global WebSocket)
-npm run qa:voice          # headless, asserts that playback really advances
-npm run qa:voice:watch    # the same in a visible, audible window
+# Live voice smoke test (run npm run setup:voice first)
+npm run qa:voice
 
 # Motion quality check (needs a test DSH copy running on port 3181)
 node test/motion-qa.mjs

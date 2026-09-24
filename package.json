@@ -28,8 +28,7 @@
     "test": "node --test test/*test.mjs",
     "qa": "node test/motion-qa.mjs && node test/cdp-whale-moe.mjs",
     "qa:soak": "node test/soak-work.mjs",
-    "qa:voice": "node test/voice-browser-check.mjs",
-    "qa:voice:watch": "node test/voice-browser-check.mjs --headed"
+    "qa:voice": "node test/voice-live-smoke.mjs"
   },
   "license": "MIT",
   "dsh": {

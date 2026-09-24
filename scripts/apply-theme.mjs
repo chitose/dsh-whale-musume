@@ -45,6 +45,7 @@ const ASSETS = [
   "generated/dsh-whale-home-peek.webp",
   "generated/dsh-whale-workbench-peek.webp",
   "generated/dsh-whale-settings-peek.webp",
+  "voice/ja/translations.json",
   "peek-calibration.json"
 ];
 
@@ -132,24 +133,6 @@ export function patchIndexHtml(source) {
   return { source: replaceExactlyOnce(source, "</head>", fallback, "frontend index head close"), changed: true };
 }
 
-/* The Japanese voice pack is a directory tree rather than a fixed file list, and
-   it is optional: a clone that never ran scripts/voice-pack.py simply has no
-   voice directory and installs exactly as before. */
-function collectVoiceAssets() {
-  const dir = path.join(EXT, "assets", "voice");
-  const out = [];
-  if (!fs.existsSync(dir)) return out;
-  const walk = (rel) => {
-    for (const entry of fs.readdirSync(path.join(dir, rel), { withFileTypes: true })) {
-      const next = rel ? `${rel}/${entry.name}` : entry.name;
-      if (entry.isDirectory()) walk(next);
-      else out.push(`voice/${next}`);
-    }
-  };
-  walk("");
-  return out.sort();
-}
-
 export function planWrites(target, assetsOnly = false) {
   const base = path.resolve(target);
   const writes = [];
@@ -160,7 +143,7 @@ export function planWrites(target, assetsOnly = false) {
        patchHost/patchClient/untheme helpers stay exported for legacy installs. */
   }
   const assetsRoot = path.join(base, "node_modules/@deepseek-ai/dsh-web-frontend/dist/assets");
-  for (const name of [...ASSETS, ...collectVoiceAssets()]) {
+  for (const name of ASSETS) {
     const src = path.join(EXT, "assets", name);
     if (!fs.existsSync(src)) throw new Error(`theme asset missing: ${src}`);
     push(normalizeRel(path.join(path.relative(base, assetsRoot), name)), fs.readFileSync(src));

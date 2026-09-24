@@ -1,4 +1,4 @@
-"""Japanese phoneme normalization shared in spirit with the offline voice pack."""
+"""Japanese phoneme normalization helpers for Kokoro rendering checks."""
 
 FIXES = (("ᶄ", "ky"), ("ᶃ", "gy"), ("ᶀ", "by"), ("ᶁ", "dy"), ("ᶆ", "my"),
          ("ᶈ", "py"), ("ᶉ", "ry"), ("ƫ", "ty"), ("K", "kw"), ("G", "gw"), ("g", "ɡ"))

@@ -11,11 +11,8 @@
   var doc = root.document;
   var VIEW_ATTR = "data-dsh-whale-view";
   var ASSET_ROOT = "/assets/generated/";
-  /* Bundled Japanese voice clips (assets/voice/ja). client.js rewrites this to
-     the plugin asset route; the theme install copies the same tree to /assets/. */
-  var VOICE_ROOT = "/assets/voice/ja/";
+  var VOICE_TRANSLATIONS = "/assets/voice/ja/translations.json";
   var VOICE_API = "/api/dsh-whale-musume/voice";
-  var VOICE_MANIFEST_VERSION = "?v=1";
   var POSE_VERSION = "?v=5";
   var DEBOUNCE_MS = 120;
   var PARTICLE_MAX = 30;
@@ -836,13 +833,7 @@
     }
   }
 
-  /* ---------- bundled Japanese voice ----------
-     Every line in the core banks has a pre-rendered clip; the manifest maps the
-     exact English line string to its file. A line with no clip (generated
-     announcements, or banks added later) simply stays silent here. */
-  var voiceManifest = null;
-  var voiceRequested = false;
-  var voiceManifestPromise = null;
+  /* ---------- live Kokoro voice ---------- */
   var voiceAudio = null;
   var voiceBlocked = false;
   var voiceTranslations = null;
@@ -857,7 +848,7 @@
   function spokenSelfName(language) { var value = selfName(); return language === "ja" && value === "Umika" ? "くじらちゃん" : value; }
   function loadVoiceTranslations() {
     if (voiceTranslations || voiceTranslationsPromise || typeof root.fetch !== "function") return;
-    voiceTranslationsPromise = root.fetch(VOICE_ROOT + "translations.json").then(function (response) {
+    voiceTranslationsPromise = root.fetch(VOICE_TRANSLATIONS).then(function (response) {
       if (!response.ok) throw new Error("translations unavailable");
       return response.json();
     }).then(function (data) {
@@ -874,33 +865,10 @@
     if (voiceMisses.length >= VOICE_MISS_MAX) voiceMisses.shift();
     voiceMisses.push({ line: String(line).slice(0, 80), reason: reason });
     root.__dshWhaleVoice = {
-      loaded: !!voiceManifest,
-      clips: voiceManifest ? Object.keys(voiceManifest.files).length : 0,
+      liveOnly: true,
       blocked: voiceBlocked,
       misses: voiceMisses
     };
-  }
-
-  function loadVoiceManifest() {
-    if (voiceRequested || typeof root.fetch !== "function") return voiceManifestPromise;
-    voiceRequested = true;
-    try {
-      voiceManifestPromise = root.fetch(VOICE_ROOT + "manifest.json" + VOICE_MANIFEST_VERSION)
-        .then(function (response) { return response && response.ok ? response.json() : null; })
-        .then(function (json) { if (json && json.files) voiceManifest = json; })
-        .catch(function () { /* no voice pack installed: stay silent */ });
-    } catch (e) { /* fetch unavailable */ }
-    return voiceManifestPromise;
-  }
-
-  /* Pure: caller supplies the manifest and root, which keeps it testable. */
-  function voiceSourceFor(line, manifest, voiceRoot) {
-    var files = manifest && manifest.files;
-    if (!files || typeof line !== "string") return "";
-    var file = files[line];
-    if (!file || typeof file !== "string") return "";
-    if (file.indexOf("..") !== -1 || file.charAt(0) === "/") return "";
-    return voiceRoot + file;
   }
 
   function voiceEnabled() {
@@ -928,9 +896,8 @@
     if (typeof line !== "string" || !line) return false;
     if (!readPref("voiceJa")) { noteVoiceMiss(line, "voice-off"); return false; }
     if (!readPref("chat")) { noteVoiceMiss(line, "bubbles-off"); return false; }
-    if (!voiceManifest && !sourceOverride) { noteVoiceMiss(line, "manifest-not-loaded"); loadVoiceManifest(); return false; }
-    var source = sourceOverride || voiceSourceFor(line, voiceManifest, VOICE_ROOT);
-    if (!source) { noteVoiceMiss(line, "not-in-pack"); return false; }
+    var source = sourceOverride || "";
+    if (!source) { noteVoiceMiss(line, "no-live-audio"); return false; }
     if (voiceBlocked) { noteVoiceMiss(line, "autoplay-blocked"); return false; }
     try {
       if (!voiceAudio) voiceAudio = new root.Audio();
@@ -987,10 +954,7 @@
     }).catch(function () {
       if (!current() || !enabled || !readPref("voiceJa")) return;
       memory.bubbleHideAt = Date.now() + 4500;
-      Promise.resolve(language === "ja" ? loadVoiceManifest() : null).then(function () {
-        if (!current()) return;
-        if (language !== "ja" || !playVoiceFor(line)) emitInteractionLine(shown);
-      });
+      emitInteractionLine(shown);
     });
     return shown;
   }
@@ -3410,7 +3374,7 @@
 
   function onUserActivity() {
     memory.lastInteractionAt = Date.now();
-    /* A gesture clears the browser's autoplay block, so clips can play again. */
+    /* A gesture clears the browser's autoplay block, so live audio can play again. */
     if (voiceBlocked) voiceBlocked = false;
     schedule();
   }
@@ -3418,7 +3382,6 @@
   function start() {
     if (root.__dshWhaleMoeStarted) return;
     root.__dshWhaleMoeStarted = true;
-    if (voiceEnabled()) loadVoiceManifest();
     if (voiceLanguage() === "ja") loadVoiceTranslations();
     root.addEventListener("pointerdown", onUserActivity, true);
     root.addEventListener("keydown", onUserActivity, true);

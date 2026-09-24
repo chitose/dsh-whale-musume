@@ -39,12 +39,12 @@ node test/cdp-whale-moe.mjs
 
 - Live voice setup: `npm run setup:voice` installs the local Kokoro sidecar and offline Argos translator. `node test/voice-live-smoke.mjs` checks both languages against the real models;
 - `voice-pilot.mjs --all` also refreshes the committed `assets/voice/ja/translations.json` used to display curated Japanese dialogue;
-- **Full manual: [`docs/voice-pipeline.md`](docs/voice-pipeline.md)** — setup, how to change a translation, how to regenerate only the affected clips, and the traps;
+- **Full manual: [`docs/voice-pipeline.md`](docs/voice-pipeline.md)** — setup and how to change a translation;
 - Sources: the English lines in `assets/whale-moe-core.js`, the Japanese in `.voice-preview/ja/part-*.json`, and the presenter's own fixed strings in `EXTRAS` (`scripts/voice-pilot.mjs`);
-- Generated: 654 clips in `assets/voice/ja/` (committed, 15.7 MB) plus the cache in `.voice-preview/` (git-ignored);
-- Chain: `voice-pilot.mjs --merge` → `--all` → `kokoro-render.py --only-missing` → `voice-pack.py` → `apply-theme.mjs --assets-only`;
-- Verify with `npm test`, then `npm run qa:voice` (headless Chrome, real playback) or `npm run qa:voice:watch` (audible);
-- The manifest is keyed by the **exact English line**, so editing an English line re-keys its clip and requires the whole chain to be re-run.
+- Generated: live Kokoro WAVs in the per-user voice cache; the repo only commits `assets/voice/ja/translations.json`;
+- Chain: `voice-pilot.mjs --merge` → `--all` → `apply-theme.mjs --assets-only`;
+- Verify with `npm test`, then `npm run qa:voice` after `npm run setup:voice`;
+- Kokoro receives the current English line, selected language, and personalized names at runtime.
 
 ## Commit conventions
 
