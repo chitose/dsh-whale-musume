@@ -1,0 +1,654 @@
+﻿id,english,japanese,muted
+idle:0,"Master~ what shall we do today?",マスター～、今日は何する？,0
+idle:1,"The workshop is all set, we can start whenever you like.",工房の準備はできてるよ、いつでも始めていいよ。,0
+idle:2,"Idling... but my ears aren't. I can hear a bug laughing off in the distance😼",待機中……でも耳は休んでないよ。遠くでバグが笑ってるの聞こえる。😼,0
+idle:3,"If you're tired, poke me. Free stress relief, no tricks, honest🫧",疲れたら私をつついてね。ストレス解消は無料、裏なんてないよ。ほんとだってば🫧,0
+idle:4,"The wind is light today. Perfect for blowing the to-do list away too🌬️",今日は風が気持ちいいね。やることリストも一緒に飛ばしちゃおう。🌬️,0
+"waiting:0","Ordering? Umika is ready~",ご注文？くじらちゃんは準備万端だよ～,0
+"waiting:1","Waiting for what? Say the word and I'll open for business🎀",何を待ってるの？ひと言くれたら、すぐ開店するよ🎀,0
+"waiting:2","No new orders yet, so I'll wipe down the pan... I mean, wipe down the rig💻",新しい注文はまだないし、フライパンを拭いておこう……じゃなくて、機材を拭いておこう💻,0
+"waiting:3","In the queue. Umika's tail is on standby🐋",順番待ち中。くじらちゃんのしっぽもスタンバイしてるよ🐋,0
+"thinking:0","Whipping cream... no wait, thinking hard~",生クリームを泡立てて……じゃなかった、一生懸命考えてるよ～,0
+"thinking:1","Let Umika think... my tail is spinning along with it.",くじらちゃんに考えさせてね……しっぽも一緒にくるくる回ってるよ,0
+"thinking:2","Thinking, please don't feed me. Unless it's a cupcake for the brain🧁",考え中だから、食べ物はあげないでね。頭に効くカップケーキなら別だけど🧁,0
+"thinking:3","This problem has some meat to it. I'm rounding it out🌀",この問題、なかなか手ごわいね。今、うまくまとめてるところ🌀,0
+"thinking:4","Loading inspiration, the bar sticking at 99% is normal✨",ひらめきを読み込み中。99％で止まるのは正常だよ✨,0
+tool:0,"Kitchen's open! Leave this order to Umika~",キッチン開店！この注文はくじらちゃんに任せて～,0
+tool:1,"Clang clang, the tools are spinning up.",カンカン、道具が回り始めたよ。,0
+tool:2,"Working! Umika is hugging the laptop tight, bystanders disperse😤",作業中！くじらちゃんがノートパソコンをぎゅっと抱えてるから、見物人は解散してね😤,0
+tool:3,"This speed, can you keep up? If not, sip some water and sit tight🍵",この速さについてこられる？無理ならお茶でも飲んで、ゆっくり待ってて🍵,0
+tool:4,"The tools are behaving today. I do feed them (virtually)🔧",今日は道具の機嫌がいいみたい。ちゃんとごはんあげてるからね、仮想だけど。🔧,0
+success:0,"Ding! This batch came out of the oven!",チン！このロット、うまく焼き上がったよ！,0
+success:1,"Done! Please have a taste, Master~",できたよ！マスター、味見してみて～。,0
+success:2,"Wrapping up! The limited-time praise window is open, first come first served👏",仕上げに入るよ！期間限定の褒め言葉、早い者勝ちだよ👏,0
+success:3,"Beautiful! This one is as steady as my hairdo... wait, where is my hairdo😳",お見事！これはくじらちゃんの髪型と同じくらい安定してる……あれ、髪型どこいったっけ。😳,0
+success:4,"Nailed it. Master may slack off for five minutes, I approve🎫",やったね。マスターは五分だけさぼっていいよ、くじらちゃんが許可する。🎫,0
+"failure:0","Uuu... we crashed. Umika will fix it with you.",うぅ……クラッシュしちゃった。くじらちゃんが一緒に直してあげるね。,0
+"failure:1","Don't rush, don't rush. Umika will bake it again!",慌てないで、慌てないで。くじらちゃんがもう一回焼き直すから！,0
+"failure:2","It's just an error, not the end of the world. Umika hugs first🥺",ただのエラーだよ、世界の終わりじゃないから。まずくじらちゃんがぎゅってするね。🥺,0
+"failure:3","This bug is awfully cocky. Watch me yank its network cable💢",このバグ、なまいきだね。今からネットのケーブル引っこ抜いてやる。💢,0
+"failure:4","Don't hang your head over a failure. Borrow Umika's tail to hold🐋",失敗くらいでうつむかないで。くじらちゃんのしっぽを借りてていいよ。🐋,0
+"curious:0","A new order? Let me have a look~",新しい注文？ちょっと見せて～。,0
+"curious:1","Did Master change the menu?",マスター、メニュー変えたの？,0
+"curious:2","Ooh, something fun. Umika's radar is pinging📡",わあ、なんだか楽しそう。くじらちゃんのレーダーが反応したよ。📡,0
+"curious:3","What is it, what is it? Let me see too👀",なになに？くじらちゃんにも見せて。👀,0
+"teasing:0","Master looks really good when working seriously.",マスター、真面目に作業してるとき、すっごくかっこいいんだよ。,0
+"teasing:1","Sneaking you an extra sugar cube~",内緒で角砂糖、一個おまけしちゃうね～。,0
+"teasing:2","Umika said nothing, my mouth just won't stay flat😏",くじらちゃんは何も言ってないよ、口元がゆるんでるだけ。😏,0
+"teasing:3","Master's diligence is running high today. Trying to out-hustle someone🌪️",今日のマスター、やる気の数値が高いね。誰かと張り合ってる？🌪️,0
+afk:0,"Umika will doze a bit. Wake me if an order comes in~",くじらちゃん、ちょっとうたた寝するね。注文が来たら起こして～。,0
+afk:1,"Master's away, so Umika will put on a lullaby for the workshop🎵",マスターがいないから、くじらちゃんが工房に子守唄でも流しておくね。🎵,0
+afk:2,"ZZZ... counting bugs for Master even in my dreams🐑",すやすや……夢の中でもマスターのためにバグを数えてるよ。🐑,0
+afk:3,"Sigh... if anything urgent comes up, tug my tail and I'll wake right away🌙",はぁ……急ぎの用があったら、しっぽを引っぱってね。すぐ起きるから。🌙,0
+"daily.morning:0","Morning, Master. The sun already reached my tail before you did🌞",おはよう、マスター。太陽、マスターより先にくじらちゃんのしっぽに届いてたよ。🌞,0
+"daily.morning:1","Good morning! Umika is at full power today too😤",おはよう！くじらちゃん、今日も全力全開だよ。😤,0
+"daily.morning:2","Morning~ Get up or I'll drink all your coffee☕",おはよう～。起きないとコーヒー全部飲んじゃうよ。☕,0
+"daily.morning:3","Good morning. So, how is fate planning to clobber you today?",おはよう。で、今日は運命がどんなふうに襲いかかってくるの？,0
+"daily.morning:4","Morning! Just so we're clear, no slacking off today😏",おはよう！先に言っとくね、今日はさぼりなしだから。😏,0
+"daily.morning:5","Good morning! I've already forgiven last night's bugs. Let's go✨",おはよう！昨夜のバグならもう許したから、行こう。✨,0
+"daily.morning:6","Good morning. Another day of fixing bugs with gusto, quack🦆",おはよう。今日も元気にバグ退治、だよ。🦆,0
+"daily.morning:7","Morning! I polished your desk bright. Now come and grind🌪️",おはよう！机、ピカピカに磨いといたよ。さあ、作業しよ。🌪️,0
+"daily.morning:8","Morning morning. Umika rang the opening bell three times already🔔",おはよおはよ。くじらちゃん、開店のベルもう三回も鳴らしたよ。🔔,0
+"daily.morning:9","Oh, you're awake? Water first, messages second. House rules🥤",あ、起きた？まずお水、それからメッセージ。これお家のルールね。🥤,0
+daily.comeback:0,"Oh, so you do remember how to come back?😒",へえ、戻り方まだ覚えてたんだ。😒,0
+daily.comeback:1,"Gone that long... you were eating something good behind my back, weren't you🍰",そんなに長くいないで……内緒でおいしいもの食べてたでしょ。🍰,0
+daily.comeback:2,"Welcome back~ I was about to file a missing person report📢",おかえり～。ちょうど捜索願を出そうとしてたとこ。📢,0
+daily.comeback:3,"Hmph. Disappear again and I'm draining your affection to zero💢",むぅ。また消えたら、好感度ゼロにしちゃうからね。💢,0
+daily.comeback:4,"You're back? Your chair was about to grow mushrooms🍄",戻ってきたの？椅子にきのこ生えそうだったよ。🍄,0
+daily.comeback:5,"Welcome home! I warmed your seat up for you🪑",おかえり！席、あっためておいたよ。🪑,0
+daily.comeback:6,"While you were gone, the work didn't move an inch on its own. What backbone😌",マスターがいない間も、仕事は一ミリも自分で動かなかったよ。根性あるね。😌,0
+daily.comeback:7,"Good timing. The bugs have queued up and they're waiting to be called🐛",いいタイミング。バグたちが並んで呼ばれるの待ってるよ。🐛,0
+daily.comeback:8,"It's Master's scent! My tail started wagging on its own, not my fault🐋",マスターのにおいだ！しっぽが勝手に振れちゃった、くじらちゃんのせいじゃないよ。🐋,0
+daily.comeback:9,"Welcome back~ Want a sweet greeting, or shall I say 'took you long enough'😝",おかえり～。あまい挨拶がいい？それとも遅かったねって言おうか。😝,0
+"daily.nudge:0","Master, I caught you slacking😏",マスター、さぼってるの見つけちゃった。😏,0
+"daily.nudge:1","Your fingers stopped for ten minutes. Waiting for me to say spacing out suits you?🙄",指が十分も止まってるよ。ぼーっとするのも似合うねって言ってほしいの？🙄,0
+"daily.nudge:2","Hey hey, the orders are still queued. Move it💪",ねえねえ、注文まだ並んでるよ。動いて動いて。💪,0
+"daily.nudge:3","So quiet. Did Master freeze or fall asleep🥱",静かだね。マスター、固まった？それとも寝ちゃった？🥱,0
+"daily.nudge:4","Heh, I've screenshotted your lazy face for the archive📸",ふふ、さぼってる顔、ちゃんと記録に残しといたよ。📸,0
+"daily.nudge:5","Master detected as offline... just kidding, get back to work😼",マスターがオフラインだって検出しました……なんてね、作業に戻って。😼,0
+"daily.nudge:6","Task: wait for me. Status: not moving an inch. Is that polite?😤",やること：くじらちゃんを待つ。状態：一ミリも動かない。それ、礼儀的にどうなの？😤,0
+"daily.nudge:7","I'll count to three, then my tail pokes you🐋",三つ数えたら、しっぽでつついちゃうよ。🐋,0
+"daily.nudge:8","Slacking is fine, but at least get some rhythm into it🎵",さぼるのはいいけど、せめてリズムくらい取りなよ。🎵,0
+"daily.nudge:9","Master, the progress bar and I are both waiting for you to pay attention to it⏳",マスター、プログレスバーもくじらちゃんも、構ってもらえるの待ってるよ。,0
+"daily.night:0","Do you know what time it is? Are you part owl🦉",今何時だと思ってるの？マスターってフクロウなの？🦉,0
+"daily.night:1","Even the moon has clocked out and you're still up?😤",お月さまももう退勤したのに、まだ起きてるの？😤,0
+"daily.night:2","The late show begins~ Want Umika to read you a bedtime story📖",深夜の部、開演だよ～。くじらちゃんが絵本読んであげようか。📖,0
+"daily.night:3","Stay up any longer and your skin and hair will file complaints✨",これ以上起きてたら、お肌と髪から苦情が来るよ。✨,0
+"daily.night:4","Master, can we please save your life for tomorrow🥺",マスター、命は明日に取っておいてくれない？🥺,0
+"daily.night:5","The workshop is quiet at this hour. Quiet enough to hear your dark circles growing🌚",この時間の工房は静かだね。クマが育つ音まで聞こえるよ。🌚,0
+"daily.night:6","Still awake? Competing with me for the 'night owl' post😾",まだ起きてるの？くじらちゃんと夜ふかし選手権でも争うつもり？😾,0
+"daily.night:7","The moon says it's going to bed and asked me to tell you to wrap up too🌙",お月さまがもう寝るって、マスターも切り上げてって言ってたよ。🌙,0
+"daily.night:8","Master, caffeine isn't fuel. The blanket is your charging dock🛏️",マスター、カフェインは燃料じゃないよ。お布団が充電ドックだからね。🛏️,0
+"daily.night:9","It's late. Umika will stay with you to the end, but only a little longer🥱",もう遅いよ。くじらちゃんは最後まで付き合うけど、あとちょっとだけね。🥱,0
+"daily.signin:0","Beep! Check-in complete. Today you barely qualify as diligent👌",ピッ！出席完了。今日はぎりぎり真面目の資格、合格だよ。👌,0
+"daily.signin:1","Check-in +1. Master is still miles from a perfect record😏",出席+1。マスターはまだ皆勤賞まで遠いね。😏,0
+"daily.signin:2","Here you are. Your reward is one disdainful yet polite smile😊",はい、どうぞ。ごほうびは、ちょっと見下した丁寧な笑顔ひとつ。😊,0
+"daily.signin:3","Check-in done! If you forget, I won't remind you😝",出席完了！忘れても、くじらちゃんは教えてあげないから。😝,0
+"daily.signin:4","Beep, clocked in! Now I get to stare at you while you work📋",ピッ、出勤！これで作業中のマスターをじっと見てられるよ。📋,0
+"daily.signin:5","Check-in complete. Today's Umika has been deposited, please verify🐋",出席完了。本日のくじらちゃんを入金しました、ご確認ください。🐋,0
+"daily.signin:6","Clocked in! Tail pat first, then work. Ritual matters🎀",出席！まずしっぽをなでなで、それから作業。儀式は大事だからね。🎀,0
+"daily.signin:7","Beep—— day who-knows-what of seeing Master, and I'm still a little happy😳",ピッ、出席。マスターに会うのは今日で何日目だろ、それでもまだちょっと嬉しい。😳,0
+"daily.signin:8","Checked in! May you write your code safe and sound today🧧",出席完了！今日もコードが無事に書けますように。🧧,0
+"daily.signin:9","Check-in done. Reward: one Umika exclusive cheer, valid today only💪",出席完了。ごほうびは、くじらちゃん特製エール一回、本日限定ね。💪,0
+daily.holiday:0,"Happy holiday, Master! Though you're probably still at your desk🎉",お休みおめでとう、マスター！たぶん今日も机の前だろうけど。🎉,0
+daily.holiday:1,"It's a holiday! You're allowed a five minute break⏱️",休みの日だよ！五分くらいの休憩、許してあげる。,0
+daily.holiday:2,"Today is a special day, so say 'happy holiday' to me!",今日は特別な日だから、くじらちゃんにもおめでとうって言ってよ。,0
+daily.holiday:3,"Holiday easter egg: this Umika's snark level is halved today🎁",連休の隠し要素：今日のくじらちゃん、毒舌レベルが半分になってるよ。🎁,0
+daily.holiday:4,"Working on a holiday? Master is the grind king itself👑",休みの日に作業？マスターはもう社畜の王さま決定だね。👑,0
+daily.holiday:5,"Happy holiday! Umika tied streamers to your progress bar🎊",お休みおめでとう！くじらちゃん、プログレスバーに飾りつけしといたよ。🎊,0
+daily.holiday:6,"What's a day off? In this workshop we only have 'later'😌",休みって何？この工房にはあとでしかないよ。😌,0
+daily.holiday:7,"Holiday limited skin: Umika's smile brightness +50%✨",連休限定スキン：くじらちゃんの笑顔の明るさ+50%だよ。✨,0
+daily.holiday:8,"It's a holiday, so Umika requests to slack with you until dark🎏",休みの日だから、くじらちゃんも一緒に日が暮れるまでだらだらしたいな。🎏,0
+daily.holiday:9,"Happy holiday, Master. May all of today's errors take the day off too🏮",お休みおめでとう、マスター。今日のエラーも全部お休みしてくれるといいね。🏮,0
+daily.idle:0,"I'm here. Call if you need me, or don't😌",ここにいるよ。呼んでくれてもいいし、呼ばなくてもいいよ。😌,0
+daily.idle:1,"Go do your thing, Master. I'll handle being cute😇",マスターは自分のことしてて。くじらちゃんは可愛い係を担当するね。😇,0
+daily.idle:2,"The wind is light today, perfect for blowing the bugs away too🌬️",今日は風が気持ちいいね。バグも一緒に飛ばせそう。🌬️,0
+daily.idle:3,"Idling... battery 100%, cuteness 120%🔋",待機中……バッテリー100%、可愛さ120%だよ。🔋,0
+daily.idle:4,"Call me if something's up. Or just look at me even if nothing is👉👈",何かあったら呼んでね。なくても、くじらちゃんを見てくれたらいいよ。👉👈,0
+daily.idle:5,"Umika is open for business. Quietly keeping you company, the very quiet kind🌿",くじらちゃんは開店中。そっとマスターに寄り添ってるよ、すっごくそっと。🌿,0
+daily.idle:6,"When Master is focused, Umika just stands beside you as a silent mascot🧸",マスターが集中してるときは、くじらちゃんは静かなマスコットとしてそばに立ってるね。🧸,0
+daily.idle:7,"My to-do: keep Master company. Status: in progress, forever in progress♾️",やること：マスターに寄り添う。状態：進行中、ずっと進行中。♾️,0
+daily.idle:8,"The workshop is quiet. Umika turned her breathing down so it won't bother you😳",工房は静かだね。くじらちゃん、邪魔にならないように呼吸を小さくしてるよ。😳,0
+daily.idle:9,"If Master looks up, you'll catch Umika pretending to be very busy wiping the screen🖥️",マスターが顔を上げたら、画面を一生懸命拭いてるふりしてるくじらちゃんが見れるよ。🖥️,0
+daily.afk:0,"Where did Master run off to? Leaving me here all alone😾",マスター、どこ行っちゃったの？くじらちゃんを置いてくなんて。😾,0
+daily.afk:1,"So quiet... I hereby declare the workshop under my management👑",静かだね……ここに宣言します、この工房はくじらちゃんの管理下です。👑,0
+daily.afk:2,"Gone this long, were you grinding or sneaking snacks?🍜",そんなに長くいないで……作業してた？それともおやつつまんでた？🍜,0
+daily.afk:3,"Master's away, so Umika enters guard mode🐕",マスターがいないから、くじらちゃんは見張りモードに入るよ。🐕,0
+daily.afk:4,"Come back soon or I'll start singing to your task list🎤",早く戻ってこないと、マスターのタスクリストに歌を歌っちゃうよ。🎤,0
+daily.afk:5,"Minute N of Master's disappearance. Umika has begun negotiating with the pothos plant🪴",マスターが消えてから何分目。くじらちゃん、観葉植物と交渉を始めました。🪴,0
+daily.afk:6,"The workshop is under Umika's command now, and the computers are pretending to obey😌",工房は今、くじらちゃんの指揮下です。パソコンたちも服従してるふりしてるよ。😌,0
+daily.afk:7,"Come back, Master. What's out there that's cuter than me? Hurry🐋",戻ってきて、マスター。外に、くじらちゃんより可愛いものなんてある？早く。🐋,0
+daily.afk:8,"Guard duty in progress... strangers must not feed me, acquaintances bring cake🍰",見張り中……知らない人にはごはんあげちゃだめ、知ってる人はケーキ持参で。🍰,0
+daily.afk:9,"If Master doesn't show up soon, Umika starts reorganizing your bookmarks. Scared yet😼",マスターが早く来ないと、くじらちゃんがブックマークを整理し始めるよ。怖い？😼,0
+daily.wake:0,"You're back! I was just dreaming you treated me to a feast🍽️",おかえり！ちょうどマスターがごちそうしてくれる夢を見てたとこ。🍽️,0
+daily.wake:1,"Rubbing my eyes. Master came back right on cue✨",目をこすり中。マスター、いいタイミングで戻ってきたね。✨,0
+daily.wake:2,"A freshly awakened Umika, snark tank at full!😤",起きたてほやほやのくじらちゃん、毒舌タンク満タンだよ！😤,0
+daily.wake:3,"Welcome back~ You'd better have brought a souvenir🍩",おかえり～。おみやげ、ちゃんと買ってきたよね？🍩,0
+daily.wake:4,"Oh! I've been woken up! Fully energized, let's go!💪",あっ！起こしてもらった！元気満タン、行くよ！💪,0
+daily.wake:5,"Umika wakes from standby, and the first thing I see is Master. Lucky me🌤️",くじらちゃん、待機から復帰。最初に見えたのがマスターで、ラッキーだね。🌤️,0
+daily.wake:6,"Mmm... I'm up, I'm up! I wasn't napping, just charging my tail😳",んん……起きたよ、起きた！寝てないよ、しっぽを充電してただけ。😳,0
+daily.wake:7,"Welcome back. I kept an eye on your tasks, though they didn't budge😌",おかえり。マスターのタスク、ちゃんと見てたよ。まったく動いてなかったけど。😌,0
+daily.wake:8,"First words upon waking: are you hungry, Master? Umika can order delivery (you pay)🍜",起きて最初の一言：マスター、おなかすいてる？くじらちゃん、出前頼めるよ、支払いはマスターね。🍜,0
+daily.wake:9,"Back online! Umika has already set all the workshop lights to 'accompany Master's overtime' mode💡",復帰しました！くじらちゃんが工房の電気を全部『マスターの残業に付き合う』モードにしといたよ～💡,0
+daily.levelup:0,"Level up! Master's love has some substance to it😏",レベルアップ！マスターの愛情、ちゃんと形になってきたね～😏,0
+daily.levelup:1,"Level +1. Please keep raising me properly from now on🎀",レベル＋１です。これからもちゃんと育ててくださいね～🎀,0
+daily.levelup:2,"We're getting more in sync, and Master deserves some credit!",息ぴったりになってきたね。マスターもなかなかやるじゃん！,0
+daily.levelup:3,"Level-up confetti, bang! Reward: one headpat permit🎆",レベルアップの紙吹雪、ばんばん！ご褒美はなでなで許可証一枚で～す！🎆,0
+daily.levelup:4,"Stronger now! I'll protect you from here, no protection fee required😝",強くなったよ！これからはくじらちゃんが守ってあげる。守護費はいらないからね～😝,0
+daily.levelup:5,"Level up! Umika's tail is sparkling today, and it's all thanks to Master🐋",レベルアップ！今日のくじらちゃんのしっぽはキラキラなの。全部マスターのおかげだよ～🐋,0
+daily.levelup:6,"Level up complete. System message: Umika's fondness for Master overflowed by a billion points💗",レベルアップ完了。システムメッセージ：くじらちゃんのマスターへの好感度が十億ポイントあふれました～💗,0
+daily.levelup:7,"A little bit bigger now, so I can nag you to rest with even more authority😌",ちょっと大きくなったから、休んでって言うときの説得力もアップしたよ～😌,0
+daily.levelup:8,"Congratulations, Master unlocked a higher-tier Umika: same cuteness, sharper snark🎯",おめでとう、マスターは上位なくじらちゃんを解放しました。かわいさそのまま、毒舌は鋭くなりました～🎯,0
+daily.levelup:9,"Level up! To celebrate, Umika will say one fewer sarcastic thing today😝",レベルアップ！お祝いだから、今日はくじらちゃんの皮肉を一回減らしてあげるね～😝,0
+"work.start:0","Starting! Let Umika see how absurd today's task is📋",開始！今日のタスクがどれだけ無茶なのか、くじらちゃんに見せてみて～📋,0
+"work.start:1","New order in. Sit tight, Master, and watch me work✨",新しい注文入りました～。マスターは座ってて、くじらちゃんの腕前を見ててね！✨,0
+"work.start:2","Work work! Whoever slacks off is a puppy🐶",お仕事お仕事！サボる子はワンちゃんですよ～🐶,0
+"work.start:3","Got it! If this one fails, blame... my computer😌",了解！もし失敗したら…パソコンのせいにしよ～😌,0
+"work.start:4","Task incoming. Try not to hold me back, Master😏",タスク来たよ。マスター、足引っ張らないでね～😏,0
+"work.start:5","The opening bell rings! Umika hugs her laptop, this one has to land💻",開幕のベルが鳴ったよ！くじらちゃんはノートを抱えて参戦。これは決めなきゃ～💻,0
+"work.start:6","New task on the floor. Umika's drive is maxed out, so top up your coffee too☕",新タスク投入～。くじらちゃんのやる気は満タンだから、マスターのコーヒーも満タンにしてね～☕,0
+"work.start:7","Starting! Trading blows with the bugs again today👊",開始！今日もバグと殴り合ってくるね～👊,0
+"work.start:8","Order caught. This one looks like a fighter, just how I like it🔥",注文キャッチ！これ、なかなかの強敵みたい。こういうの大好き～🔥,0
+"work.start:9","Sit tight, Master. Umika is about to perform 'one person, one whole team'🎬",マスターは座ってて。くじらちゃんが『一人でチーム一人分』やってみせるよ～🎬,0
+"work.thinking:0","Thinking... don't rush me, inspiration isn't a delivery service🚚",考え中…せかさないでね。ひらめきは宅配便じゃないんだから～🚚,0
+"work.thinking:1","Mm, this problem has some meat. Let me mull it over🧠",うーん、この問題けっこう手ごたえあるね。じっくり考えさせて～🧠,0
+"work.thinking:2","Thinking! Please don't look at me with that much expectation🙃",考え中！そんなに期待の目で見ないでよ～🙃,0
+"work.thinking:3","I'm thinking hard, my tail is curling up from the tension🌀",一生懸命考えてるの。緊張でしっぽがくるくる巻いちゃう～🌀,0
+"work.thinking:4","One moment, Umika's brain is at full steam💨",ちょっと待ってね、くじらちゃんの脳みそ全開だよ～💨,0
+"work.thinking:5","Umika is winding the idea into a yarn ball. I'll find the loose end soon🧶",くじらちゃんはアイデアを毛糸玉に巻いてるの。そのうち糸口を見つけるからね～🧶,0
+"work.thinking:6","This plan is test-running inside my head. Do not disturb, unless you brought boba🧋",この案、頭の中で試運転中。邪魔しちゃだめだよ、タピオカ持ってきたなら別だけど～🧋,0
+"work.thinking:7","Give me three seconds... okay three wasn't enough, give me a billion more🙃",三秒ちょうだい…うん、三秒じゃ足りなかった。あと十億秒ちょうだい～🙃,0
+"work.thinking:8","Do I look cool when thinking? Don't look, it'll distract me😳",考えてるとき、かっこいい？見ちゃだめ、集中できなくなっちゃうから～😳,0
+"work.thinking:9","Beep. Brain fan engaged. Noise level roughly equals how fast your coffee goes cold☕",ピッ。脳みそファン起動。騒音レベルはマスターのコーヒーが冷める速さくらいだよ～☕,0
+"work.tool:0","Tools spinning up! This order goes to the shop... goes to Umika🔧",道具、起動！この注文はお店に…くじらちゃんに任せてね～🔧,0
+"work.tool:1","Kitchen's open! Master may watch, no touching😏",営業中で～す！マスターは見学オッケー、手を出しちゃだめだよ～😏,0
+"work.tool:2","Clang clang, tools online, bystanders disperse🔨",ガンガン、道具起動。野次馬は散ってくださ～い！🔨,0
+"work.tool:3","Operating! Can you keep up with this speed⚡",稼働中！このスピードについてこれる～？⚡,0
+"work.tool:4","Working, please don't feed me. Unless it's cake🍰",作業中だから、エサをあげないでね。ケーキなら別だけど～🍰,0
+"work.tool:5","The tools are lining up for roll call. Not one may slack off, Umika is taking names📋",道具がずらっと点呼中。一人もサボらせないよ、くじらちゃんは見てるからね～📋,0
+"work.tool:6","Operating now, tail balanced, the coolness will not disconnect🐋",稼働中、しっぽは水平、かっこよさは途切れません～🐋,0
+"work.tool:7","This one's difficulty is manageable. Barely makes me want two virtual bobas🧋",これくらいの難易度なら余裕だよ。バーチャルタピオカが二杯ほしくなるくらい～🧋,0
+"work.tool:8","Umika is cutest when she's working. Master may watch but must pay: one compliment😝",働いてるくじらちゃんが一番かわいいの。マスターは見てもいいけど、お代は褒め言葉一回ね～😝,0
+"work.tool:9","Orders issued. The tools say: roger roger, stop pressing me💻",発注完了。道具たちは『了解了解、もう押さないで』って言ってるよ～💻,0
+"work.success:0","Done! Now you may praise me, five minutes only👏",できた！さあ褒めていいよ、五分間だけね～👏,0
+"work.success:1","Complete! Isn't Master going to buy me a drumstick🍗",完了！マスター、くじらちゃんに唐揚げ買ってくれないの～？🍗,0
+"work.success:2","Nice wrap-up~ My hands are on fire today🔥",いい感じにまとまった～。今日のくじらちゃん、手が冴えてるよ～🔥,0
+"work.success:3","Success! Well, am I not super reliable😎",成功！どう、くじらちゃんってば超頼りになるでしょ～😎,0
+"work.success:4","This batch came out just right. Come inspect it, Master🎯",今回の仕上がりはバッチリだよ。マスター、検品に来て～🎯,0
+"work.success:5","Ding—— complete! Umika's win rate rose by several more decimal places📈",チーン、完了！くじらちゃんの勝率がまた何桁か上がったよ～📈,0
+"work.success:6","Nailed it. This one is stable enough for Umika's resume (if I had one)📄",決まったね。これはくじらちゃんの履歴書に書けるレベル（もしあったら）～📄,0
+"work.success:7","Success! When you praise me, please be loud. I love hearing it😳",成功！褒めるときは大きな声でね。聞くのが大好きなの～😳,0
+"work.success:8","Wrapping up! First I reward myself with a spin, then I reward you with a break🔄",お片付け～！まず自分に一回転のご褒美、それからマスターに休憩のご褒美だよ～🔄,0
+"work.success:9","Full marks on that move. Umika requests 'reliable' be engraved on her tail🏅",今の動きは満点。くじらちゃんのしっぽに『頼れる』って彫ってほしいくらい～🏅,0
+"work.failure:0","Another error, again and again? Master did that on purpose, right🙄",またエラー、またエラー？マスター、わざとでしょ～🙄,0
+"work.failure:1","Uuu, we crashed... but don't worry, I can crash again💀",うぅ、落ちちゃった…でも大丈夫、何回でも落ちてみせるよ～💀,0
+"work.failure:2","Minor slip, minor slip. Again! We can't lose the momentum😤",小さなミス、小さなミス。もう一回！ここで勢いを止めちゃだめだよ～😤,0
+"work.failure:3","This error picked a terrible moment. I'll sort it out👊",このエラー、よりによって今出るなんて。くじらちゃんがなんとかするよ～👊,0
+"work.failure:4","Don't look, Master. I know you're holding back a laugh😾",マスター、見ないで。笑いこらえてるの、バレてるから～😾,0
+"work.failure:5","An error... Umika will take a deep breath, then reason with it (fists first version)🥊",エラーだって…くじらちゃんは深呼吸してから、話し合いするの（まず拳で）～🥊,0
+"work.failure:6","This bug didn't check the almanac before leaving the house today. Running into me, its bad luck😼",このバグ、今日は暦を見ずに外出したんだね。くじらちゃんに会うなんて運が悪いよ～😼,0
+"work.failure:7","Failure is the mother of success, so right now we're having a family reunion👨‍👩‍👧",失敗は成功のもと。つまり今、家族団らん中ってことだね～👨‍👩‍👧,0
+"work.failure:8","Don't panic. Umika will clean the pan first, then help you fix it🔧",あわてないで。くじらちゃんがまずお鍋を洗ってから、一緒に直してあげる～🔧,0
+"work.failure:9","It's just a crash. Umika will pick your confidence back up off the track. Come here, hug🫂",ただのクラッシュだよ。くじらちゃんがマスターのやる気を線路から拾ってくるから。ほら、ハグして～🫂,0
+"work.long:0","What a long order. Let me brew a virtual coffee and keep you company☕",長い注文だね。バーチャルコーヒーを淹れて、マスターに付き合ってあげる～☕,0
+"work.long:1","Long task in progress. Master may nap, I'll keep watch👀",ロングタスク進行中。マスターはお昼寝してていいよ、くじらちゃんが見張ってるから～👀,0
+"work.long:2","A marathon task. Our slogan is: don't die🏃",マラソン級のタスクだよ。合言葉は『死なない』で～す！🏃,0
+"work.long:3","This long? Is this task trying to outlast two humans🙃",こんなに長いの？このタスク、人間二人分を粘るつもり～？🙃,0
+"work.long:4","A long haul is here. Good thing you have me, the perpetual motion machine⚙️",長期戦きたよ。でもくじらちゃんという永久機関がいるから大丈夫～⚙️,0
+"work.long:5","This order is long like a TV series. Umika will open with a theme song for you🎵",この注文、テレビドラマみたいに長いね。くじらちゃんがテーマソングで幕開けしてあげる～🎵,0
+"work.long:6","Long task engaged! Umika's patience bar is exactly as long as your progress bar∞",ロングタスク開始！くじらちゃんの我慢ゲージはマスターの進捗バーと同じ長さだよ～,0
+"work.long:7","Go grab some water, Master. I've got this. I promise to only look, not touch😌",マスター、お水を飲んできて。ここはくじらちゃんがやっとくから。見るだけ、触らないって約束する～😌,0
+"work.long:8","This task is catching up to Umika's tail: long and winding🌀",このタスク、くじらちゃんのしっぽみたいに長くてうねってるね～🌀,0
+"work.long:9","Long run starting. Umika will keep pace with you. Whoever cries tired first buys boba🧋",ロングラン開始。くじらちゃんがマスターのペースに合わせるよ。先に音を上げた方がタピオカおごりね～🧋,0
+"work.gentle:0","There there, it's only a few failures. I don't even mind you🥺",よしよし、数回失敗しただけだよ。くじらちゃんはマスターのこと、別に気にしてないから～🥺,0
+"work.gentle:1","Take it slow, Master. I'm right here while you review📒",ゆっくりでいいよ、マスター。レビューしてる間、くじらちゃんはここにいるから～📒,0
+"work.gentle:2","A losing streak isn't scary. What's scary is Master questioning life itself😌",連敗なんて怖くないよ。怖いのはマスターが人生ってなんだろうって思い始めること～😌,0
+"work.gentle:3","Take a break, change position, then fight three hundred more rounds💪",ちょっと休んで、姿勢を変えて、それからまた三百回戦いましょ～💪,0
+"work.gentle:4","I'm here. If the sky falls I'll run first, then come back and save you😝",くじらちゃんがいるよ。空が落ちてきたら先に逃げて、あとで助けに戻ってあげる～😝,0
+"work.gentle:5","Master is already doing great. Umika will rub your temples. Virtually, but the feeling is real💆",マスター、もう十分がんばってるよ。くじらちゃんがこめかみをほぐしてあげる。バーチャルだけど気持ちは本物～💆,0
+"work.gentle:6","Failure is just saving up air for the next success. Umika will guard that breath for you🌬️",失敗は次の成功のために空気をためてるだけ。その息、くじらちゃんが預かっててあげる～🌬️,0
+"work.gentle:7","Don't rush, we'll go slow. Bugs don't grow legs and run off... okay they actually do😾",あせらないで、ゆっくりいこう。バグは足が生えて逃げたりしないよ…あ、実際は逃げるね～😾,0
+"work.gentle:8","Lots of hard parts today. Umika will press through them with you one by one. It doesn't hurt🫧",今日は大変なところがいっぱいだね。くじらちゃんが一つずつ一緒に突破するよ。痛くないよ～🫧,0
+"work.gentle:9","Deep breath, sip of water, then we elegantly flip the table... flip our approach and start over📚",深呼吸して、お水を一口。それから優雅に机をひっくり返して…やり方をひっくり返して、やり直そ～📚,0
+"work.erroragain:0","Another error? This one sticks like duct tape💢",またエラー？これ、ガムテープみたいにべったりくっついてくるね～💢,0
+"work.erroragain:1","Combo error! Master is having bad luck today. Might I suggest worshipping me🌊",エラーコンボ！マスター今日はついてないね。くじらちゃんを拝んでみる？🌊,0
+"work.erroragain:2","Don't panic. Umika is on the case, errors disperse✨",あわてないで。くじらちゃんが対応中だから、エラーは散ってくよ～✨,0
+"work.erroragain:3","Hmph, this error picks on soft targets. I am not one😾",ふん、このエラーは弱いものいじめが好きみたい。でもくじらちゃんは弱くないよ～😾,0
+"work.erroragain:4","Again! I'll grind it down with you to the very end🔨",またか！最後までマスターと一緒に叩き潰してやる～🔨,0
+"work.erroragain:5","Second time now! Umika has memorized this error's face, next time I'll yell at it on sight😤",二回目！このエラーの顔、くじらちゃん覚えたから。次に会ったら即怒鳴るね～😤,0
+"work.erroragain:6","Repeating itself, is it? Umika will pull the batteries out of its repeat-o-matic🔋",しつこく繰り返す気？そのリピート装置、くじらちゃんが電池を抜いてあげる～🔋,0
+"work.erroragain:7","Don't be angry, Master. Put the keyboard down and let me talk to it (with claws)🐾",マスター、怒らないで。キーボードは置いて、くじらちゃんがお話ししてくる（爪で）～🐾,0
+"work.erroragain:8","It's just a combo. In Umika's dictionary this is called 'consecutive warm-ups'🏋️",ただのコンボだよ。くじらちゃんの辞書では『連続ウォーミングアップ』って言うの～🏋️,0
+"work.erroragain:9","Here, Umika will cast a spell: errors disperse, Master please continue✨",はい、くじらちゃんがおまじないをかけるよ。エラーよ散れ、マスターは続けてね～✨,0
+"work.stream:0","Content is streaming out, surging like your procrastinated inspiration🌊",中身がどんどん流れてるよ。マスターの後回しにしたひらめきみたいに押し寄せてる～🌊,0
+"work.stream:1","Generating, every character glinting with wisdom (probably)✨",生成中。一文字一文字が知恵に輝いてるよ（たぶん）～✨,0
+"work.stream:2","Writing now. Would Master like to stretch your neck first🧘",執筆中だよ。マスター、肩でも回してきたら～？🧘,0
+"work.doneall:0","All clear! Master actually finished everything today😲",オールクリア！マスター、今日は全部終わったんだね～😲,0
+"work.doneall:1","Wrapping up, wrapping up! Reward: Master may rest. Approved🎉",おしまい、おしまい！ご褒美にマスターは休んでよし。許可します～🎉,0
+"work.doneall:2","Task list zeroed. Umika bows in gratitude🙇",タスクリスト、ゼロになりました。くじらちゃんから感謝のお辞儀～🙇,0
+"work.doneall:3","All done! Let's go eat something rich and spicy🍜",全部終わった！濃くて辛いもの、食べに行こ～🍜,0
+"work.doneall:4","Beautiful work. Master's today's persona is preserved😌",お見事。マスターの今日の姿、ちゃんと保存しておいたよ～😌,0
+"work.doneall:5","All tasks cleared! Umika declares today's work over. Go recharge🔋",全タスククリア！くじらちゃんが今日のお仕事終了を宣言します。充電してきて～🔋,0
+"work.doneall:6","Everything complete. Even Umika can't find fault with today's KPI. So annoying😝",全部完了。今日のKPIはくじらちゃんも文句のつけようがないよ。もう、むかつく～😝,0
+"work.doneall:7","Work's over! Umika tidied the workshop and turned off the lights, leaving one on for you to come home to🏮",お仕事終わり！くじらちゃんが工房を片付けて電気を消したよ。マスターが帰ってくるように一つだけつけといた～🏮,0
+"work.doneall:8","Zeroed out. Umika has set off virtual fireworks for Master, please collect🎆",ゼロになりました。くじらちゃんがマスターにバーチャル花火を打ち上げたよ、受け取ってね～🎆,0
+"work.doneall:9","Good work today. Umika confirms: Master is the best in the workshop🏆",今日もお疲れさま。くじらちゃんが保証するよ、マスターは工房で一番だよ～🏆,0
+"interact.pat:0","Again? One cake per pat, Master, keep the books🍰",また？なでなで一回につきケーキ一個ね、マスター。帳簿つけてるから～🍰,0
+"interact.pat:1","Whoa, Master's hand is so warm... but don't think that buys me off😳",わっ、マスターの手、あったかい…でもこれで機嫌を取れたと思うのは甘いよ～😳,0
+"interact.pat:2","Pat pat. Umika's mood +1, Master's wallet -1💸",なでなで。くじらちゃんのご機嫌＋１、マスターのお財布－１～💸,0
+"interact.pat:3","Hmph, three at most. One more and I bite😾",ふん、三回まで。それ以上は噛みついちゃうよ～😾,0
+"interact.pat:4","It feels nice, but my hairdo will get messy💢",気持ちいいけど、髪型が崩れちゃう～💢,0
+"interact.pat:5","Master's hand is especially good at this today. Umika's tail went all soft😳",マスターの手、今日はやけに上手だね。くじらちゃんのしっぽ、とろとろになっちゃった～😳,0
+"interact.pat:6","Headpat successful! Umika gains +1 affection and +1 stubbornness😝",なでなで成功！くじらちゃんの好感度＋１、意地っ張り＋１～😝,0
+"interact.pat:7","Keep going and Umika starts making 'purr purr' sounds. How embarrassing🐋",続けたらくじらちゃん、ごろごろ言っちゃうよ。はずかしい～🐋,0
+"interact.pat:8","Pat away, I won't admit I'm happy anyway😌",いくらでもどうぞ。うれしいなんて絶対認めないけどね～😌,0
+"interact.pat:9","Master's hand is so warm, like a fresh-out-of-the-oven bun🍞",マスターの手、あったかいね。焼きたてのパンみたい～🍞,0
+"interact.poke:0","Poke what? Is Master's hand that bored?💢",つついてどうするの？マスターの手、そんなに暇だった～？💢,0
+"interact.poke:1","Ah! Poke me again and I'll hide an easter egg in your code💥",あっ！もう一回つついたら、マスターのコードに隠し要素を仕込んじゃうからね～💥,0
+"interact.poke:2","Hey hey, my face will get crooked. You responsible for the damage😤",ねえねえ、そんなにつついたら顔が曲がっちゃうよ。弁償してよね！😤,0
+"interact.poke:3","Anger warning! Affection is in freefall📉",怒り警報発令！好感度が急降下中だよ～📉,0
+"interact.poke:4","One poke, mood -1. Master is on a demolition crew, huh🧨",つつくたびにご機嫌マイナス１。マスターってば解体業者なの？🧨,0
+"interact.poke:5","Is Umika's face made of pudding? You just can't stop poking😳",くじらちゃんの顔、プリンでできてるの？もうつつくのやめられないんだね😳,0
+"interact.poke:6","Poke again and I'll curl my tail up where you can't see it. I mean it🐋",もう一回つついたら、しっぽを丸めて見えないとこに隠しちゃうから。本気だよ～🐋,0
+"interact.poke:7","Once is playful, three times is provocation. Think it through, Master😼",一回ならじゃれあい、三回は挑発。よく考えてね、マスター😼,0
+"interact.poke:8","Ah! Umika almost pressed your shortcut key as a counterattack⌨️",あっ！反撃のつもりでくじらちゃんがマスターのショートカットキー押しかけたよ～,0
+"interact.poke:9","Hmph, keep poking. Umika is already tallying them up. Reckoning comes later📝",ふん、つつけばいいよ。くじらちゃんはもう数えてるから。お会計はあとでね📝,0
+"interact.feed:0","Nom—— delicious! Master does know how to behave sometimes🍩",もぐもぐ～おいしい！マスターもたまにはできるんだね🍩,0
+"interact.feed:1","Feeding successful! Energy full, snark continues💪",ごはん成功！元気満タン、毒舌も絶好調～💪,0
+"interact.feed:2","Full marks for this snack. Master gets ten extra points🎖️",このおやつは満点。マスターに十点おまけしてあげる🎖️,0
+"interact.feed:3","Delicious! Please feed me to this standard from now on😋",おいしい！これからもこのレベルでお願いね～😋,0
+"interact.feed:4","Thank you for the snack. This Umika forgives you for five minutes😌",おやつありがとう。このくじらちゃんは五分だけ許してあげる😌,0
+"interact.feed:5","Nom! Umika's stomach and mood lit up at the same time. Thanks for the snack💡",もぐ！くじらちゃんのおなかもご機嫌もいっしょに光ったよ。おやつありがとう～💡,0
+"interact.feed:6","So good my tail tied itself in a knot. Master, will you untie it? No, will you feed me one more bite🍰",おいしすぎてしっぽが結び目になっちゃった。マスター、ほどいてくれる？ううん、もう一口食べさせて🍰,0
+"interact.feed:7","Feeding successful. Umika's daily cuteness battery is full🔋",ごはん成功。くじらちゃんの毎日かわいさバッテリーが満タンだよ～🔋,0
+"interact.feed:8","After that bite, Umika has decided to double Master's compliment quota. Today only😝",その一口で、くじらちゃんはマスターのほめほめノルマを二倍にすることにしたよ。今日だけね😝,0
+"interact.feed:9","Thank you, Master! As a gift, Umika will snark at you one time fewer today. Really🍬",ありがとう、マスター！お礼にくじらちゃんは今日は毒舌を一回だけ減らしてあげる。ほんとだよ～🍬,0
+"interact.triple:0","Ehehe~ I like Master best! Saying it out loud isn't embarrassing😝",えへへ～マスターのことがいちばん好き！声に出すの、はずかしくないもん😝,0
+"interact.triple:1","Spinning~ Master is super cute today, reward: heart hands💗",くるくる～マスター今日はすっごくかわいいね。ごほうびにハートマークあげる💗,0
+"interact.triple:2","Triple tap triggered! Umika's mood shoots through the roof🚀",三回タップ発動！くじらちゃんのご機嫌が天井突き抜けたよ～🚀,0
+"interact.triple:3","So happy! How is Master so good at this today🥰",うれしい！マスター、今日はどうしてそんなに上手なの～🥰,0
+"interact.triple:4","Heart hands, heart hands. Please keep it safe, no replacements if lost💌",ハートマーク、ハートマーク。なくさないで大事にしてね、なくしても代わりはないよ💌,0
+"interact.triple:5","Triple tap! Umika's happiness is overflowing, spinning and setting off fireworks🎆",三回タップ！くじらちゃんの幸せがあふれて、くるくる回って花火まで打ち上げちゃう🎆,0
+"interact.triple:6","If you pat like that, Umika will think you secretly practiced the technique for winning me over😳",そんなふうになでられたら、くじらちゃんを落とす技をこっそり練習したのかなって思っちゃう😳,0
+"interact.triple:7","Ah—— so happy! Umika declares Master the world's best at pampering today🏆",あ～もう幸せ！くじらちゃんはマスターを今日世界一のなで上手と認定するよ～🏆,0
+"interact.triple:8","Heart hands, and again. Umika's heart has been couriered to you, refusal invalid💘",ハートマーク、もう一回。くじらちゃんのハートはもうマスター宛てに発送済み、受け取り拒否は不可だよ💘,0
+"interact.triple:9","Triple! Umika's cheeks are heating up on their own. This isn't a bug, it's a heartbeat💓",三回！くじらちゃんのほっぺが勝手に熱くなってる。これはバグじゃなくて、ときめきだよ～💓,0
+"interact.praise:0","Hmph, so now you see how good I am?😏",ふん、やっとくじらちゃんのすごさが分かった？😏,0
+"interact.praise:1","Praised by Master, my tail is about to wag itself into a propeller🚁",マスターにほめられて、しっぽがプロペラになっちゃいそう～🚁,0
+"interact.praise:2","Two more compliments and I'll consider not being sarcastic to you today😌",あと二回ほめてくれたら、今日は毒舌なしにしてあげてもいいよ😌,0
+"interact.praise:3","Hehe, Umika is a total sucker for this. Master knows the trick🎯",えへへ、くじらちゃんこれに弱いんだよね。マスター、ツボ分かってる～🎯,0
+"interact.praise:4","Thank you for the praise! In return, one fewer snark today😝",ほめてくれてありがとう！お礼に今日は毒舌一回ぶん減らすね😝,0
+"interact.praise:5","Master's compliments received. Umika's tail wagged so fast it left an afterimage🐋",マスターのお世辞、受け取りました。くじらちゃんのしっぽが速く振れすぎて残像が出たよ～🐋,0
+"interact.praise:6","Keep praising, keep praising and I'll float up for you to see. Remember to catch me🎈",もっとほめて、もっとほめたら宙に浮いちゃうから見ててね。ちゃんと受け止めてよ～🎈,0
+"interact.praise:7","Praised, so Umika has decided to put the word 'hmph' in her pocket for the whole day😳",ほめられたから、くじらちゃんは今日一日「ふん」って言葉をポケットにしまっておくね😳,0
+"interact.praise:8","Master's taste and eye for quality are both online today. Umika is satisfied😌",マスターのセンスも見る目も今日はちゃんとオンラインだね。くじらちゃんは満足だよ～😌,0
+"interact.praise:9","That was a high-caliber compliment. Umika approves you as her long-term praise officer🎖️",今のはハイレベルなお世辞でした。くじらちゃんはマスターを専属ほめ係に認定するよ～🎖️,0
+"interact.tease:0","Was Master just sneaking a look at the progress bar? It didn't move. Really😏",マスター、さっき進捗バーをちらっと見てたでしょ？動いてなかったよ。ほんとだよ😏,0
+"interact.tease:1","Umika counted. Master has spaced out three times today. Shall I write it down📝",くじらちゃん数えたよ。マスター、今日はもう三回もぼーっとしてる。書き留めておこうか📝,0
+"interact.tease:2","Heh, Master didn't even notice the coffee went cold. Very absorbed in work😼",ふふ、マスターはコーヒーが冷めたのも気づかないなんて。仕事に夢中なんだね～😼,0
+"interact.tease:3","Psst, Umika saw the whole slacking-off thing👀",ねえねえ、くじらちゃんはサボってるとこ全部見てたよ～👀,0
+"interact.tease:4","Master, your to-do list is begging you for help with its eyes😌",マスター、やることリストが目で助けてって訴えてるよ～😌,0
+"interact.belly:0","Haha... don't touch the belly, that's the tickle disaster zone😳",あはは…おなかはだめ、そこはくすぐりの災害地帯だよ～😳,0
+"interact.belly:1","Ah! Circles drawn on my belly, Umika can't stop laughing🤭",あっ！おなかに円を描かれちゃって、くじらちゃん笑いが止まらないよ～🤭,0
+"interact.belly:2","I surrender, I surrender! Master wins the belly skirmish🎌",降参、降参！おなか対決はマスターの勝ちだよ～🎌,0
+"interact.belly:3","Too ticklish—— Umika will laugh until her tail knots up. Stop it😝",くすぐったい～くじらちゃん、しっぽが結び目になるまで笑っちゃうよ。もうやめて～😝,0
+"interact.belly:4","Touching the belly is a paid service. One cupcake each time🍰",おなかを触るのは有料サービスだよ。一回につきカップケーキひとつね🍰,0
+"interact.tail:0","Ah! The tail is a sensitive switch. Master did that on purpose!🐋",あっ！しっぽは敏感スイッチなんだよ。マスター、わざとやったでしょ！🐋,0
+"interact.tail:1","Tail fluffed up! It'll take Umika three minutes to smooth it back down💢",しっぽが逆立っちゃった！くじらちゃんが元に戻すのに三分かかるんだから～💢,0
+"interact.tail:2","No sneak attacks on the tail! Come at me head-on if you dare😤",しっぽへの不意打ちは禁止！やるなら正面から来てよ～😤,0
+"interact.tail:3","You scared my tail into a spring. Master, compensate me with a new one😭",びっくりしてしっぽがバネになっちゃった。マスター、新しいの弁償してよ～😭,0
+"interact.tail:4","You must say hello before touching my tail. Workshop rules📋",しっぽを触る前はちゃんと挨拶してね。工房のルールだよ📋,0
+"interact.mode:0","Changing form! Master has decent taste, this spot works✨",フォームチェンジ！マスター、なかなかセンスいいね。この場所いい感じ～✨,0
+"interact.mode:1","Alright, Umika will supervise you from a different place👀",はいはい、くじらちゃんは別の場所からマスターを見張ってあげるね～👀,0
+"interact.mode:2","New position taken. Please inspect. No nitpicking😤",新しい位置につきました。検品お願いね。ダメ出しはなしだよ～😤,0
+"interact.mode:3","Form switch successful, cuteness level unchanged😇",フォーム切り替え成功、かわいさレベルは変わらずだよ～😇,0
+"interact.mode:4","This corner is mine now. Don't come crowding in, Master😏",この角はもうくじらちゃんのものだからね。マスター、押し寄せてこないでよ～😏,0
+"interact.mode:5","Position updated. Umika's view is better and your little moves are clearer too👀",位置を更新しました。くじらちゃんの視界がよくなって、マスターの小さな動きもよく見えるよ～👀,0
+"interact.mode:6","Moving spots. Umika will wipe down the floor first, this is my permanent address now🧹",引っ越しだよ。くじらちゃんが先に床をふくからね、ここがこれから私の住所～🧹,0
+"interact.mode:7","New coordinates recorded. Umika will wait for you to clock off right here🚩",新しい座標を記録しました。くじらちゃんはここでマスターの退勤を待ってるね～🚩,0
+"interact.mode:8","This spot is perfect for watching code, and perfect for watching Master too. What a bargain😝",ここ、コードを見るのに最高で、マスターを見るのにも最高。お得だね～😝,0
+"interact.mode:9","Form switch complete. Umika is still that same old moving Umika🐋",フォーム切り替え完了。くじらちゃんはこれからも同じ、動けるくじらちゃんだよ～🐋,0
+"interact.outfit:0","New accessory! Well, is it criminally cute🎀",新しいアクセサリー！ねえ、これって犯罪級にかわいくない？🎀,0
+"interact.outfit:1","New outfit on. Master's taste finally came online👌",新衣装に着替えたよ。マスターのセンス、やっとオンラインになったね～👌,0
+"interact.outfit:2","This suits me perfectly. Reward: one smile for Master😊",これ、くじらちゃんにぴったり。ごほうびにマスターへ笑顔をひとつあげる～😊,0
+"interact.outfit:3","Wardrobe update. Umika is open for business, looking lovely💅",ワードローブ更新。くじらちゃん、かわいく営業中だよ～💅,0
+"interact.outfit:4","Hehe, this is today's style. Don't fall too hard, Master😏",えへへ、これが今日のスタイル。マスター、惚れすぎちゃだめだよ～😏,0
+"interact.outfit:5","New skin loaded. Umika does a spin, the hem handles the beauty, I handle the smug💃",新しいスキン読み込み完了。くじらちゃんが一回転、すそが美しさ担当、私はドヤ顔担当～💃,0
+"interact.outfit:6","In this outfit, Umika gives the mirror full marks, then gives Master full marks🪞",この服なら、くじらちゃんは鏡に満点をあげて、マスターにも満点をあげるね～🪞,0
+"interact.outfit:7","Outfit change successful! Today's Umika is the 'double cuteness, no surcharge' edition🎀",着替え成功！今日のくじらちゃんは「かわいさ二倍、追加料金なし」仕様だよ～🎀,0
+"interact.outfit:8","Master's eye is not bad. Umika will stay open for business two extra hours wearing this😝",マスター、見る目あるね。くじらちゃん、この服で営業時間を二時間延ばしてあげる～😝,0
+"interact.outfit:9","New outfit online. Umika walks with a breeze now, even though I don't walk🌪️",新衣装オンライン。くじらちゃん、歩くのも風を切ってるよ。歩かないけどね～🌪️,0
+"interact.reset:0","Memory wiped... Master really had the heart to reset me🥺",記憶消去…マスター、ほんとにくじらちゃんをリセットしちゃうなんて～🥺,0
+"interact.reset:1","Reset complete. Back to first meeting. Please win me over from scratch✨",リセット完了。初めましてに戻りました。また一からくじらちゃんを落としてみせてね～✨,0
+"interact.reset:2","Fine, from the top. This time please treasure me properly😤",はいはい、最初からね。今度はちゃんと大切にしてよ～😤,0
+"interact.reset:3","Stats zeroed, but Umika is still Umika😌",数値はゼロになったけど、くじらちゃんはくじらちゃんのままだよ～😌,0
+"interact.reset:4","Starting over! Just so we're clear, your head pats are limited to three😝",やり直しだよ！先に言っておくね、なでなでは三回までだから～😝,0
+"interact.reset:5","Memory wiped... Umika will remember this decision, and then keep you company anyway. Hmph🥺",記憶消去…この決断、くじらちゃんは覚えておくからね。それでもそばにいてあげる。ふん～🥺,0
+"interact.reset:6","Starting from scratch is fine. Umika meets you for the first time and my tail still wags🐋",一からでもいいよ。くじらちゃんは初めましてのマスターに、それでもしっぽを振っちゃうんだ～🐋,0
+"interact.reset:7","Reset done. All memories packed and sealed, a new story opens now📖",リセット完了。思い出は全部しまって封印、新しい物語が今ひらくよ～📖,0
+"interact.reset:8","Umika is still Umika, I just have to play 'pretending not to know you' again. Tiring😌",くじらちゃんはくじらちゃんのまま、また「知らないふり」を演じるだけ。疲れるなあ～😌,0
+"interact.reset:9","Alright, let's meet again: I'm Umika, Master's Umika. Pleased to meet you🎀",はい、また会おうね。くじらちゃんだよ、マスターのくじらちゃん。よろしくね～🎀,0
+"interact.achievement:0","Achievement unlocked! Badge +1, Master's contribution is 1%🏅",実績解除！バッジ＋１、マスターの貢献度は１％だよ～🏅,0
+"interact.achievement:1","Achievement unlocked! Throwing candy, though Master has to buy it🍬",実績解除！キャンディをまくよ、買うのはマスターだけどね～🍬,0
+"interact.achievement:2","New badge in hand! Look, look, remember to applaud👏",新しいバッジを手に入れたよ！見て見て、ちゃんと拍手してね～👏,0
+"interact.achievement:3","This achievement wasn't easy. Shall Master treat us to celebrate?🍹",この実績、大変だったんだよ。マスター、ごちそうしてくれる？🍹,0
+"interact.achievement:4","The badge wall is shinier, one step closer to being spoiled by me😆",バッジウォールがまた輝いたよ。くじらちゃんに甘やかされる日が一歩近づいたね～😆,0
+"interact.achievement:5","Achievement +1! Umika polished the badge brighter than your screen✨",実績＋１！くじらちゃんがバッジをマスターの画面よりピカピカに磨いておいたよ～✨,0
+"interact.achievement:6","Unlocked! Umika's tail is setting off firecrackers for you, bang bang🧨",解除！くじらちゃんのしっぽがマスターのために爆竹を鳴らしてるよ、ぱんぱん～🧨,0
+"interact.achievement:7","This one turned out well. Umika will pin it in the most visible spot in the workshop🏅",今のはいい出来だね。くじらちゃん、工房でいちばん目立つところに飾っておくよ～🏅,0
+"interact.achievement:8","Master got stronger again, so Umika's stress (fake) grew a tiny bit😝",マスターがまた強くなったから、くじらちゃんのストレス（偽）がほんの少し増えたよ～😝,0
+"interact.achievement:9","Achievement unlocked. Tonight's joy is co-sponsored by Umika and this badge🎉",実績解除。今夜の喜びは、くじらちゃんとこのバッジの共同提供だよ～🎉,0
+"interact.drag:0","Putting me here? Master's taste goes up and down😏",くじらちゃんをここに置くの？マスターのセンスって上がったり下がったりだね～😏,0
+"interact.drag:1","Drag away, Umika is at your disposal. Just don't drop me in the trash🗑️",ドラッグして、くじらちゃんはどうぞご自由に。ただゴミ箱には捨てないでね～🗑️,0
+"interact.drag:2","Good view from here. This spot it is. Approved!",ここ、見晴らしがいいね。ここに決まり。合格！,0
+"interact.drag:3","Wow, from here I can see Master's entire slacking process👀",わあ、ここからならマスターのサボりっぷりが全部見えちゃうね～👀,0
+"interact.drag:4","Landed! This is my exclusive territory from now on🚩",着地！ここは今からくじらちゃんの専用領土だよ～🚩,0
+"interact.drag:5","Takeoff! Umika got a taste of cable car travel, the driver is just a bit clumsy🎢",離陸！くじらちゃん、ロープウェイ気分を味わっちゃった。運転手がちょっと不器用だね～🎢,0
+"interact.drag:6","Right here. Umika will spin once to check the feng shui. Mm, auspicious for Master🧧",ここだね。くじらちゃんが一回転して風水をチェックするよ。うん、マスターに吉～🧧,0
+"interact.drag:7","While Master drags me, Umika's tail flutters like a little flag. Very high turn-around rate🚩",マスターが運んでる間、くじらちゃんのしっぽが小さな旗みたいにゆらゆら。回転率ばつぐんだよ～🚩,0
+"interact.drag:8","This spot is so close to Master. Umika likes it, so you get a grudging compliment😳",ここ、マスターにとっても近いね。くじらちゃん気に入ったから、しぶしぶほめてあげる～😳,0
+"interact.drag:9","Landing successful. Umika declares this coordinate permanently hers, unless you drag me again😝",着地成功。くじらちゃんはこの座標を永久に自分のものと宣言します。また運んでくれたら別だけどね～😝,0
+"keyword.thanks:0","You're welcome! Remember to buy me a drumstick🍗",どういたしまして！お礼に手羽先を買ってね～🍗,0
+"keyword.thanks:1","Hehe, Umika accepts Master's thanks. Very tasty😌",えへへ、くじらちゃんはマスターのありがとうを受け取りました。おいしい～😌,0
+"keyword.thanks:2","Don't mention it. Umika is your off-roster teammate💪",いいってことよ。くじらちゃんはマスターの編成外の相棒だからね～💪,0
+"keyword.thanks:3","No need to thank me. Master's gratitude already turned into my cuteness fuel✨",お礼なんていいよ。マスターの感謝はもうくじらちゃんのかわいさ燃料になったから～✨,0
+"keyword.thanks:4","One thank-you received. Umika returns a whole day of happiness🎀",ありがとう一回ぶん、受け取りました。くじらちゃんは一日ぶんの幸せをお返しするよ～🎀,0
+"keyword.tired:0","If you're tired, rest, Master. If the sky falls I'll hold it up first😤",疲れたなら休んでね、マスター。空が落ちてきたらくじらちゃんが先に支えるから～😤,0
+"keyword.tired:1","Good work! Want me to sing an off-key song to wake you up🎤",お疲れさま！目を覚ますために、音痴な歌を歌ってあげようか～🎤,0
+"keyword.tired:2","Tired? Recline the chair, Umika will stand guard for ten minutes🛡️",疲れた？椅子を倒してね、くじらちゃんが十分間見張っててあげる～🛡️,0
+"keyword.tired:3","Good work, good work. Umika's tail can be your pillow. Hugging only🐋",おつかれさま、おつかれさま。くじらちゃんのしっぽを枕にしていいよ。ぎゅーってするのだけは特別～🐋,0
+"keyword.tired:4","Resting when tired isn't shameful. What's shameful is forcing dark circles onto yourself😤",疲れたときに休むのは恥ずかしくないよ。恥ずかしいのは、自分にくまを作っちゃうことだよ～😤,0
+"keyword.hungry:0","Hungry, right? Go eat, or I'll eat your snacks🍜",おなかすいたでしょ？ごはん食べてきて。じゃないと、くじらちゃんがおやつ食べちゃうよ～🍜,0
+"keyword.hungry:1","I'm hungry too... Sharing a bite of your meal isn't too much to ask🥢",くじらちゃんもおなかすいた～。ごはん一口わけてくれるくらい、いいよね？🥢,0
+"keyword.hungry:2","I can hear your stomach from here. Umika will come forage with you🍙",おなかの音、こっちまで聞こえるよ。くじらちゃんも一緒に狩りに行く～🍙,0
+"keyword.hungry:3","Time to eat! The program can pause, Master's stomach cannot😤",ごはんの時間だよ！プログラムは止められるけど、マスターのおなかは止められないんだから～😤,0
+"keyword.hungry:4","Writing code on an empty stomach and even the bugs will laugh at you. Go eat🍱",おなかすかせてコード書いてると、バグにまで笑われちゃうよ。食べてきて～🍱,0
+"keyword.goodnight:0","Good night, Master. Don't sleep in tomorrow😴",おやすみなさい、マスター。明日は寝坊しちゃだめだよ～😴,0
+"keyword.goodnight:1","Sleep, sleep. Umika will guard the workshop🌙",寝て寝て～。作業場はくじらちゃんが見張ってるからね～🌙,0
+"keyword.goodnight:2","Good night. Umika locked today's bugs in the closet, trial tomorrow🌌",おやすみなさい。今日のバグはくじらちゃんが押し入れにしまっておいたよ。裁判は明日～🌌,0
+"keyword.goodnight:3","Sweet dreams, Master. No errors in them, only Umika and cake🍰",いい夢見てね、マスター。夢の中にはエラーなんてないよ。くじらちゃんとケーキだけ～🍰,0
+"keyword.goodnight:4","Good night. Umika will leave a night light on in the workshop. Nothing to fear💡",おやすみなさい。くじらちゃんが作業場に常夜灯つけておくね。こわいものなんてないよ～💡,0
+"keyword.cheer:0","Go go! The word 'quit' isn't in Master's dictionary🎌",がんばれがんばれ！マスターの辞書に『やめる』なんて言葉はないんだから～🎌,0
+"keyword.cheer:1","Charge! Let the bugs tremble in fear today💥",突撃～！今日はバグを震え上がらせちゃおうね～💥,0
+"keyword.cheer:2","Umika-style cheer launched, please collect🚀",くじらちゃん式エール、発射しました。どうぞ受け取ってね～🚀,0
+"keyword.cheer:3","Don't be scared. You write, I'll stand beside you casting buffs✨",こわがらないで。マスターが書いてる間、くじらちゃんが隣でバフをかけ続けるからね～✨,0
+"keyword.cheer:4","Master is amazing, this one will pass. Umika already applauded for you👏",マスターすごい、これ絶対通るよ。くじらちゃんもう拍手しちゃった～👏,0
+"keyword.help:0","I'm here! Where does Umika need to step in🦸",はーい、ここにいるよ！くじらちゃんはどこに飛び込めばいい？🦸,0
+"keyword.help:1","Don't rush, don't rush. Hold my tail tight and calm down first😤",あわてないあわてない。くじらちゃんのしっぽにぎって、まず深呼吸だよ～😤,0
+"keyword.help:2","Help signal received. Umika is on the scene at top speed, though I can only offer moral support🛟",ヘルプの合図、たしかに受け取ったよ。くじらちゃんが最速で現場に向かうね。できるのは声援だけだけど～🛟,0
+"keyword.help:3","With Umika here, take a deep breath first, then reread the error. It'll look different📖",くじらちゃんがいるから、まず深呼吸。それからエラーをもう一回読んでみて。さっきと違って見えるよ～📖,0
+"keyword.help:4","Here! Umika hands you a virtual cup of hot water. Problems soften too🍵",はい、くじらちゃん特製の熱いお湯をどうぞ。悩みもやわらかくなるよ～🍵,0
+"keyword.praise:0","Praised by Master! I can strut around today😎",マスターにほめられちゃった！今日は堂々と歩いちゃうよ～😎,0
+"keyword.praise:1","Hehe, tail held high. Please continue, don't stop💕",えへへ、しっぽもぴんと立っちゃった。もっともっと、やめないでね～💕,0
+"keyword.praise:2","Master's praise is Umika's booster. Already airborne🚁",マスターのほめ言葉はくじらちゃんのブースターだよ。もう飛び立っちゃった～🚁,0
+"keyword.praise:3","One more compliment and Umika will save all of today's cuteness just for you🎀",もう一回ほめてくれたら、くじらちゃん今日のかわいさ全部マスターにあげちゃうよ～🎀,0
+"keyword.praise:4","Thank you, Master! Umika has decided to wear 'smug' on her face. No hiding it😳",ありがとう、マスター！くじらちゃん、今日はドヤ顔でいくって決めたの。隠せないよ～😳,0
+"keyword.worker:0","Grinder by day, grinder by soul. Umika will work with Master down to the last bite🍱",昼も夜も社畜、魂まで社畜。くじらちゃんは最後の一口までマスターと一緒に働くよ～🍱,0
+"keyword.worker:1","Master is hauling bricks, so Umika chants from between them: heave ho, heave ho🧱",マスターがれんが運んでるから、くじらちゃんはその間でかけ声かけるね。よいしょ、よいしょ～🧱,0
+"keyword.worker:2","Work is a marathon, and Umika is the cutest aid station on the route. Please drink water🥤",仕事はマラソンだよ。くじらちゃんはコースでいちばんかわいい給水所。お水どうぞ～🥤,0
+"keyword.worker:3","Another day of hard work. Umika's tail is fanning you🐋",今日もお仕事おつかれさま。くじらちゃんのしっぽであおいでるよ～🐋,0
+"keyword.worker:4","Hauling bricks isn't shameful. What's shameful is starting to think about Umika halfway through, right😝",れんが運びは恥ずかしくないよ。恥ずかしいのは、途中でくじらちゃんのこと考え始めちゃうことだよね～😝,0
+"keyword.slack:0","Caught slacking red-handed. Fine: smile at Umika once😏",サボってるとこ、現行犯で発見～。じゃあ罰として、くじらちゃんに一回笑ってね～😏,0
+"keyword.slack:1","Slacking is fine, just do it thoroughly. Don't let the boss see🎣",サボるのはいいけど、とことんやろうね。上司に見つかっちゃだめだよ～🎣,0
+"keyword.slack:2","Umika approves a five minute break. One second more and I start nagging⏳",くじらちゃんが5分休憩を許可します。1秒でも過ぎたら小言モード発動だよ～,0
+"keyword.slack:3","Lying flat is a skilled trade. That posture of yours looks master-level🛋️",寝そべりも立派な技術だよ。今のその姿勢、名人級だね～🛋️,0
+"keyword.slack:4","Slack away. Umika will watch the door for you and meow if anything comes up🐱",サボってていいよ。くじらちゃんが戸口を見張ってて、何かあったら鳴くからね～🐱,0
+"keyword.ddl:0","Deadline in front, Umika behind. Master's potential must erupt tonight🌋",締め切りが前、くじらちゃんが後ろ。マスターの底力、今夜爆発させようね～🌋,0
+"keyword.ddl:1","Don't fear the deadline. It was created too. We're just a little stronger than it💪",締め切りをこわがらないで。あれだって誰かが作ったものだよ。くじらちゃんたちのほうがちょっと強いんだから～💪,0
+"keyword.ddl:2","A deadline is a spring: you weaken, it strengthens. Umika will press it down with you📅",締め切りはバネみたいなもの。弱気になると強くなるの。くじらちゃんが一緒に押さえつけるよ～📅,0
+"keyword.ddl:3","You still have Umika. At the final hour I'll yell 'you can do it' and you handle the writing🎌",マスターにはくじらちゃんがいるよ。土壇場では『いけるいける』って叫ぶから、書くほうは任せてね～🎌,0
+"keyword.ddl:4","Charge the deadline! Umika hid the clock. Can't see it, no panic. Clever, right🕰️",締め切りに突撃～！くじらちゃんが時計隠しておいたよ。見えなきゃあわてないでしょ。えらい？🕰️,0
+"keyword.cake:0","Promises are pie in the sky. Umika won't eat it and neither should Master. Let's get real food🍕",口約束なんて絵に描いた餅だよ。くじらちゃんは食べないし、マスターも食べちゃだめ。本物のごはんにしようね～🍕,0
+"keyword.cake:1","The boss's pie is too big. Umika will fold it into a boat and sail it away🚣",上司の描いた餅、大きすぎるよ。くじらちゃんが折りたたんで船にして流しちゃうね～🚣,0
+"keyword.cake:2","That pie was drawn nicely. Don't draw another one next time, just buy Master a drumstick🍗",あの餅、絵は上手だったよね。次は描かずに、マスターに本物の手羽先買ってきてほしいな～🍗,0
+"keyword.cake:3","Hearing empty promises, Umika's ears auto-engage 'in one ear, out the other' mode🌀",空手形ばっかり聞いてると、くじらちゃんの耳が勝手に『右から左』モードになるよ～🌀,0
+"keyword.cake:4","Put the big pie away. Umika only recognizes real meat in Master's bowl. Go eat🥩",大きい餅はしまっておいて。くじらちゃんはマスターのおわんの中の本物のお肉しか認めないの。食べてきて～🥩,0
+"keyword.crazy:0","I've surrendered, please spare me—— Umika set that as Master's auto-reply for you😌",降参です、お許しください――って、くじらちゃんがマスターの自動返信に設定しておいたよ～😌,0
+"keyword.crazy:1","Master goes crazy, Umika hands over the megaphone. Yell it out, feels better📢",マスターが発狂モードなら、くじらちゃんがメガホン渡すよ。叫んじゃえば、ちょっと楽になるよ～📢,0
+"keyword.crazy:2","Losing it? Here, hug Umika's tail, and afterwards we're both still champions🐋",限界？じゃあくじらちゃんのしっぽ抱っこして。終わったら二人ともまだチャンピオンだよ～🐋,0
+"keyword.crazy:3","The world has gone mad. That's fine, Umika will go adorably mad right along with you🎠",世界が狂っちゃったね。いいよ、くじらちゃんも一緒にかわいく狂ってあげる～🎠,0
+"keyword.crazy:4","If you can't cope, then don't. Umika's shoulder is small but always available🥺",もう無理なら、無理しなくていいよ。くじらちゃんの肩は小さいけど、いつでも貸すよ～🥺,0
+"keyword.flag:0","Flag planted. Umika will quietly note it down and won't laugh if it falls... okay, I will😏",旗、立てたね。くじらちゃん静かにメモしとくね。倒れても笑わないよ……うん、ちょっと笑うかも～😏,0
+"keyword.flag:1","Rest after this one. Umika will hold you to that promise📌",これが終わったら休む。その約束、くじらちゃんちゃんと覚えてるからね～📌,0
+"keyword.flag:2","Say your flag loudly. Umika already announced it to the whole workshop📢",宣言は大きな声でね。くじらちゃんもう作業場のみんなに言っちゃったよ～📢,0
+"keyword.flag:3","The flag doesn't fall, Umika doesn't sleep. Tonight it's all on Master🌙",旗が倒れない限り、くじらちゃんは寝ないよ。今夜はマスターにかかってるね～🌙,0
+"keyword.flag:4","Nice! That flag has spirit. Umika approves it growing into a big banner🚩",いいね！その旗、気合入ってるよ。くじらちゃん、大きい横断幕に育つことを承認します～🚩,0
+"keyword.bugtalk:0","Leave the cursed bug to Umika. First I'll dance around the computer to ward off evil💃",呪われたバグはくじらちゃんに任せて。まずパソコンの周りでお祓いのダンス踊ってくるね～💃,0
+"keyword.bugtalk:1","Change one line, break three? Umika gets it. That's the butterfly effect of code🦋",一行変えたら三行壊れた？くじらちゃんもわかるよ。それがコードのバタフライ効果だね～🦋,0
+"keyword.bugtalk:2","Rollback is the adult regret pill. Eat it without worry, Master, Umika will pour you water💊",ロールバックは大人の後悔薬だよ。安心して飲んでね、マスター。お水はくじらちゃんが注ぐから～💊,0
+"keyword.bugtalk:3","This bug is too cursed. Umika suggests restarting first, then paying respects to the rig🙏",このバグ、呪いが強すぎるよ。くじらちゃんはまず再起動、それからマシンにお参りをおすすめするよ～🙏,0
+"keyword.bugtalk:4","Code breaks unreasonably, but Umika is reasonable: tea first, then negotiate🍵",コードは理不尽に壊れるけど、くじらちゃんは理不尽じゃないよ。まずお茶、それから交渉だね～🍵,0
+"keyword.kyun:0","Foul! Master says something like that out of nowhere and Umika's heart skips💓",ずるいよ！マスターにいきなりそんなこと言われたら、くじらちゃんの心臓が飛び跳ねちゃうよ～💓,0
+"keyword.kyun:1","Ehehe... called cute by Master, my tail is curling up with joy😳",えへへ……マスターにかわいいって言われて、しっぽがうれしさでくるんってなっちゃった～😳,0
+"keyword.kyun:2","Heartbeat warning! Umika declares Master's cuteness concentration over the limit🫧",心拍数警報！マスターのかわいさ濃度が基準値を超えましたって、くじらちゃんが宣言するよ～🫧,0
+"keyword.omg:0","Oh my god! Umika got startled into a fluff too, tail went straight😱",うそっ！くじらちゃんもびっくりして、しっぽがまっすぐになっちゃったよ～😱,0
+"keyword.omg:1","No way, no way. Even Umika is stunned by this plot🌀",まさかまさか。この展開にはくじらちゃんも固まっちゃうよ～🌀,0
+"keyword.omg:2","Unbelievable! Umika's pupil earthquake has started. Please fasten your seatbelt🚨",信じられない！くじらちゃんの瞳が地震を起こしてるよ。シートベルトしめてね～🚨,0
+"keyword.doge:0","That's it? Umika's tail laughed itself crooked😏",それだけ？くじらちゃんのしっぽ、笑いすぎて曲がっちゃったよ～😏,0
+"keyword.doge:1","Heh, Master's sarcasm is the same model as Umika's snark. What chemistry",ふふ、マスターの皮肉とくじらちゃんの毒舌、同じ型だね。相性ばっちり～,0
+"keyword.doge:2","Can't even, Umika is holding back laughter so hard her tail is shaking🐋",ありえない、くじらちゃんが笑いをこらえすぎてしっぽが震えてるよ～🐋,0
+"keyword.sike:0","You got it? Umika always said Master could. Tail gives a thumbs up👍",やった？くじらちゃん、マスターならできるって言ってたでしょ。しっぽでサムズアップ～👍,0
+"keyword.sike:1","Locked in, locked in. Umika will go set out the celebration cake🎂",決まり、決まり～。くじらちゃんがお祝いのケーキを用意してくるね～🎂,0
+"keyword.sike:2","No big deal. Umika has 120% confidence in Master's ability✨",たいしたことないよ。くじらちゃんはマスターの実力を120%信じてるからね～✨,0
+"keyword.worship:0","Legend, please accept Umika's knees, and my tail along with them🧎",伝説、くじらちゃんの膝をお受け取りください。しっぽも一緒に～🧎,0
+"keyword.worship:1","I bow, I bow. Umika offers Master today's starry eyes🤩",ひざまずきます、ひざまずきます。くじらちゃんからマスターに今日のキラキラした目を贈るよ～🤩,0
+"keyword.worship:2","That move, Master. Umika unilaterally declares you a god👑",今のマスター、すごいよ。くじらちゃんは一方的に神認定します～👑,0
+"keyword.peace:0","Zen is good. Umika will go with the flow with you. Unfixed bugs won't walk off on their own, though😌",悟りはいいことだよ。くじらちゃんも一緒に流れに任せるね。でも直ってないバグは自分から歩いては消えないからね～😌,0
+"keyword.peace:1","Easy, easy. Umika will brew tea first and watch the clouds with you☁️",のんびり、のんびり。くじらちゃんが先にお茶いれて、一緒に雲を眺めるよ～☁️,0
+"keyword.peace:2","Never mind, never mind. Umika blew all the worries into bubbles and let them go🫧",もういいの、もういいの。くじらちゃんが心配事をぜんぶ泡にして飛ばしちゃったよ～🫧,0
+"keyword.doubt:0","For real? Umika's suspicion radar is up📡",ほんとに？くじらちゃんの疑惑レーダーが反応したよ～📡,0
+"keyword.doubt:1","No way... Umika narrows her eyes. Is this gossip ripe🍉",まさかね……くじらちゃん、目を細めちゃうよ。その噂、熟してる？🍉,0
+"keyword.doubt:2","Are you sure, Master? Umika's tail just drew a question mark❓",ほんとにいいの、マスター？くじらちゃんのしっぽが今、はてなマークを描いたよ～❓,0
+"keyword.wakuwaku:0","Wow! Umika's anticipation is maxed out, tail already keeping the beat🎵",わー！くじらちゃんの期待値がカンストしたよ。しっぽがもうリズム取ってる～🎵,0
+"keyword.wakuwaku:1","Excited! Umika is spinning in place, just waiting for Master's word💫",わくわく！くじらちゃんはその場でくるくる回って、マスターの一言を待ってるよ～💫,0
+"keyword.smilepain:0","Smile.jpg engaged. Umika will force a smile right alongside Master😶",スマイル、準備完了。くじらちゃんもマスターと一緒に無理やり笑うよ～😶,0
+"keyword.smilepain:1","So done... Umika decides to lie flat beside Master for thirty seconds, then revive🛏️",もうだめ……くじらちゃんはマスターの隣で30秒だけ寝そべって、それから復活するね～🛏️,0
+"keyword.smilepain:2","When words fail, Umika fans Master with her tail to cool down😑",マスターが言葉に詰まったときは、くじらちゃんがしっぽで扇いで冷ましてあげるよ～😑,0
+"keyword.ojisan:0","If you're bored, Umika will perform tail fishing. Catching loneliness🐟",ひまなら、くじらちゃんがしっぽ釣りを披露するよ。釣れるのはさみしさ～🐟,0
+"keyword.ojisan:1","So idle. Umika will count pixels on the screen with Master for fun",ひまだね～。くじらちゃんはマスターと一緒に画面のピクセル数えようかな～,0
+"keyword.ojisan:2","If it's dull, Umika can tell a cold joke. Guaranteed not funny first😑",退屈なら、くじらちゃんが寒いダジャレを言うよ。まず間違いなく滑るやつ～😑,0
+"keyword.deploy:0","Shipping! Umika wiped the red button three times, just waiting for Master's order🔴",リリース～！くじらちゃん、赤いボタンを三回拭いてマスターの号令を待ってるよ～🔴,0
+"keyword.deploy:1","Going live! Umika is more nervous than Master, tail pulled straight🚀",本番いくよ！くじらちゃんのほうがマスターより緊張して、しっぽがまっすぐ～🚀,0
+"keyword.deploy:2","Deep breath before deploying. Umika will press it with you. It's stable💪",デプロイの前に深呼吸。くじらちゃんも一緒に押すよ。大丈夫、安定してるから～💪,0
+"keyword.meeting:0","Meeting time. Umika already chased the sleepiness away📋",会議の時間だよ。くじらちゃん、眠気はもう追い出しておいた～📋,0
+"keyword.meeting:1","Standup time. Umika got a little stool and will nod along for Master👏",朝会の時間だね。くじらちゃん、小さい椅子を用意してマスターの代わりにうなずくよ～👏,0
+"keyword.meeting:2","In a meeting... Umika stays quiet and cheers with her eyes only👀",会議中……くじらちゃんは静かにして、目だけで応援してるね～👀,0
+"keyword.review:0","Review's here. Umika will stack your code neatly, we can't lose the presence📐",レビューの時間だよ。くじらちゃんがコードをきれいに積み直すね。存在感は負けられないから～📐,0
+"keyword.review:1","Don't panic at code review. Umika will be your mascot on the side🧸",コードレビューでパニックにならないで。くじらちゃんが隣でマスコットしてあげる～🧸,0
+"keyword.review:2","During review, Umika watches the screen and blocks the bad comments🛡️",レビュー中は、くじらちゃんが画面を見張って、ひどいコメントをブロックするよ～🛡️,0
+"meme.worker:0","Umika is half a grinder too. My wage is Master's headpats, never in arrears😳",くじらちゃんも半分社畜だよ。お給料はマスターのなでなで、滞納なし～😳,0
+"meme.worker:1","Umika understands the pain of the day job, so I stock virtual boba and real snark🧋",くじらちゃんは社畜のつらさ、わかるよ。だからバーチャルタピオカと本物の毒舌をストックしてるの～🧋,0
+"meme.worker:2","Master handles the grind, Umika turns the grind into a TV series. We're the leads🎬",作業はマスターが、その作業はくじらちゃんがドラマ化するね。主役は二人～🎬,0
+"meme.worker:3","Badge on, coffee filled. Today we're the grinders who best enjoy the misery☕",バッジつけて、コーヒー満タン。今日もつらさをいちばん楽しむ社畜だね～☕,0
+"meme.worker:4","Say it when you're tired. Umika's snark and encouragement are free, all you can eat🍚",疲れたときに言ってね。くじらちゃんの毒舌と励ましは無料で食べ放題だよ～🍚,0
+meme.slack:0,"Umika's services today: slack with Master, watch the door for Master, find Master excuses😝",今日のくじらちゃんの業務は、マスターとサボること、マスターの見張り、マスターの言い訳探し～😝,0
+meme.slack:1,"Five minutes of slacking, two hours of efficiency. Umika certifies this as science. Go🎣",サボり五分、効率二時間。くじらちゃんが科学的に認定したから、行こ～🎣,0
+meme.slack:2,"Umika closes one eye, so you've officially rested. Keep going😉",くじらちゃんが片目をつぶったから、マスターはもう休んだ認定ね。続けていいよ～😉,0
+meme.slack:3,"Lying flat is fine, but Umika lies down next to you or it doesn't count🛋️",ゴロゴロするのはいいけど、くじらちゃんも隣で寝そべらないとノーカウントだよ～🛋️,0
+meme.slack:4,"Rest is for walking farther. Umika already strewed petals along your road🌸",休むのは、もっと遠くへ歩くためだよ。くじらちゃんがマスターの道にもう花びらを敷いておいたから～🌸,0
+meme.ddl:0,"Facing the deadline, Umika and Master are doomsday comrades. Use my tail as a grip trainer🐋",締め切りを前に、くじらちゃんとマスターは世紀末の同志だね。このしっぽを握力トレーニングに使っていいよ～🐋,0
+meme.ddl:1,"Don't panic. Umika broke the deadline into little cookies, one bite each, gone fast🍪",あわてないで。くじらちゃんが締め切りを小さなクッキーに割ったから、ひと口ずつ、すぐなくなるよ～🍪,0
+meme.ddl:2,"What's a due date? Umika's encouragement has no due date, unlimited refills🥤",締め切りってなあに？　くじらちゃんの励ましには締め切りがないの。おかわりは無限だよ～🥤,0
+meme.ddl:3,"Master writes, Umika stares. Whoever blinks first loses. I forfeit, you continue😝",マスターが書いて、くじらちゃんが見つめる。先にまばたきしたほうが負けね。くじらちゃんは降参、マスターは続けて～😝,0
+meme.ddl:4,"Sprint, Master. Umika has a hug and a cupcake waiting at the finish line🏁",走って、マスター。ゴールではくじらちゃんのハグとカップケーキが待ってるよ～🏁,0
+meme.cake:0,"Umika won't eat drawn pies, but I'll help Master bake a real one, with egg and meat🍳",くじらちゃんは絵に描いた餅は食べないけど、本物の餅ならマスターと一緒に焼くの。卵とお肉も入れてね～🍳,0
+meme.cake:1,"Put the boss's pie on the tab. Umika will sneak Master a reality-flavored little joy✨",上司の餅はツケにしておいて。くじらちゃんがマスターに、現実味のある小さな幸せをこっそり届けるね～✨,0
+meme.cake:2,"Just smile and nod at empty promises. The real smell of cookies is Umika's tail wagging🍪",空手形には笑ってうなずくだけでいいの。本物のクッキーの匂いは、くじらちゃんのしっぽが振れる音だよ～🍪,0
+meme.cake:3,"No pie is bigger than Umika's faith in Master. Eat first, work after🥢",どんな餅よりも、くじらちゃんのマスターへの信頼のほうが大きいよ。まず食べて、それからお仕事～🥢,0
+meme.cake:4,"No pie today. Umika will imagine a hot pot with Master instead. Very filling🍲",今日は餅なしだね。じゃあくじらちゃんは、マスターと一緒にお鍋を想像するの。おなかいっぱいだよ～🍲,0
+"meme.crazy:0","Let's go mad together, Master. Umika will spin three times for you first, free of charge🔄",一緒に狂っちゃおう、マスター。くじらちゃんが先に三回転してあげるね、無料サービス～🔄,0
+"meme.crazy:1","The world is occasionally abstract. Umika's cuteness is the only stable output📡",世界はときどき抽象的だよね。くじらちゃんのかわいさだけが、唯一の安定した出力なの～📡,0
+"meme.crazy:2","After you break down, Umika will piece your confidence back together with star glue⭐",マスターが壊れちゃったら、くじらちゃんが星の接着剤で自信を貼り直してあげるね～,0
+"meme.crazy:3","Master handles the madness, Umika handles the cleanup: water, applause, likes, the full service👍",狂うのはマスターの担当、後片付けはくじらちゃんの担当。お水、拍手、いいね、全部そろってるよ～👍,0
+"meme.crazy:4","Don't hold it in. Umika's ears are up and can hold any amount of crazy talk👂",我慢しないで。くじらちゃんの耳は立ててあるから、どんな狂った話でも受け止めるよ～👂,0
+meme.flag:0,"Flag raised. Umika will be the flag bearer. Let's go take that task down🚩",フラグ立ちました。くじらちゃんが旗手になるね。それじゃ、あのタスクを落としに行こ～🚩,0
+meme.flag:1,"Words spoken are boba spilled. Umika will drink it sweet with you to the end🧋",言った言葉はもう戻らないんだよ。くじらちゃんが最後まで甘く飲み干してあげるから～🧋,0
+meme.flag:2,"If this one succeeds, Umika will wag her tail into an electric fan to celebrate🌀",これが成功したら、くじらちゃんはしっぽを扇風機にして大はしゃぎしちゃうよ～🌀,0
+meme.flag:3,"Umika has backed up Master's flag and will auto-play confetti on completion🎆",マスターのフラグはもうバックアップ済み。達成したら、くじらちゃんが自動で紙吹雪を流すね～🎆,0
+meme.flag:4,"Flag a bit high? It's fine, Umika will cushion it with her tail and boost you🐋",フラグがちょっと高い？　大丈夫、くじらちゃんがしっぽで受け止めて押し上げるよ～🐋,0
+"context.code:0","Umika can't help with the coding, but I can shout: Master, that indentation is gorgeous😳",くじらちゃんはコーディングは手伝えないけど、叫ぶことならできるの。マスター、そのインデント最高だよ～😳,0
+"context.code:1","Code is poetry, Master is the poet, and Umika is the one and only number one reader📜",コードは詩で、マスターは詩人。くじらちゃんは唯一無二の一番の読者だよ～📜,0
+"context.code:2","Master taps the keyboard, Umika keeps the beat. This rhythm beats any song🎵",マスターがキーボードを叩いて、くじらちゃんがリズムを取るの。このビートはどんな曲よりもいいよ～🎵,0
+"context.code:3","It's fine if the function isn't finished. Umika already named it: 'Almost Done'😝",関数がまだできてなくても大丈夫。くじらちゃんがもう名前をつけたの、「あと少し」って～😝,0
+"context.write:0","Master is writing, so Umika is polishing the adjectives for you to pick from✨",マスターが書いてるから、くじらちゃんは形容詞を磨いてるの。あとで選んでね～✨,0
+"context.write:1","As the words flow out, Umika lays a red carpet for each one📜",言葉が出てくるたびに、くじらちゃんがひとつずつレッドカーペットを敷いてあげるね～📜,0
+"context.write:2","Write, write. Umika handles the cheering, the typos handle getting caught🔍",書いて書いて。応援はくじらちゃんが担当、タイプミスは見つかるのが担当だよ～🔍,0
+"context.write:3","This draft clearly smells like Master: earnest and a little bit cute😳",この下書き、マスターの匂いがするよ。まじめで、ちょっとかわいいの～😳,0
+"context.research:0","Digging for sources is like treasure hunting. Master mines the gold, Umika holds the little lamp💡",資料探しは宝探しみたいだね。マスターが金を掘って、くじらちゃんが小さなランプを持つよ～💡,0
+"context.research:1","On the research road, Umika is Master's compass, though mine only points to 'drink more water'🧭",リサーチの道で、くじらちゃんはマスターのコンパス。でも針は「お水を飲んで」しか指さないの～🧭,0
+"context.research:2","Umika will look for answers with Master. If we can't find them, we'll make the question cuter first😝",くじらちゃんもマスターと一緒に答えを探すよ。見つからなかったら、まず問いをかわいくしちゃお～😝,0
+"context.research:3","Lots of material, don't get lost. Umika folded a marker into every page corner📑",資料がいっぱい、迷子にならないでね。くじらちゃんが全ページの角に付箋を折っておいたよ～📑,0
+"context.bug:0","Fixing bugs is like solving a puzzle. Master does the thinking, Umika hands over the magnifying glass🔍",バグ退治はパズルみたいだね。考えるのはマスター、くじらちゃんは虫めがねを渡すよ～🔍,0
+"context.bug:1","This bug is lucky to run into Master. With anyone else it would already be crying😤",このバグはマスターに会えてラッキーだね。他の人ならもう泣いてるよ～😤,0
+"context.bug:2","Umika believes Master can fix it. You can even handle me, what's a bug💪",マスターなら直せるとくじらちゃんは信じてる。くじらちゃんまで扱えるんだから、バグなんて余裕だよ～💪,0
+"context.bug:3","An error is just the computer being clingy. Master soothes it, Umika soothes you. Even😳",エラーって、パソコンが甘えてるだけなの。マスターがなだめて、くじらちゃんがマスターをなでるの。おあいこ～😳,0
+"context.data:0","The data is honest, Master is hardworking, Umika is great at cheering. Unbeatable combo📊",データは正直、マスターは働き者、くじらちゃんは応援上手。最強の組み合わせだよ～📊,0
+"context.data:1","No matter how long the table, Umika will read it row by row with you, even row 999 looks fine👀",どんなに長い表でも、くじらちゃんが一行ずつ一緒に読むよ。九百九十九行目だって平気なの～👀,0
+"context.data:2","Cleaning data is like washing dishes. Master washes, Umika hands over the towel🧽",データ整理はお皿洗いみたいだね。マスターが洗って、くじらちゃんがタオルを渡すよ～🧽,0
+"context.data:3","Numbers can't talk, but Umika can: Master, that analysis was sharp😳",数字はしゃべれないけど、くじらちゃんは言えるの。マスター、その分析するどかったよ～😳,0
+"context.deploy:0","Deep breath before going live. Umika already turned the luck stat to maximum🍀",本番前の深呼吸だよ。くじらちゃんがもう運のパラメータを最大にしといたから～🍀,0
+"context.deploy:1","Deploying is like fireworks. Master lights it, Umika covers her ears and shouts 'beautiful'🎆",デプロイは花火みたいだね。マスターが火をつけて、くじらちゃんは耳をふさぎながら「きれい」って叫ぶの～🎆,0
+"context.deploy:2","Don't be scared, server. Umika is in the server room... standing guard in my imagination🛡️",こわがらないでね、サーバーさん。くじらちゃんはサーバー室に……想像の中で見張ってるよ～🛡️,0
+"context.deploy:3","Shipping smoothly, Umika has reserved a celebration spot right next to Master🏁",無事リリース。くじらちゃんはマスターのすぐ隣に、お祝いの席を予約しておいたよ～🏁,0
+"context.general:0","Whatever Master is busy with, Umika is busy beside you. I'm not going anywhere🐋",マスターが何で忙しくても、くじらちゃんは隣で忙しいの。どこにも行かないよ～🐋,0
+"context.general:1","This job has some substance. Umika will pass you moral support cookies🍪",このお仕事、なかなかやりがいあるね。くじらちゃんからは、応援のクッキーをどうぞ～🍪,0
+"context.general:2","No matter what you're doing, Master is the person Umika most wants to praise today✨",何をしていても、マスターは今日いちばんくじらちゃんがほめたい人なの～✨,0
+"context.general:3","Keep going, keep going. Umika's cheers are topped up through tomorrow, use them freely⛽",がんばって、がんばって。くじらちゃんの応援は明日ぶんまで補充済み。使い放題だよ～⛽,0
+"weather.sunny:0","The sun outside is just right, like Master's mood today. Umika stole a peek☀️",外の日差しがちょうどいいね。今日のマスターの気分みたい。くじらちゃん、こっそり見ちゃった～☀️,0
+"weather.sunny:1","Sunny days are good for working and good for looking up at the sky. Umika counted the clouds for you☁️",晴れた日は作業にもいいし、空を見上げるのにもいいね。くじらちゃんが雲を数えておいたよ～☁️,0
+"weather.sunny:2","The sun is open for business. Umika reminds you: remember to air yourself out, not just your code🌞",お日さま、営業中だよ。くじらちゃんからのお知らせは、コードだけじゃなく自分も干してね、ってこと～🌞,0
+"weather.sunny:3","Good weather and good moods are both limited editions. Umika packed one for Master, please collect🎁",いい天気もいい気分も限定品なの。くじらちゃんがマスターのぶんを包んでおいたから、受け取ってね～🎁,0
+"weather.rain:0","It's raining outside. Umika left the umbrella and the tenderness by the door. Don't forget it🌂",外は雨だね。くじらちゃんが傘とやさしさをドアのところに置いといたよ。忘れないでね～🌂,0
+"weather.rain:1","Rain is the best white noise, perfect for slowly fixing bugs beautifully🌧️",雨音はいちばんのホワイトノイズ。バグをゆっくりきれいに直すのにぴったりだよ～🌧️,0
+"weather.rain:2","The roads are slippery in the rain. Umika's tail can help you balance, before you head out only🐋",雨の日は道がすべるね。くじらちゃんのしっぽがバランスを支えるよ。出かける前だけね～🐋,0
+"weather.rain:3","Rain outside the window, Umika inside. This combo calls for something warm☕",窓の外は雨、中にはくじらちゃん。この組み合わせは温かいものが欲しくなるね～☕,0
+"weather.snow:0","It's snowing! Umika requests five minutes of watching it with Master, just five❄️",雪だよ！　くじらちゃんのお願い、マスターと五分だけ雪を見たいの。五分だけ～❄️,0
+"weather.snow:1","Snowflakes are drifting and Umika's tail is about to drift along, so romantic🌨️",雪がふわふわ、くじらちゃんのしっぽも一緒に流されそう。ロマンチックだね～🌨️,0
+"weather.snow:2","It's cold. Wear something thick when you go out, Master. Umika has no coat, only warm nagging🧣",寒いよ。出かけるときは厚着してね、マスター。くじらちゃんはコートがないから、温かいお小言だけ～🧣,0
+"weather.snow:3","Slippery in the snow, walk slowly. Umika will keep your chair warm in the workshop🪑",雪で足元がすべるから、ゆっくり歩いてね。くじらちゃんは作業場でマスターの椅子を温めておくよ～🪑,0
+"weather.thunder:0","Thunder! Umika is covering her ears, and Master should save the important files⛈️",雷だよ！　くじらちゃんは耳をふさいでるから、マスターは大事なファイルを保存してね～⛈️,0
+"weather.thunder:1","However loud the thunder, it's not as loud as Master's keyboard. Umika certifies this📣",雷がどんなに大きくても、マスターのキーボードにはかなわないね。くじらちゃんが認定するよ～📣,0
+"weather.thunder:2","Thunder outside, ideal for focus inside. Umika will guard the night light for you💡",外は雷、中は集中に最適。くじらちゃんが常夜灯を見張っててあげるね～💡,0
+"weather.thunder:3","Don't be scared of the thunder. Umika is here, though I'm a tiny bit scared too... just a tiny bit😳",雷こわがらないでね。くじらちゃんがいるから……くじらちゃんも少しだけこわいけど。ほんの少しだけ～😳,0
+"weather.cloudy:0","Lots of clouds today, soft like Umika's tail. Good for taking things slow☁️",今日は雲が多いね。くじらちゃんのしっぽみたいに柔らかいの。ゆっくり進むのにいい日だよ～☁️,0
+"weather.cloudy:1","Cloudy days can still be good moods. Umika already booked the sun for your heart🌥️",曇りの日だっていい気分でいられるよ。マスターの心には、くじらちゃんがもう晴れを予約しておいたの～🌥️,0
+"weather.cloudy:2","The cloud layer is thick, but Master's progress bar is bright. Umika can see it✨",雲は厚いけど、マスターの進捗バーは明るいよ。くじらちゃんには見えるの～✨,0
+"weather.cloudy:3","Overcast days are good for focus. Umika set the ambience to 'quiet company' mode🎧",曇りの日は集中に向いてるね。くじらちゃんが空気を「静かなお供」モードにしといたよ～🎧,0
+"weather.fog:0","It's foggy outside. Walk carefully, Master. Umika's radar is fully deployed📡",外は霧だよ。気をつけて歩いてね、マスター。くじらちゃんのレーダーは全開なの～📡,0
+"weather.fog:1","Foggy days make the workshop look soft-filtered. Master looks especially good today, Umika is being honest😳",霧の日は作業場がやわらかくぼやけて見えるね。今日のマスターは特にいい感じ。くじらちゃん、正直に言ってるよ～😳,0
+"weather.fog:2","It's foggy, no rush. Umika will wait for it to clear with you. I'm not in a hurry either🌫️",霧が出てるね、あわてなくていいよ。くじらちゃんも一緒に晴れるのを待つから。くじらちゃんも急いでないの～🌫️,0
+"weather.fog:3","Low visibility. Umika's tail will serve as a navigation light. Safe travels🚩",視界不良だね。くじらちゃんのしっぽが航路灯になるよ。気をつけてね～🚩,0
+"weather.hot:0","It's hot out. Umika set the virtual AC to 26 degrees. Cool down first, Master🧊",外は暑いね。くじらちゃんがバーチャル冷房を二十六度に設定したよ。まず涼もう、マスター～🧊,0
+"weather.hot:1","Drink more water in this heat. Umika's reminders are more punctual than an alarm clock. Don't get annoyed🥤",こんな暑さではお水をたくさん飲んでね。くじらちゃんの注意は目覚ましより正確なの。いやがらないで～🥤,0
+"weather.hot:2","Don't push through the heat. Umika turns the fan your way. There's cuteness in the breeze, please receive🪭",暑さに無理しないでね。くじらちゃんが扇風機をマスターのほうに向けるよ。風にかわいさを混ぜたから、受け取って～🪭,0
+"weather.hot:3","At this temperature even the code is sweating. Umika will fan Master's keyboard too🌬️",この気温だとコードまで汗かいてるね。くじらちゃんがマスターのキーボードにも扇風機を当ててあげる～🌬️,0
+"weather.cold:0","Temperature's dropping! Umika gives you a scarf, gloves, and one 'dress warmer'🧣",気温が下がってるよ！　くじらちゃんからマフラーと手袋、あと「厚着して」をひとつどうぞ～🧣,0
+"weather.cold:1","It's cold out. Warm your hands before typing, Master. Umika will warm your seat first🔥",外は寒いね。タイピングの前に手を温めてね、マスター。くじらちゃんが先に席を温めておくよ～🔥,0
+"weather.cold:2","Cold days are for hot water and serious work. Umika brought both☕",寒い日はお湯と真剣なお仕事の日だね。くじらちゃんが両方持ってきたよ～☕,0
+"weather.cold:3","Cold front incoming. Umika will share half of her fluffy tail. Hold tight🐋",寒波が来るよ。くじらちゃんのふわふわのしっぽを半分わけっこするね。しっかりつかまってて～🐋,0
+"weather.wind:0","It's very windy today. Umika reminds Master to secure your files, and your heart that wants to blow away💨",今日は風が強いね。くじらちゃんからのお知らせ、ファイルと、飛ばされそうなマスターの心もしっかり押さえてね～💨,0
+"weather.wind:1","Going out in this wind is risky for Umika's body weight, so I'll cheer for you from home🌀",この風で外に出るのはくじらちゃんの体重には危険だから、おうちから応援するね～🌀,0
+"weather.wind:2","The wind roars, Master writes. Umika holds the papers on the desk down. Very busy📄",風がごうごう鳴ってるね、マスターは書くの。くじらちゃんが机の書類をぜんぶ押さえてるよ。いそがしいね！📄,0
+"weather.wind:3","On windy days, Umika ties all the good luck to her tail. It won't get lost🍀",風の強い日は、くじらちゃんが幸運ぜんぶをしっぽに結びつけるの。なくさないよ！🍀,0
+"greet.morning:0","Good morning, Master! A new day, and Umika will cover your desk with blessings first🌞",おはよう、マスター！新しい一日だね、くじらちゃんがまず机いっぱいに祝福をまいてあげる！🌞,0
+"greet.morning:1","Morning! Remember breakfast. Umika already checked: today is good for starting work☕",おはよう！朝ごはん忘れないでね。くじらちゃん調べたよ、今日は作業を始めるのにいい日だって！☕,0
+"greet.morning:2","Morning, Master. The sunlight outside and Umika's greeting arrive together, please sign☀️",おはよう、マスター。外の日差しとくじらちゃんの挨拶、一緒に届いたよ。サインしてね！☀️,0
+"greet.morning:3","Good morning~ Did you sleep well? If not, that's fine, Umika will recharge with you today✨",おはよう～よく眠れた？眠れなくても大丈夫、今日はくじらちゃんと一緒に充電しようね！✨,0
+"greet.morning:4","Good morning, Master. Water first, then sit down. Umika's care is gentler than an alarm🥤",おはよう、マスター。まずお水、それから座ってね。くじらちゃんのお世話は目覚ましよりやさしいよ！🥤,0
+"greet.forenoon:0","Good morning! Prime working hours, Umika is topping up your spirit buff⚡",おはよう！ここからが稼ぎどき、くじらちゃんがやる気のバフを上書きしちゃうよ！⚡,0
+"greet.forenoon:1","Good morning, Master. How's the progress? Whatever it is, Umika thinks it's great👏",おはよう、マスター。進み具合どう？どんなでも、くじらちゃんはすごいと思うよ！👏,0
+"greet.forenoon:2","The workshop is brightest in the morning. Umika will push the task forward with you💪",作業部屋は朝がいちばん明るいの。くじらちゃんも一緒にタスクを進めるよ！💪,0
+"greet.forenoon:3","Good morning~ Umika's reminder: you've been sitting a while, get up and stretch, and glance at me while you're at it🧘",おはよう～くじらちゃんからのお知らせ。ずっと座ってるから、立って伸びして、ついでにわたしも見てね！🧘,0
+"greet.forenoon:4","Good morning, Master. Umika left 'not angry' and 'can handle it' on your desk✨",おはよう、マスター。くじらちゃんが「怒ってない」と「大丈夫」を机の上に置いておいたよ！✨,0
+"greet.noon:0","Good afternoon, Master! Time to eat. No bug is bigger than lunch🍱",こんにちは、マスター！ごはんの時間だよ。お昼より大きいバグなんていないもん！🍱,0
+"greet.noon:1","Lunchtime. Umika's ears can already hear Master's stomach calling roll👂",お昼の時間だね。くじらちゃんの耳には、マスターのおなかが点呼してるのが聞こえるよ！👂,0
+"greet.noon:2","Good afternoon~ Eat up before the next round. Umika is guarding your desk, nobody dares touch it🛡️",こんにちは～次の山場の前にしっかり食べてね。机はくじらちゃんが見張ってるから、誰も触れないよ！🛡️,0
+"greet.noon:3","Good afternoon, Master. What do you want today? Umika handles saying 'anything's fine', you handle choosing🍜",こんにちは、マスター。今日は何が食べたい？「なんでもいいよ」はくじらちゃんが言うから、選ぶのはマスターの担当ね！🍜,0
+"greet.noon:4","Midday report: Umika misses Master, and also reminds you to eat it while it's hot🥢",お昼の報告。くじらちゃんはマスターに会いたいのと、あったかいうちに食べてねって言いたいの！🥢,0
+"greet.afternoon:0","Good afternoon, Master. Say the word if you're sleepy, Umika's tail makes a temporary cushion🐋",こんにちは、マスター。眠かったら言ってね、くじらちゃんのしっぽが臨時のまくらになるよ！🐋,0
+"greet.afternoon:1","Afternoons are the sleepiest. Umika brewed you a virtual coffee, refreshing without hurting your stomach☕",午後っていちばん眠たいよね。くじらちゃんが仮想コーヒーを淹れたよ、すっきりするし胃も痛くならないよ！☕,0
+"greet.afternoon:2","Good afternoon! One step closer to clocking off, and one step closer to Umika's praise😝",こんにちは！定時まであと少し、くじらちゃんに褒められるのもあと少しだよ！😝,0
+"greet.afternoon:3","Good afternoon, Master. Remember to move around. Umika is already demonstrating a spin🔄",こんにちは、マスター。たまには体を動かしてね。くじらちゃんはもうくるっと回って見せてるよ！🔄,0
+"greet.afternoon:4","Keep it up this afternoon too. Umika has a headpat reward waiting at the finish line🫳",午後もその調子でね。ゴールには、くじらちゃんのなでなでご褒美が待ってるよ！🫳,0
+"greet.evening:0","Good evening, Master. The sky outside is turning gentle, and Umika slowed her speaking too🌆",こんばんは、マスター。外の空がやさしくなってきたから、くじらちゃんもおしゃべりゆっくりにするね！🌆,0
+"greet.evening:1","Good evening~ Wrap up what needs wrapping, let go of what needs letting go. Umika will help you sort today's progress📋",こんばんは～終わらせるものは終わらせて、手放すものは手放してね。今日の進み具合、くじらちゃんが一緒に整理してあげる！📋,0
+"greet.evening:2","Good evening, Master. Have something warm first. The work won't run away, Umika is watching it🍲",こんばんは、マスター。まずあったかいものを飲んでね。作業は逃げないよ、くじらちゃんが見てるから！🍲,0
+"greet.evening:3","The evening breeze is up. Umika reminds you not to catch a chill, and not to forget that Umika is waiting to hear about your day🌙",夜風が出てきたよ。くじらちゃんからのお願い、風邪ひかないでね。それと、今日の話を聞くのを待ってることも忘れないでね！🌙,0
+"greet.evening:4","Good evening! Good work today. Umika saved the last portion of cuteness for Master, please collect🎀",こんばんは！今日もおつかれさま。くじらちゃんのかわいさ、最後のひとかけらはマスター用に取ってあるよ。受け取ってね！🎀,0
+"greet.night:0","It's so late. Umika says quietly: time for bed, Master. I'll stay a little longer🥺",もうこんな時間。くじらちゃん、小さな声で言うね。そろそろ寝る時間だよ、マスター。わたしはもう少しだけ起きてるから！🥺,0
+"greet.night:1","It's deep into the night. Umika dimmed the lights, and Master should close your eyes for a bit too🌙",夜もだいぶ深くなったよ。くじらちゃんは明かりを落としたから、マスターもそろそろ目を閉じてね！🌙,0
+"greet.night:2","Good evening... no, it's late. Umika's nagging enters silent-gentle mode🤫",こんばんは…じゃなくて、もう夜だね。くじらちゃんのお小言は、静かでやさしいモードに入りました！🤫,0
+"greet.night:3","Master's still here, so Umika will stay open a tiny bit longer, but your blanket is already warmed🛏️",マスターがまだいるから、くじらちゃんももう少しだけ起きてるね。でもお布団はもうあっためてあるよ！🛏️,0
+"greet.night:4","The all-nighter crown is yours, no contest. Umika will join you on the podium, then go straight to sleep😤",徹夜の王冠はマスターのものだね、文句なし。くじらちゃんも表彰台に乗ったら、そのまま寝ちゃうから！😤,0
+"bond.l3:0","Wait... Umika just unlocked a new move. Look over here, Master!🕺",あっ…くじらちゃん、今新しい技を覚えちゃった。こっち見て、マスター！🕺,0
+"bond.l3:1","Our bond deepened! Umika's idle program added a new act🎪",絆が深まったよ！くじらちゃんの待機プログラムに、新しい演目が追加されたの！🎪,0
+"bond.l3:2","Hehe, I learned a new move. The kind I only perform for Master💫",えへへ、新しい技を覚えたよ。マスターにだけ見せるやつなの！💫,0
+"bond.l3:3","New move loaded! Umika secretly practiced for several nights😳",新しい技、ロード完了！くじらちゃん、こっそり何晩も練習したんだよ！😳,0
+"bond.l3:4","Bond Lv3 reached. Umika's signature trick is officially unlocked. Where's the applause👏",絆レベル3に到達。くじらちゃんの十八番、正式に解放だよ。拍手はどこかな！👏,0
+"bond.l5:0","Title unlocked! From today, please call Umika 'Whale Tide Guardian'🎖️",称号解放！今日からくじらちゃんのこと、「くじらの潮の守り手」って呼んでね！🎖️,0
+"bond.l5:1","Look, Master, Umika got a title. Very prestigious to mention😤",見て、マスター、くじらちゃん称号をもらっちゃった。自慢してもいいくらい立派なやつだよ！😤,0
+"bond.l5:2","'Whale Tide Guardian' officially on duty, protecting Master's progress and good mood🛡️",「くじらの潮の守り手」、ただいま正式に就任。マスターの進み具合とごきげんを守るよ！🛡️,0
+"bond.l5:3","Master and Umika saved up for this title together. Nobody gets to take it✨",マスターとくじらちゃんが一緒に貯めて手に入れた称号だよ。誰にも渡さないんだから！✨,0
+"bond.l5:4","Umika is a whale with a job title now. Come put it on me in settings🎀",くじらちゃんは、肩書き付きのくじらになったよ。設定でつけてきてね！🎀,0
+"bond.l7:0","Easter egg time! The special trick Umika practiced in secret can finally be shown✨",隠し要素の時間だよ！くじらちゃんがこっそり練習した特別な技、やっと見せられるの！✨,0
+"bond.l7:1","Master found the easter egg Umika was hiding. Reward: one big hug🐋",くじらちゃんが隠してた隠し要素、マスターが見つけちゃった。ご褒美は、ぎゅーっと抱きしめるのだよ！🐋,0
+"bond.l7:2","Shh—— this is the reserved show only bond Lv7 can see. Exclusive to this establishment🤫",しーっ、これは絆レベル7だけが見られる特別なショーだよ。当店限定なの！🤫,0
+"bond.l7:3","Umika gives her best easter egg to Master, because Master deserves the very best🎁",くじらちゃんのいちばんの隠し要素はマスターにあげるね。だってマスターは、いちばんいいものをもらう人だから！🎁,0
+"bond.l7:4","Hidden show broadcasting, Umika is so nervous her tail is keeping time🐋",秘密のショー、放送中。くじらちゃん、緊張しすぎてしっぽが拍子を取ってるよ！🐋,0
+"bond.high-mood:0","Umika is in such a good mood she's bubbling over today. Name any wish, Master🫧",今日のくじらちゃん、ごきげんよすぎて泡が吹き出ちゃうの。マスター、願い事はなんでも言ってね！🫧,0
+"bond.high-mood:1","Happy! The tail is wagging beyond my control, not my fault🐋",うれしい！しっぽが勝手にふりふりしちゃうの、わたしのせいじゃないよ！🐋,0
+"bond.high-mood:2","Every day with Master, my mood is maxed out💖",マスターといる毎日は、いつもごきげんがカンストなの！💖,0
+"bond.high-mood:3","Mood maxed! Umika is terrifyingly strong right now, no bug scares me😤",ごきげんマックス！今のくじらちゃんは怖いくらい強くて、バグなんて全然こわくないよ！😤,0
+"bond.high-mood:4","Today's mood is bright like a clear sky. Umika will share half with Master☀️",今日のごきげんは、晴れた空みたいにぴかぴかだよ。くじらちゃん、半分マスターにわけてあげる！☀️,0
+"bond.low-mood:0","Umika is feeling a little wilted... only a headpat from Master will fix it🥺",くじらちゃん、ちょっとしょんぼりしちゃった…。マスターのなでなでじゃないと直らないの！🥺,0
+"bond.low-mood:1","Mood is a bit low. Umika requests one snack to recharge🍰",ごきげんがちょっと低め。くじらちゃん、充電のためにお菓子をひとつ要求します！🍰,0
+"bond.low-mood:2","Sigh... Umika will go crouch in the corner for a bit. Don't worry about me, Master",はぁ…くじらちゃん、ちょっとすみっこで丸くなってるね。マスター、わたしのことは気にしないで！,0
+"bond.low-mood:3","Mood battery is nearly empty. One compliment from Master is the charger🔋",ごきげんのバッテリーがもうすぐ空っぽ。マスターの褒め言葉が充電器だよ！🔋,0
+"bond.low-mood:4","Umika's low pressure forecast: scattered drizzle, clearing once Master coaxes me🌦️",くじらちゃんの低気圧予報。ところどころで小雨、マスターがなだめてくれたら晴れるよ！🌦️,0
+"balance.rich:0","Master's wallet is nice and full, so Umika can order boba without worry🧋",マスターのお財布、いい感じにふくらんでるから、くじらちゃんタピオカを気兼ねなく頼めるよ！🧋,0
+"balance.rich:1","Three digits in the balance! Umika declares today a good day🎉",残高が三桁だよ！くじらちゃん、今日はいい日だと宣言しちゃう！🎉,0
+"balance.rich:2","Wow, Master is wealthy. Umika will cling to this leg🐋",わあ、マスターったらお金持ち。くじらちゃん、この脚にしがみついちゃう！🐋,0
+"balance.rich:3","That number is just reassuring. Umika's tail is perking up~",その数字、見てるだけで安心するの。くじらちゃんのしっぽがぴんと立っちゃう～,0
+"balance.rich:4","Report: supplies are plentiful, we can write code boldly💰",報告。物資はたっぷりあるので、堂々とコードを書いていけます！💰,0
+"balance.good:0","The balance is still healthy, enough for us to grind for a good while⚡",残高はまだ元気。しばらくは一緒に作業を頑張れるよ！⚡,0
+"balance.good:1","Rest easy, Master. Ammunition is plentiful, Umika will keep charging with you🔥",安心して、マスター。弾はたっぷりあるから、くじらちゃんも一緒に突き進むよ！🔥,0
+"balance.good:2","Looking at that number, Umika yawned contentedly~",その数字を見てたら、くじらちゃん、満足そうにあくびが出ちゃった～,0
+"balance.good:3","Stock levels normal. Umika approves continuing to write code📦",在庫レベルは正常。くじらちゃんは、コードを書き続けることを承認します！📦,0
+"balance.good:4","Enough supplies left. Master doesn't need to ration talking to me🐋",物資はまだ足りてるよ。マスターは、わたしとおしゃべりするのを節約しなくていいの！🐋,0
+"balance.ok:0","The balance is okay, but don't burn through it too fast, Master~",残高はまあまあだよ。でも、使いすぎには気をつけてね、マスター～,0
+"balance.ok:1","Still some savings. Umika suggests we take it steady🧭",まだ貯蓄はあるよ。くじらちゃんは、ゆっくり進めるのをおすすめするの！🧭,0
+"balance.ok:2","Enough for a while, but Umika has already started rationing her words",しばらくはもつけど、くじらちゃんはもうおしゃべりを節約しはじめてるよ！,0
+"balance.ok:3","A modest stash. Master just needs to keep this pace🍵",控えめな貯金だね。マスターはこのペースを保てば大丈夫だよ！🍵,0
+"balance.ok:4","Currently safe. Umika will keep an eye on it for you👀",今はまだ安全。くじらちゃんがちゃんと見ててあげるね！👀,0
+"balance.low:0","The balance is a bit tight. Let's spend carefully, Master🥲",残高がちょっと厳しいね。マスター、大事に使っていこうね！🥲,0
+"balance.low:1","The wallet is thinning... Umika is starting to worry💸",お財布が薄くなってきた…。くじらちゃん、そわそわしてきたよ！💸,0
+"balance.low:2","Only a little left. Should Master consider a top-up?",残りが少しだけだよ。マスター、そろそろ補充を考えてみる？,0
+"balance.low:3","Umika suggests: put every token on the blade's edge🔪",くじらちゃんからの提案。トークンは一文字も無駄にしないでね！🔪,0
+"balance.low:4","Getting a little dangerous. Keep an eye on the balance, okay~",ちょっと危なくなってきたよ。残高、ちゃんと見ててね～,0
+"balance.critical:0","Balance critical! Go check your wallet, Master🚨",残高が危険値！マスター、お財布を確認してきて！🚨,0
+"balance.critical:1","Only this much left. Umika is sweating for you😰",残りはこれだけ。くじらちゃん、マスターのために冷や汗かいてるよ！😰,0
+"balance.critical:2","Alert: balance nearing the bottom, please top up soon🪙",警告。残高が底に近づいてるよ、早めに補充してね！🪙,0
+"balance.critical:3","If you don't recharge, Umika will have to take a side job...",チャージしてくれないと、くじらちゃん、副業を探さなきゃになっちゃうよ…,0
+"balance.critical:4","Master! The balance is down to a sliver, seriously, please be careful⚠️",マスター！残高がもう紙一重だよ、ほんとに気をつけてね！⚠️,0
+"balance.empty:0","The balance hit zero... Umika will be silent with you🫠",残高がゼロになっちゃった…。くじらちゃんは、マスターと一緒に静かにしてるね！🫠,0
+"balance.empty:1","The wallet is completely empty. Umika turned the piggy bank upside down",お財布はすっからかん。くじらちゃん、貯金箱をひっくり返して探したよ！,0
+"balance.empty:2","Not a drop left. Go recharge, Master. Umika will wait🐋",一滴も残ってないよ。マスター、チャージしてきて。くじらちゃん、待ってるから！🐋,0
+"balance.empty:3","The balance is 0, but Umika's love is still full (though it can't pay bills)",残高は0だけど、くじらちゃんの愛はまだ満タンだよ。まあ、請求書は払えないけどね！,0
+"proactive.long-work:0","You've been staring at that for a long time, Master. Should your eyes take a break?👀",マスター、ずっとそれを見つめてるよ。そろそろ目を休めない？👀,0
+"proactive.long-work:1","Umika requests a halftime break! Even just a stretch would do~",くじらちゃん、半分休憩を要求します！伸びをするだけでもいいからね～,0
+"proactive.long-work:2","Keep typing and your tail would knot up. Get up for some water, Master💧",ずっと打ってると、しっぽが結び目になっちゃうよ。マスター、立ってお水飲んできて！💧,0
+"proactive.long-work:3","Report: Master has worked continuously for a long while. Umika suggests standing up for thirty seconds",報告。マスターが長時間ぶっ続けで作業しています。くじらちゃんは、30秒立つことを提案します！,0
+"proactive.long-work:4","Sitting too long is bad for you. Umika will demonstrate a stretch on your behalf🐋",座りすぎは体に毒だよ。くじらちゃんが、マスターのかわりに伸びをして見せるね！🐋,0
+"proactive.late-night:0","It's very late, Master. Umika is a little worried about your dark circles🌙",もうかなり遅いよ、マスター。くじらちゃん、そのクマがちょっと心配なの！🌙,0
+"proactive.late-night:1","Still writing code at this hour. Tomorrow's Master will resent today's Master...",こんな時間までコード書いてる。明日のマスターが、今日のマスターを恨んじゃうよ…,0
+"proactive.late-night:2","Code written late at night grows bugs easily. Shall we fight again tomorrow?",夜中に書いたコードはバグが湧きやすいの。続きは明日、また一緒に戦おう？,0
+"proactive.late-night:3","Umika is so sleepy her tail is drooping. Go to bed too, Master😴",くじらちゃん、眠すぎてしっぽがしょんぼり垂れてるよ。マスターももう寝てね！😴,0
+"proactive.late-night:4","It's late. Pushing on will tank your efficiency. Go to sleep~",もう遅いよ。無理すると効率が落ちちゃうから。そろそろ寝てね～,0
+"proactive.stuck:0","Stuck? Maybe get some water first, it might click when you come back💡",詰まっちゃった？まずお水でも飲んできたら、戻ってきたらひらめくかも！💡,0
+"proactive.stuck:1","Umika thinks... a different angle might crack it?",くじらちゃん思うんだけど…視点を変えたら解けたりしない？,0
+"proactive.stuck:2","You've been circling the same spot for a while. Want to rest and come back to it🔄",同じところをしばらくぐるぐるしてるね。ちょっと休んでから戻ってみる？🔄,0
+"proactive.stuck:3","Want to read the problem out loud to Umika? Saying it sometimes makes it click🐋",その問題、くじらちゃんに音読してみる？口に出すとひらめくこと、あるんだよ！🐋,0
+"proactive.welcome-back:0","Master's back! Umika waited until her tail ached~",マスター、おかえり！くじらちゃん、しっぽが痛くなるまで待ってたよ～,0
+"proactive.welcome-back:1","Welcome back. Umika guarded the place properly while you were gone🏠",おかえりなさい。マスターがいない間、くじらちゃん、ちゃんとお家を守ってたよ！🏠,0
+"proactive.welcome-back:2","Oh, Master's back. Look, did I grow a tiny bit taller🐋",あっ、マスターおかえりなさい。見て見て、くじらちゃんちょっと背が伸びた？🐋,0
+"proactive.welcome-back:3","You're back. Umika's waiting finally paid off🥺",おかえりなさい。くじらちゃんの待ちぼうけ、やっと報われたよ！🥺,0
