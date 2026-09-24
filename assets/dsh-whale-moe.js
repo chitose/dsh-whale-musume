@@ -183,17 +183,29 @@
     return btn;
   }
 
-  function createLanguageSelect() {
+  function createVoiceSelect() {
     var select = doc.createElement("select");
-    select.setAttribute("aria-label", "Dialogue language");
-    select.innerHTML = '<option value="ja">Japanese</option><option value="en">English</option>';
-    select.value = voiceLanguage();
+    select.setAttribute("aria-label", "Kokoro voice");
     select.addEventListener("change", function (event) {
       event.stopPropagation();
-      try { root.localStorage.setItem("whale-moe:voiceLanguage", select.value); } catch (e) { /* unavailable */ }
-      root.dispatchEvent(new root.CustomEvent("whale-moe-prefs-change", { detail: { key: "voiceLanguage", value: select.value } }));
+      var key = "whale-moe:kokoroVoice:" + voiceLanguage();
+      try { root.localStorage.setItem(key, select.value); } catch (e) { /* unavailable */ }
+      root.dispatchEvent(new root.CustomEvent("whale-moe-prefs-change", { detail: { key: "kokoroVoice", value: select.value } }));
     });
     return select;
+  }
+
+  function refreshVoiceSelect(select) {
+    if (!select) return;
+    var voices = voiceLanguage() === "ja" ? ["jf_tebukuro", "jf_alpha", "jf_gongitsune", "jf_nezumi"] : ["af_sarah", "af_bella", "af_nicole", "af_sky"];
+    select.replaceChildren();
+    voices.forEach(function (voice) {
+      var option = doc.createElement("option");
+      option.value = voice;
+      option.textContent = voice;
+      select.appendChild(option);
+    });
+    select.value = kokoroVoice();
   }
 
   function createManageDialogButton() {
@@ -211,14 +223,19 @@
   /* Dialog-management modal: view/mute/edit every fixed LINES/DIALOGUE entry.
      Overrides are keyed "<state>:<index>" / "<bank>.<event>:<index>", matching
      core.resolveLines. Built lazily on first open, then just unhidden. */
-  function commitDialogOverride(id, originalText, muted, text) {
+  function commitDialogOverride(id, originalText, muted, text, japanese) {
     var overrides = readDialogOverrides();
     var entry = {};
     if (muted) entry.muted = true;
     if (text !== originalText) entry.text = text;
-    if (entry.muted || entry.text !== undefined) overrides[id] = entry;
+    if (japanese && japanese !== (voiceTranslations && voiceTranslations[originalText])) {
+      entry.jaText = japanese;
+      entry.sourceText = text;
+    }
+    if (entry.muted || entry.text !== undefined || entry.jaText !== undefined) overrides[id] = entry;
     else delete overrides[id];
     writeDialogOverrides(overrides);
+    root.dispatchEvent(new root.CustomEvent("whale-moe-prefs-change", { detail: { key: "dialogText", value: id } }));
   }
 
   function buildDialogRow(id, originalText) {
@@ -234,23 +251,34 @@
 
     var input = doc.createElement("textarea");
     input.rows = 1;
+    input.setAttribute("aria-label", "English dialog line");
     input.value = typeof override.text === "string" ? override.text : originalText;
+
+    var japanese = doc.createElement("textarea");
+    japanese.rows = 1;
+    japanese.setAttribute("aria-label", "Japanese dialog line");
+    japanese.setAttribute("data-dsh-whale-japanese", originalText);
+    japanese.placeholder = "Loading Japanese…";
+    japanese.value = typeof override.jaText === "string" ? override.jaText : (voiceTranslations && voiceTranslations[originalText]) || "";
 
     var reset = doc.createElement("button");
     reset.type = "button";
     reset.textContent = "Reset";
 
-    function commit() { commitDialogOverride(id, originalText, mute.checked, input.value); }
+    function commit() { commitDialogOverride(id, originalText, mute.checked, input.value, japanese.value); }
     mute.addEventListener("change", commit);
     input.addEventListener("change", commit);
+    japanese.addEventListener("change", commit);
     reset.addEventListener("click", function () {
       mute.checked = false;
       input.value = originalText;
-      commitDialogOverride(id, originalText, false, originalText);
+      japanese.value = (voiceTranslations && voiceTranslations[originalText]) || "";
+      commitDialogOverride(id, originalText, false, originalText, japanese.value);
     });
 
     row.appendChild(mute);
     row.appendChild(input);
+    row.appendChild(japanese);
     row.appendChild(reset);
     return row;
   }
@@ -265,9 +293,93 @@
     return section;
   }
 
+  function dialogEntries() {
+    var entries = [];
+    Object.keys(core.LINES).forEach(function (state) {
+      core.LINES[state].forEach(function (line, index) { entries.push({ id: state + ":" + index, original: line }); });
+    });
+    Object.keys(core.DIALOGUE).forEach(function (bank) {
+      Object.keys(core.DIALOGUE[bank]).forEach(function (event) {
+        core.DIALOGUE[bank][event].forEach(function (line, index) { entries.push({ id: bank + "." + event + ":" + index, original: line }); });
+      });
+    });
+    return entries;
+  }
+
+  function csvCell(value) {
+    return '"' + String(value).replace(/"/g, '""') + '"';
+  }
+
+  function exportDialogCsv() {
+    return Promise.resolve(loadVoiceTranslations()).then(function () {
+      var overrides = readDialogOverrides();
+      var rows = [["id", "english", "japanese", "muted"]];
+      dialogEntries().forEach(function (item) {
+        var entry = overrides[item.id] || {};
+        rows.push([item.id, typeof entry.text === "string" ? entry.text : item.original,
+          typeof entry.jaText === "string" ? entry.jaText : (voiceTranslations && voiceTranslations[item.original]) || "",
+          entry.muted ? "1" : "0"]);
+      });
+      var blob = new root.Blob(["\ufeff" + rows.map(function (row) { return row.map(csvCell).join(","); }).join("\r\n")], { type: "text/csv;charset=utf-8" });
+      var url = root.URL.createObjectURL(blob);
+      var link = doc.createElement("a");
+      link.href = url;
+      link.download = "whale-moe-dialog.csv";
+      doc.body.appendChild(link);
+      link.click();
+      link.remove();
+      root.setTimeout(function () { root.URL.revokeObjectURL(url); }, 0);
+    });
+  }
+
+  function parseDialogCsv(csv) {
+    var rows = [], row = [], cell = "", quoted = false;
+    csv = String(csv).replace(/^\ufeff/, "");
+    for (var i = 0; i < csv.length; i += 1) {
+      var char = csv[i];
+      if (quoted) {
+        if (char === '"' && csv[i + 1] === '"') { cell += '"'; i += 1; }
+        else if (char === '"') quoted = false;
+        else cell += char;
+      } else if (char === '"' && !cell) quoted = true;
+      else if (char === ",") { row.push(cell); cell = ""; }
+      else if (char === "\n" || char === "\r") {
+        if (char === "\r" && csv[i + 1] === "\n") i += 1;
+        row.push(cell); rows.push(row); row = []; cell = "";
+      } else if (char === '"') throw new Error("Invalid CSV quoting");
+      else cell += char;
+    }
+    if (quoted) throw new Error("Unclosed CSV quote");
+    if (row.length || cell) { row.push(cell); rows.push(row); }
+    return rows;
+  }
+
+  function importDialogCsv(csv) {
+    var rows = parseDialogCsv(csv);
+    if (!rows.length || rows[0].join(",") !== "id,english,japanese,muted") throw new Error("Expected columns: id, english, japanese, muted");
+    var known = Object.create(null);
+    dialogEntries().forEach(function (item) { known[item.id] = item.original; });
+    var overrides = readDialogOverrides(), seen = Object.create(null);
+    rows.slice(1).forEach(function (row) {
+      if (row.length !== 4 || !Object.hasOwn(known, row[0]) || seen[row[0]] || !["0", "1"].includes(row[3]) || row[1].length > 1000 || row[2].length > 1000) throw new Error("Invalid dialog CSV row: " + row[0]);
+      seen[row[0]] = true;
+      var original = known[row[0]], entry = {};
+      if (row[3] === "1") entry.muted = true;
+      if (row[1] !== original) entry.text = row[1];
+      if (row[2] && row[2] !== (voiceTranslations && voiceTranslations[original])) { entry.jaText = row[2]; entry.sourceText = row[1]; }
+      if (Object.keys(entry).length) overrides[row[0]] = entry;
+      else delete overrides[row[0]];
+    });
+    if (rows.length < 2) throw new Error("CSV has no dialog lines");
+    writeDialogOverrides(overrides);
+    root.dispatchEvent(new root.CustomEvent("whale-moe-prefs-change", { detail: { key: "dialogText", value: "import" } }));
+    return rows.length - 1;
+  }
+
   function openDialogManager() {
     var existing = doc.querySelector("[data-dsh-whale-dialog-manager]");
     if (existing) { existing.hidden = false; return; }
+    loadVoiceTranslations();
 
     var overlay = doc.createElement("div");
     overlay.setAttribute("data-dsh-whale-dialog-manager", "true");
@@ -279,6 +391,40 @@
 
     var panel = doc.createElement("div");
     panel.setAttribute("data-dsh-whale-dialog-panel", "true");
+
+    var actions = doc.createElement("div");
+    actions.setAttribute("data-dsh-whale-dialog-actions", "true");
+    var exportButton = doc.createElement("button");
+    exportButton.type = "button";
+    exportButton.textContent = "Export CSV";
+    exportButton.addEventListener("click", function () { exportDialogCsv(); });
+    var importButton = doc.createElement("button");
+    importButton.type = "button";
+    importButton.textContent = "Import CSV";
+    var fileInput = doc.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = ".csv,text/csv";
+    fileInput.hidden = true;
+    var status = doc.createElement("span");
+    status.setAttribute("role", "status");
+    importButton.addEventListener("click", function () { fileInput.click(); });
+    fileInput.addEventListener("change", function () {
+      var file = fileInput.files && fileInput.files[0];
+      if (!file) return;
+      Promise.resolve(loadVoiceTranslations()).then(function () { return file.text(); }).then(function (csv) {
+        var count = importDialogCsv(csv);
+        overlay.remove();
+        openDialogManager();
+        var nextStatus = doc.querySelector("[data-dsh-whale-dialog-actions] [role=status]");
+        if (nextStatus) nextStatus.textContent = "Imported " + count + " lines";
+      }).catch(function (error) { status.textContent = error.message; });
+      fileInput.value = "";
+    });
+    actions.appendChild(exportButton);
+    actions.appendChild(importButton);
+    actions.appendChild(fileInput);
+    actions.appendChild(status);
+    panel.appendChild(actions);
 
     var close = doc.createElement("button");
     close.type = "button";
@@ -552,7 +698,7 @@
     menu.setAttribute("data-dsh-whale-prefs", "true");
     menu.hidden = true;
     for (var i = 0; i < PREFS.length; i += 1) menu.appendChild(createToggleButton(PREFS[i].label, PREFS[i].key));
-    menu.appendChild(createLanguageSelect());
+    menu.appendChild(createVoiceSelect());
     menu.appendChild(createManageDialogButton());
 
     rootNode.appendChild(frame);
@@ -718,8 +864,7 @@
   function toggleMenu() {
     var menu = doc.querySelector("[data-dsh-whale-prefs]");
     if (menu) {
-      var language = menu.querySelector('select[aria-label="Dialogue language"]');
-      if (language) language.value = voiceLanguage();
+      refreshVoiceSelect(menu.querySelector('select[aria-label="Kokoro voice"]'));
       menu.hidden = !menu.hidden;
     }
   }
@@ -844,17 +989,29 @@
   function voiceLanguage() {
     try { return root.localStorage.getItem("whale-moe:voiceLanguage") === "en" ? "en" : "ja"; } catch (e) { return "ja"; }
   }
+  function kokoroVoice() {
+    var language = voiceLanguage();
+    var voices = language === "ja" ? ["jf_tebukuro", "jf_alpha", "jf_gongitsune", "jf_nezumi"] : ["af_sarah", "af_bella", "af_nicole", "af_sky"];
+    try { var saved = root.localStorage.getItem("whale-moe:kokoroVoice:" + language); return voices.indexOf(saved) >= 0 ? saved : voices[0]; } catch (e) { return voices[0]; }
+  }
   function spokenTitle(language) { var value = title(); return language === "ja" && value === "Master" ? "マスター" : value; }
   function spokenSelfName(language) { var value = selfName(); return language === "ja" && value === "Umika" ? "くじらちゃん" : value; }
   function loadVoiceTranslations() {
-    if (voiceTranslations || voiceTranslationsPromise || typeof root.fetch !== "function") return;
+    if (voiceTranslations || typeof root.fetch !== "function") return Promise.resolve();
+    if (voiceTranslationsPromise) return voiceTranslationsPromise;
     voiceTranslationsPromise = root.fetch(VOICE_TRANSLATIONS).then(function (response) {
       if (!response.ok) throw new Error("translations unavailable");
       return response.json();
     }).then(function (data) {
       voiceTranslations = data;
+      var manager = doc.querySelector("[data-dsh-whale-dialog-manager]");
+      if (manager) manager.querySelectorAll("[data-dsh-whale-japanese]").forEach(function (input) {
+        if (!input.value) input.value = data[input.getAttribute("data-dsh-whale-japanese")] || "";
+        input.placeholder = "Japanese text";
+      });
       if (activeVoiceLine && activeVoiceText && voiceLanguage() === "ja") activeVoiceText.textContent = localizeLine(activeVoiceLine);
     }).catch(function () { /* live translation can still resolve later */ }).then(function () { voiceTranslationsPromise = null; });
+    return voiceTranslationsPromise;
   }
   /* Diagnosable state: `__dshWhaleVoice.misses` answers "why was that bubble
      silent" without a debugger. Bounded so a long session cannot grow it. */
@@ -929,17 +1086,18 @@
     activeVoiceText = textNode;
     var generation = ++voiceGeneration;
     var language = voiceLanguage();
+    var selectedVoice = kokoroVoice();
     var shown = localizeLine(line);
     function current() {
       var bubble = textNode && textNode.closest && textNode.closest("[data-dsh-whale-bubble]");
-      return generation === voiceGeneration && voiceLanguage() === language && textNode && textNode.isConnected && bubble && !bubble.hidden;
+      return generation === voiceGeneration && voiceLanguage() === language && kokoroVoice() === selectedVoice && textNode && textNode.isConnected && bubble && !bubble.hidden;
     }
     if (voiceAudio && typeof voiceAudio.pause === "function") voiceAudio.pause();
     if (typeof root.fetch !== "function" || !readPref("chat")) return shown;
     var enabled = readPref("voiceJa");
     root.fetch(VOICE_API + "/synthesize", {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ line: line, language: language, title: spokenTitle(language), selfName: spokenSelfName(language), speak: enabled })
+      body: JSON.stringify({ line: line, language: language, voice: selectedVoice, japaneseText: language === "ja" ? japaneseOverrideFor(line) : "", title: spokenTitle(language), selfName: spokenSelfName(language), speak: enabled })
     }).then(function (response) {
       if (!response.ok) throw new Error("live voice unavailable");
       return response.json();
@@ -1767,6 +1925,10 @@
     } catch (e) { return "Umika"; }
   }
   function localizeLine(line) {
+    if (voiceLanguage() === "ja") {
+      var japanese = japaneseOverrideFor(line);
+      if (japanese) return japanese.split("マスター").join(spokenTitle("ja")).split("くじらちゃん").join(spokenSelfName("ja"));
+    }
     if (voiceLanguage() === "ja" && voiceTranslations && voiceTranslations[line]) {
       return voiceTranslations[line].split("マスター").join(spokenTitle("ja")).split("くじらちゃん").join(spokenSelfName("ja"));
     }
@@ -3378,6 +3540,15 @@
     if (voiceBlocked) voiceBlocked = false;
     schedule();
   }
+  function japaneseOverrideFor(line) {
+    var overrides = readDialogOverrides();
+    var ids = Object.keys(overrides);
+    for (var i = 0; i < ids.length; i += 1) {
+      var entry = overrides[ids[i]];
+      if (entry && !entry.muted && entry.sourceText === line && typeof entry.jaText === "string") return entry.jaText;
+    }
+    return "";
+  }
 
   function start() {
     if (root.__dshWhaleMoeStarted) return;
@@ -3394,7 +3565,7 @@
       }
       var currentBubble = activeVoiceText && activeVoiceText.closest && activeVoiceText.closest("[data-dsh-whale-bubble]");
       if (event.detail && event.detail.key === "voiceLanguage" && voiceLanguage() === "ja") loadVoiceTranslations();
-      if (event.detail && event.detail.key === "voiceLanguage" && activeVoiceLine && currentBubble && !currentBubble.hidden) {
+      if (event.detail && (event.detail.key === "voiceLanguage" || event.detail.key === "kokoroVoice" || event.detail.key === "dialogText") && activeVoiceLine && currentBubble && !currentBubble.hidden) {
         typeBubble(activeVoiceText, speakLine(activeVoiceLine, activeVoiceText));
       }
       schedule();

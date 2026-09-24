@@ -412,15 +412,29 @@ function mascotBlock(marker) {
 		}
 		function MascotLanguageRow() {
 			const [language, setLanguage] = mascotReact.useState(MascotValue("voiceLanguage", "ja"));
-			return (0, react_jsx_runtime.jsxs)("label", { style: MASCOT_ROW_STYLE, children: [
+			const [voice, setVoice] = mascotReact.useState(MascotValue("kokoroVoice:" + language, language === "ja" ? "jf_tebukuro" : "af_sarah"));
+			const voices = language === "ja" ? ["jf_tebukuro", "jf_alpha", "jf_gongitsune", "jf_nezumi"] : ["af_sarah", "af_bella", "af_nicole", "af_sky"];
+			mascotReact.useEffect(() => {
+				const sync = () => { const next = MascotValue("voiceLanguage", "ja"); setLanguage(next); setVoice(MascotValue("kokoroVoice:" + next, next === "ja" ? "jf_tebukuro" : "af_sarah")); };
+				window.addEventListener("whale-moe-prefs-change", sync);
+				window.addEventListener("storage", sync);
+				return () => { window.removeEventListener("whale-moe-prefs-change", sync); window.removeEventListener("storage", sync); };
+			}, []);
+			return (0, react_jsx_runtime.jsxs)("div", { children: [(0, react_jsx_runtime.jsxs)("label", { style: MASCOT_ROW_STYLE, children: [
 				(0, react_jsx_runtime.jsx)("span", { children: "Dialogue language" }),
 				(0, react_jsx_runtime.jsxs)("select", { value: language, onChange: (event) => {
 					const value = event.target.value;
 					setLanguage(value);
+					setVoice(MascotValue("kokoroVoice:" + value, value === "ja" ? "jf_tebukuro" : "af_sarah"));
 					try { window.localStorage.setItem("whale-moe:voiceLanguage", value); } catch (e) {}
 					window.dispatchEvent(new CustomEvent("whale-moe-prefs-change", { detail: { key: "voiceLanguage", value } }));
 				}, children: [(0, react_jsx_runtime.jsx)("option", { value: "ja", children: "Japanese" }), (0, react_jsx_runtime.jsx)("option", { value: "en", children: "English" })] })
-			] });
+			] }), (0, react_jsx_runtime.jsxs)("label", { style: MASCOT_ROW_STYLE, children: [(0, react_jsx_runtime.jsx)("span", { children: "Kokoro voice" }), (0, react_jsx_runtime.jsx)("select", { value: voices.includes(voice) ? voice : voices[0], onChange: (event) => {
+				const value = event.target.value;
+				setVoice(value);
+				try { window.localStorage.setItem("whale-moe:kokoroVoice:" + language, value); } catch (e) {}
+				window.dispatchEvent(new CustomEvent("whale-moe-prefs-change", { detail: { key: "kokoroVoice", value } }));
+			}, children: voices.map((name) => (0, react_jsx_runtime.jsx)("option", { value: name, children: name }, name)) })] })] });
 		}
 		function MascotDailyQuests() {
 			const [tick, setTick] = mascotReact.useState(0);

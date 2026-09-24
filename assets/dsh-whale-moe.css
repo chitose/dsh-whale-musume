@@ -725,6 +725,7 @@ body[data-dsh-whale-night]::after {
 }
 [data-dsh-whale-dialog-row] textarea {
   flex: 1;
+  min-width: 0;
   min-height: 34px;
   padding: 6px 8px;
   color: inherit;
@@ -747,5 +748,20 @@ body[data-dsh-whale-night]::after {
   border: 1px solid var(--dsw-alias-border-l2, rgb(0 0 0 / 12%));
   border-radius: 8px;
   font-size: 12px;
+  cursor: pointer;
+}
+[data-dsh-whale-dialog-actions] {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+}
+[data-dsh-whale-dialog-actions] button {
+  padding: 6px 10px;
+  color: var(--dsw-alias-label-primary, #1a1a1a);
+  background: var(--dsw-alias-bg-layer-2, #f3f3f3);
+  border: 1px solid var(--dsw-alias-border-l2, rgb(0 0 0 / 12%));
+  border-radius: 8px;
   cursor: pointer;
 }

@@ -13,7 +13,11 @@ import traceback
 
 MAX_CACHE_BYTES = 500 * 1024 * 1024
 MODEL_VERSION = "kokoro-v1.0.fp16+argos-en-ja-v1"
-VOICES = {"en": ("af_sarah", "en-us"), "ja": ("jf_tebukuro", "ja")}
+VOICES = {
+    "en": ("af_sarah", "af_bella", "af_nicole", "af_sky"),
+    "ja": ("jf_tebukuro", "jf_alpha", "jf_gongitsune", "jf_nezumi"),
+}
+DEFAULT_VOICE = {"en": "af_sarah", "ja": "jf_tebukuro"}
 lock = threading.Lock()
 kokoro = None
 g2p = None
@@ -62,16 +66,23 @@ def synthesize(payload):
     global kokoro, g2p
     source = payload.get("line", "")
     language = payload.get("language", "ja")
+    selected_voice = payload.get("voice", DEFAULT_VOICE.get(language))
     title = payload.get("title", "Master")
     self_name = payload.get("selfName", "Umika")
     if not isinstance(source, str) or not source.strip() or len(source) > 1000 or language not in VOICES:
         raise ValueError("invalid line or language")
     if not all(isinstance(value, str) and len(value) <= 64 for value in (title, self_name)):
         raise ValueError("invalid name")
-    text = localized(source.strip(), language, title, self_name)
+    if selected_voice not in VOICES[language]:
+        raise ValueError("invalid voice")
+    japanese_text = payload.get("japaneseText", "")
+    if not isinstance(japanese_text, str) or len(japanese_text) > 1000:
+        raise ValueError("invalid Japanese text")
+    text = (japanese_text.replace("マスター", title).replace("くじらちゃん", self_name)
+            if language == "ja" and japanese_text.strip() else localized(source.strip(), language, title, self_name))
     if payload.get("speak") is False:
         return {"text": text, "file": None}
-    voice, lang = VOICES[language]
+    voice, lang = selected_voice, "ja" if language == "ja" else "en-us"
     key = hashlib.sha256(json.dumps([text, language, voice, MODEL_VERSION], ensure_ascii=False).encode()).hexdigest()
     target = cache_dir / (key + ".wav")
     with lock:

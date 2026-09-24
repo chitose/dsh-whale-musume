@@ -63,13 +63,33 @@ function extractFunctionBody(name) {
 }
 
 test("dialogue text follows the selected language and personalized names", () => {
-  const make = new Function("voiceLanguage", "voiceTranslations", "title", "selfName", "spokenTitle", "spokenSelfName", "core", `${extractFunctionBody("localizeLine")}; return localizeLine;`);
+  const make = new Function("voiceLanguage", "voiceTranslations", "title", "selfName", "spokenTitle", "spokenSelfName", "core", "japaneseOverrideFor", `${extractFunctionBody("localizeLine")}; return localizeLine;`);
   const translations = { "Master likes Umika": "マスターはくじらちゃんが好き" };
   const names = { title: () => "先生", selfName: () => "ミカ" };
-  const ja = make(() => "ja", translations, names.title, names.selfName, names.title, names.selfName, {});
+  const ja = make(() => "ja", translations, names.title, names.selfName, names.title, names.selfName, {}, () => "");
   assert.equal(ja("Master likes Umika"), "先生はミカが好き");
-  const en = make(() => "en", translations, names.title, names.selfName, names.title, names.selfName, {});
+  const editedJa = make(() => "ja", translations, names.title, names.selfName, names.title, names.selfName, {}, () => "マスターとくじらちゃん！");
+  assert.equal(editedJa("Master likes Umika"), "先生とミカ！");
+  const en = make(() => "en", translations, names.title, names.selfName, names.title, names.selfName, {}, () => "");
   assert.equal(en("Master likes Umika"), "先生 likes ミカ");
+});
+
+test("dialog CSV preserves quoted and multiline text and rejects unknown IDs before saving", () => {
+  const parse = new Function(`${extractFunctionBody("parseDialogCsv")}; return parseDialogCsv;`)();
+  const csvCell = new Function(`${extractFunctionBody("csvCell")}; return csvCell;`)();
+  const rows = [["id", "english", "japanese", "muted"], ["idle:0", 'Hello, "Master"\nagain', "こんにちは、マスター！", "0"]];
+  assert.deepEqual(parse("\ufeff" + rows.map((row) => row.map(csvCell).join(",")).join("\r\n")), rows);
+  let saved = false;
+  const state = {
+    core: { LINES: { idle: ["Hello"] }, DIALOGUE: {} },
+    readDialogOverrides: () => ({}), writeDialogOverrides: () => { saved = true; },
+    voiceTranslations: { Hello: "こんにちは" }, root: { dispatchEvent() {}, CustomEvent: class {} },
+  };
+  const apply = new Function("state", `with (state) { ${extractFunctionBody("dialogEntries")}; ${extractFunctionBody("parseDialogCsv")}; ${extractFunctionBody("importDialogCsv")}; return importDialogCsv; }`)(state);
+  assert.throws(() => apply("id,english,japanese,muted\nmissing:0,Hello,こんにちは,0"), /Invalid dialog CSV row/);
+  assert.equal(saved, false);
+  assert.equal(apply("id,english,japanese,muted\nidle:0,Hi,やあ,1"), 1);
+  assert.equal(saved, true);
 });
 
 test("a late synthesis response cannot replace or speak a newer bubble", async () => {
@@ -81,7 +101,7 @@ test("a late synthesis response cannot replace or speak a newer bubble", async (
     activeVoiceLine: "", activeVoiceText: null, voiceGeneration: 0, voiceAudio: null, typingTimer: null,
     VOICE_API: "/api/voice",
     root: { fetch: () => new Promise((resolve) => requests.push(resolve)), clearTimeout() {} },
-    voiceLanguage: () => "en", localizeLine: (line) => line, readPref: () => true,
+    voiceLanguage: () => "en", kokoroVoice: () => "af_sarah", localizeLine: (line) => line, readPref: () => true,
     title: () => "Master", selfName: () => "Umika", spokenTitle: () => "Master", spokenSelfName: () => "Umika",
     playVoiceFor: (line, audio) => { played.push([line, audio]); return true; },
     emitInteractionLine() {}, memory: { bubbleHideAt: 0 },
